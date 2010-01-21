@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.0
+Created-By: 1.6.0-b105 (Sun Microsystems Inc.)
+Bundle-ManifestVersion: 2
+Bundle-Name: Smartrcp Plug-in
+Bundle-SymbolicName: cn.smartinvoke.smartrcp; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: cn.smartinvoke.smartrcp.Activator
+Bundle-Vendor: pengzhen
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.browser,
+ cn.smartinvoke.smartrcp.core
+Eclipse-LazyStart: true
+Bundle-ClassPath: .,flex-messaging-common.jar,flex-messaging-core.jar
+Eclipse-BuddyPolicy: registered
