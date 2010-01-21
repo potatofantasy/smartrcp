@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="og.smartinvoke.test" name="Test" schema="schema/og.smartinvoke.test.exsd"/>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="cn.smartinvoke.smartrcp.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="test1"
+            class="cn.smartinvoke.smartrcp.core.Perspective"
+            id="cn.smartinvoke.smartrcp.core.perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <!--<view
+            name="Message"
+            allowMultiple="true"
+            icon="icons/sample2.gif"
+            class="cn.smartinvoke.smartrcp.View"
+            id="cn.smartinvoke.smartrcp.view">
+      </view>
+      <view
+            name="Mailboxes"
+            allowMultiple="true"
+            icon="icons/sample3.gif"
+            class="cn.smartinvoke.smartrcp.NavigationView"
+            id="cn.smartinvoke.smartrcp.navigationView">
+      </view>-->
+      <view
+            class="cn.smartinvoke.smartrcp.core.FlashViewPart" allowMultiple="true"
+            id="cn.smartinvoke.smartrcp.core.FlashViewPart" name="flashView">
+      </view>
+      <view
+            allowMultiple="true"
+            class="org.eclipse.ui.internal.browser.WebBrowserView"
+            id="org.eclipse.ui.browser.view"
+            
+            name="浏览器">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Mail"
+            id="cn.smartinvoke.smartrcp.category">
+      </category>
+      <command
+            name="Open Mailbox"
+            description="Opens a mailbox"
+            categoryId="cn.smartinvoke.smartrcp.category"
+            id="cn.smartinvoke.smartrcp.open">
+      </command>
+      <command
+            name="Open Message Dialog"
+            description="Open a message dialog"
+            categoryId="cn.smartinvoke.smartrcp.category"
+            id="cn.smartinvoke.smartrcp.openMessage">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="cn.smartinvoke.smartrcp.open"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+2">
+      </key>
+      <key
+            commandId="cn.smartinvoke.smartrcp.openMessage"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+3">
+      </key>
+      <key
+            commandId="org.eclipse.ui.file.exit"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+X">
+      </key>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="cn.smartinvoke.smartrcp.application"
+            name="RCP Product">
+         <property
+               name="aboutText"
+               value="RCP Mail template created by PDE">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/sample2.gif">
+         </property>
+         <property
+               name="aboutImage"
+               value="product_lg.gif">
+         </property>
+         <property
+               name="appName"
+               value="RCP Product">
+         </property>
+      </product>
+   </extension>
+
+</plugin>
