@@ -1,12 +1,14 @@
 package cn.smartinvoke.smartrcp.core;
 import java.util.Map;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CLayout;
 import cn.smartinvoke.rcp.CPerspective;
+import cn.smartinvoke.util.ImageManager;
 public class FlashViewPart extends ViewPart{
 	public static final String ID = "cn.smartinvoke.smartrcp.core.FlashViewPart"; //$NON-NLS-1$
 	private CLayout clayout;
@@ -26,6 +28,13 @@ public class FlashViewPart extends ViewPart{
 		flashViewer=new FlashViewer(parent,paths);
 		//设置布局信息
 		this.setPartName(clayout.getTitle());
+		//设置图标
+		if(clayout.image!=null){
+			ImageDescriptor imageDescriptor=ImageManager.getImageDescriptor(clayout.image);
+			if(imageDescriptor!=null){
+			 this.setTitleImage(imageDescriptor.createImage());
+			}
+		}
 //			}else{//java类名称
 //				Class viewerCls=Class.forName(viewId);
 //				Object viewerObj=viewerCls.newInstance();
