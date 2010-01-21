@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<spl:SplashApp xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:spl="cn.smartinvoke.gui.*"
+	  xmlns:rcp="cn.smartinvoke.rcp.*"
+	  
+	 layout="vertical" horizontalAlign="center" verticalAlign="middle">
+	 <mx:Style>
+	 	global{
+	 	font-size:12px;
+	 	}
+	 </mx:Style>
+	 <mx:Script>
+	 	<![CDATA[
+	 		import org.eclipse.swt.SWT;
+	 		import cn.smartinvoke.rcp.CFolderLayout;
+	 		import cn.smartinvoke.rcp.CPageLayout;
+	 		
+	 		public override function getAutomatic():Boolean{
+			   return false;
+		    }
+	 		public override function getPerspective():CPerspective{
+   		     
+             var page:CPageLayout=new CPageLayout();
+   			page.editorAreaVisible=false;
+   			
+   var treeLayout:CFolderLayout=new CFolderLayout("views/TreeViewPart.swf",
+                 CPageLayout.TOP,0.5,page,false,false);
+   			treeLayout.title="导航";
+   			treeLayout.closeable=true;
+   			treeLayout.image="/icons/sample.gif";
+   var contentLayout:CFolderLayout=new CFolderLayout("views/Content1.swf",
+                CPageLayout.RIGHT,0.5,treeLayout,true,false);
+                contentLayout.closeable=true;
+  contentLayout.title="内容面板";
+  contentLayout.image="/icons/sample2.gif";
+    var perpertyLayout:CFolderLayout=new CFolderLayout("views/PerpertyViewPart.swf",
+                CPageLayout.BOTTOM,0.5,treeLayout,true,false);
+                 			perpertyLayout.title="属性"; 
+                 			perpertyLayout.closeable=true;
+                 			perpertyLayout.image="/icons/sample3.gif";
+   page.addFolderLayout(treeLayout);
+   page.addFolderLayout(contentLayout);
+   page.addFolderLayout(perpertyLayout);
+             ret.page=page;
+   			return ret;
+   		}
+   		function onClick():void{
+   			 this.closeWin();
+   		}
+	 	]]>
+	 </mx:Script>
+	 <mx:Button label="关闭" click="onClick()"/>
+	<rcp:CPerspective id="ret">
+   	<rcp:actions>
+   		<rcp:CAction  id="actionFirst" typeStr="AS_CHECK_BOX" actionId="first" text="&amp;测试\\\tCTRL+S" toolTip="toolTipTest..." 
+   			hoverImageUrl="/icons/collapseall(5).gif"
+   			imageUrl="/icons/collapseall(4).gif"/>
+   		<rcp:CAction  actionId="first1" text="测试2" toolTip="toolTipTest1..." imageUrl="/icons/sample.gif"/>
+   		<rcp:CAction  actionId="first2" text="测试3" toolTip="toolTipTest2..." imageUrl="/icons/sample2.gif"/>
+   		<rcp:CAction typeStr="AS_CHECK_BOX" actionId="first3" text="测试4" toolTip="toolTipTest3..." imageUrl="/icons/sample3.gif"/>
+   	</rcp:actions>
+   	<rcp:menuBars>
+   		<rcp:CMenuBar label="文件">
+   		 <rcp:actionIds>
+   		 	<mx:String>first</mx:String><mx:String>——</mx:String><mx:String>first1</mx:String>
+   		 	<mx:String>first2</mx:String><mx:String>first3</mx:String>
+   		 </rcp:actionIds>
+   		</rcp:CMenuBar>
+   	</rcp:menuBars>
+   	<rcp:toolBarIds>
+   		<mx:String>first2</mx:String><mx:String>——</mx:String><mx:String>first3</mx:String>
+   	</rcp:toolBarIds>
+</rcp:CPerspective>
+</spl:SplashApp>

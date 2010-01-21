@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" 
+	 creationComplete="init()"
+	layout="vertical" verticalAlign="middle" horizontalAlign="center">
+<mx:Script>
+	<![CDATA[
+		import cn.smartinvoke.executor.Executor;
+		import mx.controls.Menu;
+		import cn.smartinvoke.gui.FlashContainer;
+		import cn.smartinvoke.rcp.GlobalServiceId;
+		import cn.smartinvoke.smartrcp.gui.module.CEvent;
+		import cn.smartinvoke.smartrcp.gui.control.CActionManager;
+		import java.io.CBufferedReader;
+		import org.eclipse.swt.CEventType;
+		import org.eclipse.swt.widgets.CButton;
+
+		import org.eclipse.swt.widgets.Shell;
+		import org.eclipse.swt.widgets.Display;
+		import cn.smartinvoke.smartrcp.gui.module.ViewPartMenus;
+		import cn.smartinvoke.RemoteObject;
+		import mx.controls.Alert;
+		import cn.smartinvoke.rcp.CAction;
+		import cn.smartinvoke.pool.ObjectPool;
+		protected var flashViewer:RemoteObject=null;//容器对象的引用
+		protected var flashContainer:FlashContainer=null;
+		protected var display:Display=null;
+		
+		private  var menu: Menu=null;
+		function init():void{
+			this.contentLabel.text=Executor.applicationId;
+			//ObjectPool.INSTANCE.addObject(this,"curModule");
+            //this.menu= new Menu();
+            menu = Menu.createMenu(this, buildMenu,false);
+            menu.labelField = "@label";
+            
+			//引用与当前模块相对应的java对象FlashViewer
+			this.flashViewer=new RemoteObject();
+			this.flashViewer.remoteId=GlobalServiceId.FlashViewer;
+			
+			this.flashContainer=new FlashContainer();
+			
+			this.display=new Display();
+			
+   			this.display.addListener(CEventType.KeyDown,onKeyDown,this);
+   			//this.display.addListener(CEventType.MouseDown,onRightClick,this);
+   			this.flashContainer.addListener(CEventType.MouseDown,onRightClick,this);
+		}
+		private function onKeyDown(evt:CEvent):void{
+			//contentLabel.text=evt.character +evt.time+"";
+			onClick();
+		}
+		private function onRightClick(evt:CEvent):void{
+			Debug.object(evt.button);
+			contentLabel.text="button="+evt.button+" x="+evt.x+" y="+evt.y;
+			menu.show(evt.x,evt.y);
+			
+		}
+		private var action:CAction=null;
+		
+		
+		protected function initActions():void{
+			
+		}
+		private function onFirstActionClick(bl:Boolean):void{
+			contentLabel.text=bl+"";
+			new CActionManager().setEnable("first2",bl);
+		}
+		private function onFirst2ActionClick(bl:Boolean):void{
+			Alert.show(bl+"");
+		}
+		var shell:Shell=null; 
+		var num:int=0;
+		var fileReader:RemoteObject=null;
+		var reader:RemoteObject=null;
+		function onClick():void{
+			
+		}
+	]]>
+</mx:Script>
+<mx:XML format="e4x" id="buildMenu">
+<root>
+        <menuitem label="MenuItem A" icon="myTopIcon">
+            <menuitem label="SubMenuItem A-1" enabled="False"/>
+            <menuitem label="SubMenuItem A-2"/>
+        </menuitem>
+        <menuitem label="MenuItem B" type="check" toggled="true"/>
+        <menuitem label="MenuItem C" type="check" toggled="false" icon="myTopIcon"/>
+        <menuitem type="separator"/> 
+        <menuitem label="MenuItem D" icon="myTopIcon">
+            <menuitem label="SubMenuItem D-1" type="radio" groupName="one"/>
+            <menuitem label="SubMenuItem D-2" type="radio" groupName="one" toggled="true"/>
+            <menuitem label="SubMenuItem D-3" type="radio" groupName="one"/>
+        </menuitem>
+</root>
+
+</mx:XML> 
+<mx:Label id="contentLabel" width="100%" fontSize="12"/>
+	<mx:Button textAlign="center" label="打开窗口" fontSize="12" click="onClick()"/>
+</mx:Module> 

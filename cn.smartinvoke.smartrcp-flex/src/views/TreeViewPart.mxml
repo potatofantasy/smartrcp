@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*"
+	layout="vertical" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import cn.smartinvoke.executor.Executor;
+			import cn.smartinvoke.smartrcp.gui.module.CEvent;
+			import org.eclipse.swt.CEventType;
+			import org.eclipse.swt.widgets.Display;
+			function init():void{
+				this.indexLabel.text=Executor.applicationId;
+				Display.getCurrent().addListener(CEventType.KeyDown,this.onKeyEvent,this);
+				Display.getCurrent().addListener(CEventType.KeyUp,this.onKeyEvent,this);
+			}
+			private function onKeyEvent(evt:CEvent):void{
+				this.indexLabel.text=evt.type+"  "+evt.character+" "+evt.time;
+			}
+		]]>
+	</mx:Script>
+	<mx:Label id="indexLabel" text="treeViewPart.............."/>
+</gui:RCPModule> 
