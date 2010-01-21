@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 
 import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
@@ -37,7 +38,10 @@ public class EventFilter {
     }
     public static void dealEvent(Event evt){
     	//fire flex全局监听器
-    	fireListeners(Event_Register.globalListenerEntity, evt);
+    	//Shell mainWin=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
+    	//if(evt.widget==mainWin){
+    	 fireListeners(Event_Register.globalListenerEntity, evt);
+    	//}
     	//fire 对应控件的监听器
     	ListenerEntity entity=Event_Register.getListenerEntity(evt.widget);
     	fireListeners(entity,evt);

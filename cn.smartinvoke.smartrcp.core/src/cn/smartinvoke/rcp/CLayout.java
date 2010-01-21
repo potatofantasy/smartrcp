@@ -22,6 +22,7 @@ public class CLayout implements ILayout
 	//该配置器对应的视图是否创建
 	private boolean isCreate=false;
 	
+	public String image=null;
 	public int getRelationship() {
 		return relationship;
 	}

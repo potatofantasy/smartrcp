@@ -93,7 +93,17 @@ public class CEventBean {
 			e.printStackTrace();
 		}
 	}
-
+	public void fireEvent() {
+		try {
+			this.init();
+			if (this.flexEventNotifer != null) {
+				this.flexEventNotifer.asyncCall("fireEvent", new Object[] {
+						this.tagetId, this.funId, null });
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public void fireAction(boolean isCheck) {
 		try {
 			this.init();

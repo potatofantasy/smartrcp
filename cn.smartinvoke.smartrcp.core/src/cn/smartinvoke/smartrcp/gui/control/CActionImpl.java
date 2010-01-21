@@ -6,7 +6,7 @@ import org.eclipse.jface.action.Action;
 
 import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
-import cn.smartinvoke.smartrcp.util.JFaceHelpMethod;
+import cn.smartinvoke.util.ImageManager;
 
 public class CActionImpl extends Action{
 	CAction bean;
@@ -21,15 +21,15 @@ public class CActionImpl extends Action{
     	try{
     	String imgUrl=bean.getImageUrl();
     	if(imgUrl!=null){
-    		this.setImageDescriptor(JFaceHelpMethod.getImageDescriptor(imgUrl));
+    		this.setImageDescriptor(ImageManager.getImageDescriptor(imgUrl));
     	}
 		String hoverImg=bean.getHoverImageUrl();
 		if(hoverImg!=null){
-    		this.setImageDescriptor(JFaceHelpMethod.getImageDescriptor(hoverImg));
+    		this.setImageDescriptor(ImageManager.getImageDescriptor(hoverImg));
     	}
 		String disableImg=bean.getDisableImageUrl();
 		if(disableImg!=null){
-    		this.setImageDescriptor(JFaceHelpMethod.getImageDescriptor(disableImg));
+    		this.setImageDescriptor(ImageManager.getImageDescriptor(disableImg));
     	}
     	}catch(Exception e){};
 	}

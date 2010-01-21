@@ -28,7 +28,7 @@ public class CPerspective {
 		}else{
 			CPerspective.splashSwfPath=splashSwfPath;
 		}
-		if(!new File(splashSwfPath).exists()){//splash文件不存在
+		if(!new File(CPerspective.splashSwfPath).exists()){//splash文件不存在
 			throw new Exception("the splash swf file "+splashSwfPath+" is not exist");
 		}
 		//
@@ -41,7 +41,7 @@ public class CPerspective {
 		}else{
 		    CPerspective.runtimeSwf=runtimeSwf;
 		}
-		if(!new File(runtimeSwf).exists()){//runtime文件不存在
+		if(!new File(CPerspective.runtimeSwf).exists()){//runtime文件不存在
 			throw new Exception("the runtime swf file "+runtimeSwf+" is not exist");
 		}
 		

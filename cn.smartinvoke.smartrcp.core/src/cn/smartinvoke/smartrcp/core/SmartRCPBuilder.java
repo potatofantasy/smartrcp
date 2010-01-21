@@ -4,8 +4,11 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 
 import cn.smartinvoke.IServiceObjectCreator;
@@ -24,6 +27,8 @@ import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 import cn.smartinvoke.smartrcp.gui.control.ViewManager;
 import cn.smartinvoke.smartrcp.util.JFaceConstant;
 import cn.smartinvoke.util.ConfigerLoader;
+import cn.smartinvoke.util.ImageManager;
+import cn.smartinvoke.util.Log;
 
 public class SmartRCPBuilder {
     private static SplashWindow splash_win=SplashWindow.INSTANCE;
@@ -35,7 +40,8 @@ public class SmartRCPBuilder {
 	 */
     public static void init(IServiceObjectCreator objectCreator){
     	// TODO 程序的初始化
-		// 注册全局服务
+    	
+		//----------- 注册全局服务
 		ObjectPool objectPool = ObjectPool.INSTANCE;
 		objectPool.objectCreator=objectCreator;
 		objectPool.putObject(new CActionManager(),
@@ -47,7 +53,7 @@ public class SmartRCPBuilder {
 		objectPool.putObject(eventRegister, GlobalServiceId.Event_Register);
 		// 将splash窗口设置为服务对象供flex调用
 		ObjectPool.INSTANCE.putObject(splash_win, GlobalServiceId.Splash_Win);
-		// 设置服务类
+		//------------加载配置信息
 		try {
 			ConfigerLoader.init();
 			String servicePacks = ConfigerLoader
@@ -56,6 +62,7 @@ public class SmartRCPBuilder {
 			
 			// 设置配置信息
 			CPerspective.init();
+			//-----------开启splash窗口，加载flex的splash信息
 			try {
 				splash_win.open();
 			} catch (Throwable e) {
@@ -65,6 +72,10 @@ public class SmartRCPBuilder {
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
 		}
+    }
+    public static void initImageRegistry(ImageRegistry imageRegistry){
+    	//---------加载图像注册信息
+    	ImageManager.init(imageRegistry);
     }
     private static CActionManager actionManager = null;
     /**
@@ -127,10 +138,11 @@ public class SmartRCPBuilder {
 			}
 		}
     }
-    public static void preWindowOpen( IWorkbenchWindowConfigurer configurer){
+    public static void preWindowOpen(IWorkbenchWindowConfigurer configurer){
     	//TODO 将Display对象注册为全局服务对象，并且添加事件处理程序
     	//System.out.println();
     	Display curDisp=Display.getCurrent();
+    	Log.println("shell obj="+configurer.getWindow().getShell());
     	ObjectPool.INSTANCE.putObject(curDisp, GlobalServiceId.Swt_Display);
     	EventFilter.exeFilter(curDisp);
     	//设置视图管理器
@@ -143,6 +155,10 @@ public class SmartRCPBuilder {
         //configurer.setShowPerspectiveBar(true);
         configurer.setShowStatusLine(false);
         }
+    }
+    public static void postWindowOpen(Shell shell){
+    	Log.println(" postWindowOpen shell obj="+shell);
+    	ObjectPool.INSTANCE.putObject(shell,GlobalServiceId.Swt_Main_Win);
     }
 	/**
 	 * @param args
