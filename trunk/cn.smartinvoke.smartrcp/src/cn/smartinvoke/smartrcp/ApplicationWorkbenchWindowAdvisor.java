@@ -12,11 +12,15 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     }
 
     public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
+    	
         return new ApplicationActionBarAdvisor(configurer);
     }
     
     public void preWindowOpen() {
     	SmartRCPBuilder.preWindowOpen(this.getWindowConfigurer());
     }
-    
+    public void postWindowOpen() {
+    	//System.out.println(">>>>>>>>>>>>>>>>>>postWindowOpen");
+    	SmartRCPBuilder.postWindowOpen(this.getWindowConfigurer().getWindow().getShell());
+    }
 }
