@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*"
+	layout="vertical" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import org.eclipse.swt.SWT;
+			import mx.controls.Alert;
+			import cn.smartinvoke.RemoteObject;
+			import cn.smartinvoke.executor.Executor;
+			import cn.smartinvoke.smartrcp.gui.module.CEvent;
+			import org.eclipse.swt.CEventType;
+			import org.eclipse.swt.widgets.Display;
+			function init():void{
+				this.indexLabel.text=Executor.applicationId;
+				Display.getCurrent().addListener(CEventType.KeyDown,this.onKeyEvent,this);
+				Display.getCurrent().addListener(CEventType.KeyUp,this.onKeyEvent,this);
+			}
+			private function onKeyEvent(evt:CEvent):void{
+				if(evt.stateMask==(SWT.CTRL | SWT.ALT)&& evt.keyCode==SWT.F1){
+				   	this.indexLabel.text="ctrl + alt + F1 pressed";
+				}
+			}
+			function onClick():void{
+			   	var folder:RemoteObject=new RemoteObject();
+			   	folder.create("test.User");
+			   	Alert.show(folder.call("hello",null) as String);
+			   	folder.gc();
+			}
+		]]>
+	</mx:Script>
+	<mx:Button label="loadTest" click="onClick()"/>
+	<mx:Label id="indexLabel" text="perpertyViewPart.............."/>
+</gui:RCPModule> 

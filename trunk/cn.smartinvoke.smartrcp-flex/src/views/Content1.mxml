@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*"
+	layout="vertical" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Menu;
+			import cn.smartinvoke.executor.Executor;
+			import cn.smartinvoke.smartrcp.gui.module.CEvent;
+			import org.eclipse.swt.CEventType;
+			import org.eclipse.swt.widgets.Display;
+			
+			function init():void{
+				this.createMenus();
+			}
+			var menu1: Menu=null;var menu2: Menu=null;
+			function createMenus():void{
+				 menu1=Menu.createMenu(this, menuPanel1,false);
+				 menu1.labelField="@label";
+				 this.contextMenuManager.addMenu(this.panel1,menu1);
+				 menu2=Menu.createMenu(this, menuPanel2,false);
+				 menu2.labelField="@label";
+				 this.contextMenuManager.addMenu(this.panel2,menu2);
+			}
+			function onDelButtonClick():void{
+				this.contextMenuManager.removeMenu(this.panel1);
+			}
+			function onAddButtonClick():void{
+				var menu3:Menu=Menu.createMenu(this,this.menuPanel3,true);
+				this.contextMenuManager.addMenu(this.panel1,menu3);
+			}
+		]]>
+	</mx:Script>
+<mx:XML format="e4x" id="menuPanel1">
+<root>
+   <menuitem label="Panel1 ContextMenu"/>     
+</root>
+</mx:XML> 
+<mx:XML format="e4x" id="menuPanel2">
+<root>
+   <menuitem label="Panel2 ContextMenu"/>     
+</root>
+</mx:XML> 
+<mx:XML format="e4x" id="menuPanel3">
+<root>
+   <menuitem label="新添加进的"/>     
+</root>
+</mx:XML> 
+	<mx:Label id="indexLabel" text="treeViewPart.............."/>
+	<mx:Button label="删除panel1右键菜单" click="onDelButtonClick()"/>
+	<mx:Button label="添加新菜单" click="onAddButtonClick()"/>
+	<mx:Panel id="panel1" width="100%" height="50%">
+		
+	</mx:Panel>
+	<mx:Panel id="panel2" width="100%" height="50%">
+		
+	</mx:Panel>
+</gui:RCPModule> 

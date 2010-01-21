@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rcp:RCPApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:rcp="cn.smartinvoke.gui.*" 
+	 backgroundColor="white" layout="vertical" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
+   <mx:Style>
+   	global{
+   	 font-size:12px;
+   	}
+   </mx:Style>
+   <mx:Script>
+   	<![CDATA[
+   		import mx.controls.Alert;
+   		import cn.smartinvoke.executor.Executor;
+   		Executor.onLoadComplete=function():void{
+   			//Alert.show("over");
+   		}
+   	]]>
+   </mx:Script>
+</rcp:RCPApplication>
