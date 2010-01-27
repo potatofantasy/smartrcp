@@ -11,6 +11,9 @@ import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 
 
 public class CActionManager {
+	/**
+	 *
+	 */
 	private Map<String, CActionEntity> actionMap = new HashMap<String, CActionEntity>();
 
 	public CActionManager() {
