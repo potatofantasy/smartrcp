@@ -30,7 +30,7 @@ public class CAction extends ServiceObject{
 //		this.runFunId = runFunId;
 //	}
 	private String text=null,imageUrl,toolTip,hoverImageUrl,DisableImageUrl;
-	private int type=0;
+	private int type=-1;
 	private String actionId=null;
 	private boolean checked=false;
 	

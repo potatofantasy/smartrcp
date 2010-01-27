@@ -104,12 +104,12 @@ public class CEventBean {
 			e.printStackTrace();
 		}
 	}
-	public void fireAction(boolean isCheck) {
+	public void fireAction(CActionEvent evt) {
 		try {
 			this.init();
 			if (this.flexEventNotifer != null) {
 				this.flexEventNotifer.asyncCall("fireAction", new Object[] {
-						this.tagetId, this.funId, isCheck });
+						this.tagetId, this.funId, evt });
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

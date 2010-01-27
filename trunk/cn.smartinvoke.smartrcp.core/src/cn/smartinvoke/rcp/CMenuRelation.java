@@ -1,9 +1,10 @@
 package cn.smartinvoke.rcp;
 
-public class CMenuBar {
+public class CMenuRelation {
+	//public String id;
     public String label;
-    public Object[] actionIds;
-	public CMenuBar() {
+    public Object[] actions;
+	public CMenuRelation() {
 		
 	}
 

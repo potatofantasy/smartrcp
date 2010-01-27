@@ -16,7 +16,7 @@ import cn.smartinvoke.IServerObject;
  *
  */
 public class CObservable implements IServerObject{
-	private List<CEventBean> listeners = new LinkedList<CEventBean>();
+	protected List<CEventBean> listeners = new LinkedList<CEventBean>();
 	public CObservable() {
 		
 	}

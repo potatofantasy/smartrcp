@@ -2,6 +2,8 @@ package cn.smartinvoke.smartrcp.gui.control;
 
 import java.util.List;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -17,7 +19,7 @@ import cn.smartinvoke.smartrcp.gui.module.CEventBean;
  *
  */
 public class EventFilter {
-    
+    public static Point cur_point=null;
 	private EventFilter(){
 	  
 	}
@@ -26,6 +28,14 @@ public class EventFilter {
       	if(display!=null){
       		//init
       		Event_Register=(EventRegister)ObjectPool.INSTANCE.getObject(GlobalServiceId.Event_Register);
+      		//-----
+      		display.addFilter(SWT.MouseDown,new Listener(){
+
+				public void handleEvent(Event event) {
+					cur_point=new Point(event.x,event.y);
+				}
+      			
+      		});
       		//添加所有的事件监听器
       		for(int i=0;i<42;i++){
       	      display.addFilter(i, new Listener(){
