@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" creationComplete="init()" show="onShow()">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import cn.smartinvoke.smartrcp.gui.MainShell;
+			import cn.smartinvoke.smartrcp.gui.control.CAppToolBarManager;
+			import cn.smartinvoke.smartrcp.gui.control.CNativeMenuBuilder;
+			import cn.smartinvoke.smartrcp.gui.control.CActionManager;
+			import cn.smartinvoke.smartrcp.gui.control.CAppMenuBarManager;
+			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
+			import cn.smartinvoke.rcp.CAction;
+			import org.eclipse.swt.CEventType;
+			import org.eclipse.swt.widgets.Display;
+			
+			var action:CAction;
+			var dropDownMenu:CNativeMenuBuilder;
+			function init():void{
+			    //Alert.show("create complete");
+			    this.action=new CAction("test","测试","/icons/ant.gif","hello...");
+			    this.action.type=CAction.AS_DROP_DOWN_MENU;//下拉菜单样式
+			    
+			    //添加到全局action管理器，这样toolBar才可以根据该action的id添加此按钮
+				var actionManager:CActionManager=CActionManager.Instance;
+			    actionManager.addAction(this.action);
+			    
+			    dropDownMenu=new CNativeMenuBuilder(MainShell.Instance);
+			    dropDownMenu.initAction(this.cActions);
+			    dropDownMenu.initMenu(this.relation);
+			    dropDownMenu.addListener(this.onDropDownMenuClick,this);
+			}
+			function onShow():void{
+				Alert.show("on show");
+			}
+			function onDropDownMenuClick(evt:CActionEvent):void{
+				this.infoLabel.text="id="+evt.actionId+"  path="+evt.path;
+			}
+			function onAddClick():void{
+				
+			    CActionManager.Instance.addListener(this.action.actionId,this.onToolBarItemClick,this);
+			    
+			    var toolBarManager:CAppToolBarManager=CAppToolBarManager.Instance;
+			  	toolBarManager.insertItem(this.action.actionId);
+			} 
+			function onDelClick():void{
+			    CAppToolBarManager.Instance.removeItem(this.action.actionId);
+			}
+			function onToolBarItemClick(evt:CActionEvent):void{
+				dropDownMenu.show(evt.x,evt.y);
+			}
+			function removeAllItems():void{
+				CAppToolBarManager.Instance.removeAll();
+			}
+			var enable:Boolean=false;
+			function setDisable():void{
+			    
+				CActionManager.Instance.updateEnable(this.action.actionId,enable);
+				enable=!enable;
+			}
+		]]>
+	</mx:Script>
+    <rcp:CMenuRelation id="relation">
+    	<rcp:actions>
+    		<mx:String>a1</mx:String>
+    		<mx:String>-</mx:String>
+    		<rcp:CMenuRelation label="子菜单">
+    			<rcp:actions>
+    				<mx:String>a3</mx:String>
+    				<rcp:CMenuRelation label="子菜单">
+    				  <rcp:actions>
+    				   <mx:String>a4</mx:String>
+    				  </rcp:actions>
+    				</rcp:CMenuRelation>
+    			</rcp:actions>
+    		</rcp:CMenuRelation>
+    		<mx:String>a2</mx:String>
+    	</rcp:actions>
+    </rcp:CMenuRelation>
+	<mx:Array id="cActions">
+		<rcp:CAction actionId="a1" text="hello1"/><rcp:CAction actionId="a2" text="hello2"/>
+		<rcp:CAction actionId="a3" text="hello3"/><rcp:CAction actionId="a4" text="hello4"/>
+	</mx:Array>
+    <mx:HBox width="100%" height="30%" id="vbox1" backgroundColor="#778899" horizontalAlign="center">
+    	<mx:Button label="添加工具按钮" click="onAddClick()"/>
+    	<mx:Button label="删除工具按钮" click="onDelClick()"/>
+    	<mx:Button label="清空工具栏" click="removeAllItems()"/>
+    	<mx:Button label="change enable" click="setDisable()"/>
+    </mx:HBox>
+    	<mx:Label id="infoLabel" width="100%"/>
+   
+</gui:RCPModule> 

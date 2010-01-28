@@ -8,6 +8,7 @@ package cn.smartinvoke.smartrcp.gui.control
 	import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 	import cn.smartinvoke.smartrcp.util.Log;
 	
+	import mx.controls.Alert;
 	import mx.core.Application;
 	import mx.utils.UIDUtil;
     [Bindable]
@@ -68,7 +69,11 @@ package cn.smartinvoke.smartrcp.gui.control
 		   	 this.call('removeListener',[actionId,bean]);
 		   }
 		}
+		public function removeAction(actionId:String):void{
+			this.call('removeAction',arguments);
+		}
 		public function updateEnable(actionId:String,enable:Boolean):void{
+			//Alert.show("actionManager updateEnable id="+actionId+" enable="+enable);
 			 if(actionId!=null){
 			 	this.call("setEnable",arguments);
 			 }

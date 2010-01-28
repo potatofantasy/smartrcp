@@ -1,27 +1,32 @@
 
 /**
 *******************************************************************************/ 
-package cn.smartinvoke.smartrcp.gui
+package cn.smartinvoke.smartrcp.gui.control
 {
  import cn.smartinvoke.RemoteObject;
  import cn.smartinvoke.rcp.GlobalServiceId;
  public class CAppToolBarManager extends RemoteObject {
-  public function CAppToolBarManager(){
+ 	public static var Instance:CAppToolBarManager=new CAppToolBarManager();
+  public function CAppToolBarManager(){ 
 	 super();
 	 this.remoteId=GlobalServiceId.App_ToolBar_Manager;
   }
-   public function addToolBar(toolBar:CToolBar):void{
-	 var retObj:Object=this.call("addToolBar",arguments);
+  public function removeItem(actionId:String):void{
+	  this.call("removeItem",arguments);
+  }
+  public function removeAll():void{
+	  this.call("removeAll",arguments);
+  }
+  public function insertBefore(beforeId:String,actionId:String):void{
+	  this.call("insertBefore",arguments);
+  }
+  public function insertAfter(afterId:String,actionId:String):void{
+	 this.call("insertAfter",arguments);
+  }
+  public function insertItem(actionId:String):void{
+	 this.call("insertItem",arguments);
+  }
 
-   }
-   public function showToolItem(actionId:String):void{
-	 var retObj:Object=this.call("showToolItem",arguments);
-
-   }
-   public function hideToolItem(actionId:String):void{
-	 var retObj:Object=this.call("hideToolItem",arguments);
-
-   }
  }
 
 }

@@ -10,6 +10,7 @@
 	 </mx:Style>
 	 <mx:Script>
 	 	<![CDATA[
+	 		import cn.smartinvoke.rcp.CStandaloneLayout;
 	 		import cn.smartinvoke.rcp.CToolBar;
 	 		import org.eclipse.swt.SWT;
 	 		import cn.smartinvoke.rcp.CFolderLayout;
@@ -33,14 +34,19 @@
                 contentLayout.closeable=true;
   contentLayout.title="内容面板";
   contentLayout.image="/icons/sample2.gif";
-    var perpertyLayout:CFolderLayout=new CFolderLayout("views/PerpertyViewPart.swf",
+    var perpertyLayout:CFolderLayout=new CFolderLayout("views/AppMenuBar_T.swf",
                 CPageLayout.BOTTOM,0.5,treeLayout,true,false);
                  			perpertyLayout.title="属性"; 
                  			perpertyLayout.closeable=true;
-                 			perpertyLayout.image="/icons/sample3.gif";
+                 			 
+                 			var toolBarLayout:CStandaloneLayout=
+                 			 new CStandaloneLayout("views/AppToolBar_T.swf",CPageLayout.LEFT,.5,contentLayout,true,true,true);
+                
    page.addFolderLayout(treeLayout);
    page.addFolderLayout(contentLayout);
    page.addFolderLayout(perpertyLayout);
+   page.addStandaloneLayout(toolBarLayout);
+   
              ret.page=page;
              ret.toolBar=new CToolBar();
              ret.toolBar.type=SWT.BOTTOM;
@@ -62,6 +68,10 @@
    		<rcp:CAction  actionId="first1" type="{CAction.AS_RADIO_BUTTON}" text="测试2" toolTip="toolTipTest1..." imageUrl="/icons/sample.gif"/>
    		<rcp:CAction  actionId="first2" type="{CAction.AS_RADIO_BUTTON}" text="测试3" toolTip="toolTipTest2..." imageUrl="/icons/sample2.gif"/>
    		<rcp:CAction  actionId="first3" type="{CAction.AS_DROP_DOWN_MENU}" text="测试4" toolTip="toolTipTest3..." imageUrl="/icons/sample3.gif"/>
+   		
+   		<rcp:CAction  actionId="a1"  text="a1" toolTip="a1..."/>
+   		<rcp:CAction  actionId="a2"  text="a2" toolTip="a2..."/>
+   		<rcp:CAction  actionId="a3"  text="a3" toolTip="a1..."/>
    	</rcp:actions>
    	<rcp:menuBars>
    		<rcp:CMenuRelation label="文件">
@@ -75,6 +85,18 @@
    		 		<mx:String>first3</mx:String>
    		 	  </rcp:actions>
    		 	</rcp:CMenuRelation>
+   		 </rcp:actions>
+   		</rcp:CMenuRelation>
+   		<rcp:CMenuRelation label="测试">
+   		 <rcp:actions>
+   		 	<mx:String>a1</mx:String>
+   		 	<mx:String>-</mx:String>
+   		 	<!--<rcp:CMenuRelation label="子菜单">
+   		 	  <rcp:actions>
+   		 		<mx:String>a3</mx:String>
+   		 	  </rcp:actions>
+   		 	</rcp:CMenuRelation>-->
+   		 	<mx:String>a2</mx:String>
    		 </rcp:actions>
    		</rcp:CMenuRelation>
    	</rcp:menuBars>
