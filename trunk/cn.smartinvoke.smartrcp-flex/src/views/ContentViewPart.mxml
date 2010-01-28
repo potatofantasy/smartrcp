@@ -62,8 +62,7 @@
 			
 		}
 		private function onFirstActionClick(bl:Boolean):void{
-			contentLabel.text=bl+"";
-			new CActionManager().setEnable("first2",bl);
+			
 		}
 		private function onFirst2ActionClick(bl:Boolean):void{
 			Alert.show(bl+"");
