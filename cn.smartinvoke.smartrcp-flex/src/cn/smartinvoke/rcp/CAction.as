@@ -6,9 +6,34 @@ package cn.smartinvoke.rcp
 	[RemoteClass(alias="cn.smartinvoke.smartrcp.gui.control.CAction")]
 	public class CAction
 	{
-		public static const AS_CHECK_BOX :int= 0x02;
-		public static const AS_RADIO_BUTTON:int=0x08;
-		
+	
+    public static const AS_UNSPECIFIED:int = 0x00;
+
+    /**
+     * Action style constant (value <code>1</code>) indicating action is 
+     * a simple push button.
+     */
+    public static const AS_PUSH_BUTTON:int = 0x01;
+
+    /**
+     * Action style constant (value <code>2</code>) indicating action is 
+     * a check box (or a toggle button).
+     */
+    public static const AS_CHECK_BOX :int= 0x02;
+
+    /**
+     * Action style constant (value <code>4</code>) indicating action is 
+     * a drop down menu.
+     */
+    public static const AS_DROP_DOWN_MENU:int = 0x04;
+
+    /**
+     * Action style constant (value <code>8</code>) indicating action is 
+     * a radio button.
+     * 
+     * @since 2.1
+     */
+    public static const AS_RADIO_BUTTON:int = 0x08;
 		//private var runFun:Function=null;
 		//private var _runFunId:String;
 		
@@ -24,7 +49,7 @@ package cn.smartinvoke.rcp
 		public var type:int=-1;
 		private var _typeStr:String;
 		public var checked:Boolean=false;
-		
+		public var enable:Boolean=true;
 		public function CAction()
 		{
 		  

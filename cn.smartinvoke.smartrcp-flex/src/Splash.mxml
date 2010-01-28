@@ -10,12 +10,13 @@
 	 </mx:Style>
 	 <mx:Script>
 	 	<![CDATA[
+	 		import cn.smartinvoke.rcp.CToolBar;
 	 		import org.eclipse.swt.SWT;
 	 		import cn.smartinvoke.rcp.CFolderLayout;
 	 		import cn.smartinvoke.rcp.CPageLayout;
 	 		
 	 		public override function getAutomatic():Boolean{
-			   return false;
+			   return true;
 		    }
 	 		public override function getPerspective():CPerspective{
    		     
@@ -27,7 +28,7 @@
    			treeLayout.title="导航";
    			treeLayout.closeable=true;
    			treeLayout.image="/icons/sample.gif";
-   var contentLayout:CFolderLayout=new CFolderLayout("views/Content1.swf",
+   var contentLayout:CFolderLayout=new CFolderLayout("views/ContextMenu_T.swf",
                 CPageLayout.RIGHT,0.5,treeLayout,true,false);
                 contentLayout.closeable=true;
   contentLayout.title="内容面板";
@@ -41,6 +42,10 @@
    page.addFolderLayout(contentLayout);
    page.addFolderLayout(perpertyLayout);
              ret.page=page;
+             ret.toolBar=new CToolBar();
+             ret.toolBar.type=SWT.BOTTOM;
+             ret.toolBar.actionIds=["first","-","first1","first2","-","first3"];
+             
    			return ret;
    		}
    		function onClick():void{
@@ -51,23 +56,27 @@
 	 <mx:Button label="关闭" click="onClick()"/>
 	<rcp:CPerspective id="ret">
    	<rcp:actions>
-   		<rcp:CAction  id="actionFirst" typeStr="AS_CHECK_BOX" actionId="first" text="&amp;测试\\\tCTRL+S" toolTip="toolTipTest..." 
+   		<rcp:CAction  id="actionFirst" type="{CAction.AS_CHECK_BOX}" checked="true" actionId="first" text="&amp;测试 \\\t CTRL+S" toolTip="toolTipTest..." 
    			hoverImageUrl="/icons/collapseall(5).gif"
    			imageUrl="/icons/collapseall(4).gif"/>
-   		<rcp:CAction  actionId="first1" text="测试2" toolTip="toolTipTest1..." imageUrl="/icons/sample.gif"/>
-   		<rcp:CAction  actionId="first2" text="测试3" toolTip="toolTipTest2..." imageUrl="/icons/sample2.gif"/>
-   		<rcp:CAction typeStr="AS_CHECK_BOX" actionId="first3" text="测试4" toolTip="toolTipTest3..." imageUrl="/icons/sample3.gif"/>
+   		<rcp:CAction  actionId="first1" type="{CAction.AS_RADIO_BUTTON}" text="测试2" toolTip="toolTipTest1..." imageUrl="/icons/sample.gif"/>
+   		<rcp:CAction  actionId="first2" type="{CAction.AS_RADIO_BUTTON}" text="测试3" toolTip="toolTipTest2..." imageUrl="/icons/sample2.gif"/>
+   		<rcp:CAction  actionId="first3" type="{CAction.AS_DROP_DOWN_MENU}" text="测试4" toolTip="toolTipTest3..." imageUrl="/icons/sample3.gif"/>
    	</rcp:actions>
    	<rcp:menuBars>
-   		<rcp:CMenuBar label="文件">
-   		 <rcp:actionIds>
-   		 	<mx:String>first</mx:String><mx:String>——</mx:String><mx:String>first1</mx:String>
-   		 	<mx:String>first2</mx:String><mx:String>first3</mx:String>
-   		 </rcp:actionIds>
-   		</rcp:CMenuBar>
+   		<rcp:CMenuRelation label="文件">
+   		 <rcp:actions>
+   		 	<mx:String>first</mx:String>
+   		 	<mx:String>-</mx:String>
+   		 	<mx:String>first1</mx:String>
+   		 	<rcp:CMenuRelation label="子菜单">
+   		 	  <rcp:actions>
+   		 		<mx:String>first2</mx:String>
+   		 		<mx:String>first3</mx:String>
+   		 	  </rcp:actions>
+   		 	</rcp:CMenuRelation>
+   		 </rcp:actions>
+   		</rcp:CMenuRelation>
    	</rcp:menuBars>
-   	<rcp:toolBarIds>
-   		<mx:String>first2</mx:String><mx:String>——</mx:String><mx:String>first3</mx:String>
-   	</rcp:toolBarIds>
 </rcp:CPerspective>
 </spl:SplashApp>

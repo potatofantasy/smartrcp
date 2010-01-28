@@ -1,7 +1,9 @@
 package cn.smartinvoke.gui
 {
+	import cn.smartinvoke.smartrcp.gui.control.CNativeMenuBuilder;
 	import cn.smartinvoke.smartrcp.gui.module.CEvent;
 	
+	import mx.controls.Alert;
 	import mx.controls.Menu;
 	import mx.utils.UIDUtil;
 	
@@ -21,18 +23,29 @@ package cn.smartinvoke.gui
 			this.rcpApp.flashContainer.addListener(CEventType.MouseDown,this.onRightClick,this);
 			//Alert.show("CContextMenuManager: "+Executor.applicationId);
 		}
-		private var lastShowMenu:Menu=null;//上次打开的菜单
-		private function onRightClick(evt:CEvent):void{
+		private var lastShowMenu:Object=null;//上次打开的菜单
+		public function hideAlreadyOpenMenu():void{
 			if(lastShowMenu!=null){//关闭已经打开的菜单
 				lastShowMenu.hide();
 			}
+		}
+		private function onRightClick(evt:CEvent):void{
+			hideAlreadyOpenMenu();
+			
 		    var taget:Object=this.rcpApp.mouseOverTaget;
-		    //Alert.show(taget+"");
+		    
 		    if(taget!=null){
-		    	var menu:Menu=this.menuMap[UIDUtil.getUID(taget)];
-		    	if(menu!=null){
-		    		menu.show(evt.x,evt.y);
-		    		lastShowMenu=menu;
+		    	var menuObj:Object=this.menuMap[UIDUtil.getUID(taget)];
+		    	//Alert.show("taget="+taget+" menu="+menuObj);
+		    	if(menuObj is CNativeMenuBuilder){
+		    	 var nativeMenu:CNativeMenuBuilder=menuObj as CNativeMenuBuilder;
+		    	 nativeMenu.show(evt.x,evt.y);
+		    	}else{
+		    	 var menu:Menu=menuObj as Menu;
+		    	 if(menu!=null){
+		    		menu.show(evt.x,evt.y);	
+		    	 }
+		    	 this.lastShowMenu=menuObj;
 		    	}
 		    	
 		    }
@@ -43,10 +56,22 @@ package cn.smartinvoke.gui
         		menuMap[UIDUtil.getUID(tagetObj)]=contextMenu;
         	}
         }
+        public function addNativeMenu(tagetObj:Object,nativeMenuManager:CNativeMenuBuilder):void{
+        	if(tagetObj!=null && nativeMenuManager!=null){
+        		menuMap[UIDUtil.getUID(tagetObj)]=nativeMenuManager;
+        	}
+        }
         public function removeMenu(tagetObj:Object):void{
         	if(tagetObj!=null){
         		var uid:String=UIDUtil.getUID(tagetObj);
-        		delete menuMap[uid];
+        		var obj:Object=menuMap[uid];
+        		if(obj!=null){
+        		 if(obj is CNativeMenuBuilder){
+        			var nativeMenu:CNativeMenuBuilder=obj as CNativeMenuBuilder;
+        			nativeMenu.gc();
+        		 }
+        		 delete menuMap[uid];
+        		}
         	}
         }
 	}

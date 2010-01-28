@@ -33,8 +33,11 @@ package cn.smartinvoke.gui
 			this.addEventListener(FlexEvent.PREINITIALIZE,this.preInitialize);
 			//用于右键控件监听
 			this.addEventListener(MouseEvent.MOUSE_OVER,this.onMouseOver);
+			this.addEventListener(MouseEvent.CLICK,this.onMouseClick);
 		}
-		
+		private function onMouseClick(evt:MouseEvent):void{
+			this.contextMenuManager.hideAlreadyOpenMenu();
+		}
 		private function preInitialize(evt:FlexEvent):void{
 			//添加全局服务对象
    			ObjectPool.INSTANCE.addObject(new CEventNotifer(),GlobalServiceId.Flex_CEvent_Notifer);
