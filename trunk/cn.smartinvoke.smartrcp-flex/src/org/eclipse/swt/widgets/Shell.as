@@ -14,7 +14,7 @@ package org.eclipse.swt.widgets
  [Bindable]
 	[RemoteClass(alias="org.eclipse.swt.widgets.Shell")]
 public class Shell extends RemoteObject {
-  public function Shell(disp:Display){
+  public function Shell(disp:Display=null){
 	 super();
 	 this.createRemoteObject([disp]);
   }

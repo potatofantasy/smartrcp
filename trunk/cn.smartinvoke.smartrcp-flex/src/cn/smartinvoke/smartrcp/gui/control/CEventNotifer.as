@@ -2,6 +2,7 @@ package cn.smartinvoke.smartrcp.gui.control
 {
 	import cn.smartinvoke.IServerObject;
 	import cn.smartinvoke.pool.ObjectPool;
+	import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
 
 	public class CEventNotifer implements IServerObject
 	{
@@ -29,7 +30,7 @@ package cn.smartinvoke.smartrcp.gui.control
         		}
         	}
         }
-        public function fireAction(tagetId:String,funId:String,isCheck:Object):void{
+        public function fireAction(tagetId:String,funId:String,evt:CActionEvent):void{
         	if(tagetId!=null && funId!=null){
         		var pool:ObjectPool =ObjectPool.INSTANCE;
         		var uidStr:String=tagetId+funId;
@@ -40,9 +41,16 @@ package cn.smartinvoke.smartrcp.gui.control
         		if(taget!=null){
         			if(fun!=null && (fun is Function)){
         				var listener:Function=fun as Function;
-        				listener.apply(taget,[isCheck]);
+        				listener.apply(taget,[evt]);
         			}
         		}
+        	}
+        }
+        public function removeListener(tagetId:String,funId:String):void{
+        	if(tagetId!=null && funId!=null){
+        		var pool:ObjectPool =ObjectPool.INSTANCE;
+        		var uidStr:String=tagetId+funId;
+        		pool.removeObject(uidStr);
         	}
         }
 	}

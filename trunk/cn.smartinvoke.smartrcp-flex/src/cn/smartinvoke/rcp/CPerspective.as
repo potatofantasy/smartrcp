@@ -23,10 +23,9 @@ package cn.smartinvoke.rcp
 		
 		public var actions:Array=null;
 		public var menuBars:Array=null;
-		public var toolBarIds:Array=null;
-		
+		public var toolBar:CToolBar=null;
+		public var windowConfigurer:CWindowConfigurer=new CWindowConfigurer();
 		public var page:CPageLayout=null;
-		
 		public function CPerspective()
 		{
 		}

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*"
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*"  xmlns:rcp="cn.smartinvoke.rcp.*"
 	layout="vertical" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import cn.smartinvoke.rcp.CAction;
 			import mx.controls.Menu;
 			import cn.smartinvoke.executor.Executor;
 			import cn.smartinvoke.smartrcp.gui.module.CEvent;
@@ -45,6 +46,8 @@
    <menuitem label="新添加进的"/>     
 </root>
 </mx:XML> 
+    
+
 	<mx:Label id="indexLabel" text="treeViewPart.............."/>
 	<mx:Button label="删除panel1右键菜单" click="onDelButtonClick()"/>
 	<mx:Button label="添加新菜单" click="onAddButtonClick()"/>

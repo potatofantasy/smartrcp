@@ -4,8 +4,12 @@ package cn.smartinvoke.rcp
 	{
 		public static const  Splash_Win:String="smartrcpSplash_Win";
 		
+		public static const App_ToolBar_Manager:String="smartrcp_App_ToolBar_Manager";
+		public static const App_MenuBar_Manager:String="smartrcp_App_MenuBar_Manager";
+		
 		public static const Event_Register:String="smartrcpEventRegister";
 		public static const  Swt_Display:String="smartrcpDisplay";
+		 public static const Swt_Main_Win:String="smartrcpSwt_Main_Win";
 		public static const  View_Manager:String="smartrcpViewManager";
         public static const  CAction_Manager:String="smartrcpCAction_Manager";
         public static const  FlashView_Invoker:String="smartrcpFlashView_Invoker";
