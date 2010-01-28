@@ -50,9 +50,11 @@ package cn.smartinvoke.rcp
 		private var _typeStr:String;
 		public var checked:Boolean=false;
 		public var enable:Boolean=true;
-		public function CAction()
-		{
-		  
+		public function CAction(actionId:String=null,text:String=null,imageUrl:String=null,toolTip:String=null){
+			this.actionId=actionId;
+		    this.text=text;
+		    this.imageUrl=imageUrl;
+		    this.toolTip=toolTip;
 		}
 		[Inspectable (enumeration="AS_CHECK_BOX,AS_RADIO_BUTTON")]
 		public function set typeStr(typeStr:String):void{
