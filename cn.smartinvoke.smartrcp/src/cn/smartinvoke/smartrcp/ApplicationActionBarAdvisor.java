@@ -1,8 +1,17 @@
 package cn.smartinvoke.smartrcp;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ControlContribution;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.ToolBarContributionItem;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -60,46 +69,21 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
-		/*
-		  MenuManager fileMenu = new MenuManager("&File",
-		  IWorkbenchActionConstants.M_FILE); 
-		  MenuManager helpMenu = new
-		  MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
-		  
-		 menuBar.add(fileMenu); // Add a group marker indicating where action
-		 //set menus will appear. menuBar.add(new
-		 * GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-		 * menuBar.add(helpMenu);
-		 *  // File fileMenu.add(newWindowAction); fileMenu.add(new
-		 * Separator()); fileMenu.add(messagePopupAction);
-		 * fileMenu.add(openViewAction); fileMenu.add(new Separator());
-		 * fileMenu.add(exitAction);
-		 *  // Help helpMenu.add(aboutAction);
-		 */
-		
-		SmartRCPBuilder.createMenuBar(menuBar);
+		SmartRCPBuilder.fillMenuBar(menuBar);
 	}
-
 	protected void fillCoolBar(ICoolBarManager coolBar) {
-		/**IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
-        coolBar.add(new ToolBarContributionItem(toolbar, "main"));
-        
-		CPerspective cPerspective = Activator.cPerspective;
-		if (cPerspective != null && this.actionManager!=null) {
-		    Object[] idArr=cPerspective.toolBarIds;
-		    if(idArr!=null){
-			    for(int a=0;a<idArr.length;a++){
-			     String id=idArr[a].toString();
-			     if(id.equals(JFaceConstant.Menu_Separator_Str)){
-			    	 coolBar.add(new Separator());
-			     }else{
-			      IAction action=this.actionManager.getAction(id);
-			      if(action!=null){
-			    	  toolbar.add(action);
-			      }
-			     }
-			    }
-			 }
-		}*/
+		
+		SmartRCPBuilder.fillCoolBar(coolBar);
 	}
+}
+class MyDropDownMenu extends ControlContribution{
+	public MyDropDownMenu(String id) {
+		super(id);
+	}
+	@Override
+	protected Control createControl(Composite parent) {
+		
+		return null;
+	}
+	
 }
