@@ -41,7 +41,8 @@
 			    CActionManager.Instance.addListener(this.action.actionId,this.onToolBarItemClick,this);
 			    
 			    var toolBarManager:CAppToolBarManager=CAppToolBarManager.Instance;
-			  	toolBarManager.insertItem(this.action.actionId);
+			  	//toolBarManager.insertItem(this.action.actionId);
+			  	toolBarManager.insertAfter("first",this.action.actionId);
 			} 
 			function onDelClick():void{
 			    CAppToolBarManager.Instance.removeItem(this.action.actionId);

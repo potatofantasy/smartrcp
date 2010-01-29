@@ -21,11 +21,12 @@
 		    }
 	 		public override function getPerspective():CPerspective{
    		     
-             var page:CPageLayout=new CPageLayout();
+             var page:CPageLayout=new CPageLayout(); 
    			page.editorAreaVisible=false;
    			
-   var treeLayout:CFolderLayout=new CFolderLayout("views/TreeViewPart.swf",
-                 CPageLayout.TOP,0.5,page,false,false);
+   var treeLayout:CFolderLayout=new CFolderLayout("KeyEvent_T.swf",
+                 CPageLayout.TOP,0.5,page,false,true);
+                 treeLayout.isModuleSwf=false;
    			treeLayout.title="导航";
    			treeLayout.closeable=true;
    			treeLayout.image="/icons/sample.gif";
@@ -39,12 +40,13 @@
                  			perpertyLayout.title="属性"; 
                  			perpertyLayout.closeable=true;
                  			 
+                 			var path:String="views/AppToolBar_T.swf";//"org.eclipse.ui.browser.view"
                  			var toolBarLayout:CStandaloneLayout=
-                 			 new CStandaloneLayout("views/AppToolBar_T.swf",CPageLayout.LEFT,.5,contentLayout,true,true,true);
+                 			 new CStandaloneLayout(path,CPageLayout.LEFT,.5,contentLayout,true,true,true);
                 
    page.addFolderLayout(treeLayout);
    page.addFolderLayout(contentLayout);
-   page.addFolderLayout(perpertyLayout);
+  // page.addFolderLayout(perpertyLayout);
    page.addStandaloneLayout(toolBarLayout);
    
              ret.page=page;
