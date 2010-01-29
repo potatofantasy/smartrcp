@@ -12,6 +12,7 @@ import org.eclipse.ui.IViewLayout;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CFolderLayout;
 import cn.smartinvoke.rcp.CLayout;
+import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPageLayout;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.rcp.CStandaloneLayout;
@@ -144,7 +145,7 @@ public class Perspective implements IPerspectiveFactory {
 		   }
 		return viewIdSstr;
 	}
-	public static Map<Integer,CLayout> swfLayoutMap=new HashMap<Integer, CLayout>();
+	public static Map<Integer,CLayoutBasicInfo> swfLayoutMap=new HashMap<Integer, CLayoutBasicInfo>();
 	
 	
 }

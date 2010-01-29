@@ -10,6 +10,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 
 import cn.smartinvoke.IServiceObjectCreator;
@@ -87,11 +88,12 @@ public class SmartRCPBuilder {
 	}
 
 	public static CActionManager actionManager = null;
-
+    public static IWorkbenchWindow window;
 	/**
 	 * ´´½¨action
 	 */
-	public static void createActions() {
+	public static void createActions(IWorkbenchWindow window) {
+		SmartRCPBuilder.window=window;
 		CPerspective cPerspective = SplashWindow.getPerspective();
 		if (cPerspective != null) {
 			Object[] actionArr = cPerspective.actions;
