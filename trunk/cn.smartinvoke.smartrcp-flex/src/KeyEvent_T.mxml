@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rcp:RCPApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:rcp="cn.smartinvoke.gui.*" 
+	 layout="vertical" creationComplete="addKeyListener()" verticalAlign="middle"
+	 paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
+	<mx:Style>
+		global{
+		 font-size:12px;
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import org.eclipse.swt.SWT;
+			import cn.smartinvoke.smartrcp.gui.module.CEvent;
+			import org.eclipse.swt.CEventType;
+			import org.eclipse.swt.widgets.Display;
+			function addKeyListener():void{
+				Display.getCurrent().addListener(CEventType.KeyDown,this.onKeyDown,this);
+			}
+			function removeKeyListener():void{
+				Display.getCurrent().removeListener(CEventType.KeyDown,this.onKeyDown,this);
+			}
+			private function onKeyDown(evt:CEvent):void{
+				if(evt.stateMask==(SWT.CTRL | SWT.ALT)&& evt.keyCode==SWT.F1){
+				   	this.infoLabel.text="ctrl + alt + F1 pressed";
+				}else{
+					this.infoLabel.text=evt.character+" pressed....";
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Label id="infoLabel" width="100%"/>
+	<mx:Button label="添加监听器" click="addKeyListener()"/>
+	<mx:Button label="删除监听器" click="removeKeyListener()"/>
+</rcp:RCPApplication>

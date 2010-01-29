@@ -3,7 +3,6 @@ package cn.smartinvoke.gui
 	import cn.smartinvoke.smartrcp.gui.control.CNativeMenuBuilder;
 	import cn.smartinvoke.smartrcp.gui.module.CEvent;
 	
-	import mx.controls.Alert;
 	import mx.controls.Menu;
 	import mx.utils.UIDUtil;
 	
@@ -34,7 +33,7 @@ package cn.smartinvoke.gui
 			
 		    var taget:Object=this.rcpApp.mouseOverTaget;
 		    
-		    if(taget!=null){
+		    if(taget!=null && evt.button==3){
 		    	var menuObj:Object=this.menuMap[UIDUtil.getUID(taget)];
 		    	//Alert.show("taget="+taget+" menu="+menuObj);
 		    	if(menuObj is CNativeMenuBuilder){
@@ -47,18 +46,21 @@ package cn.smartinvoke.gui
 		    	 }
 		    	 this.lastShowMenu=menuObj;
 		    	}
-		    	
 		    }
 		}
         private var menuMap:Object=new Object();
         public function addMenu(tagetObj:Object,contextMenu:Menu):void{
         	if(tagetObj!=null && contextMenu!=null){
+        		this.removeMenu(tagetObj);//先清理以前的资源
         		menuMap[UIDUtil.getUID(tagetObj)]=contextMenu;
+        	    
         	}
         }
         public function addNativeMenu(tagetObj:Object,nativeMenuManager:CNativeMenuBuilder):void{
         	if(tagetObj!=null && nativeMenuManager!=null){
-        		menuMap[UIDUtil.getUID(tagetObj)]=nativeMenuManager;
+        		var uid:String=UIDUtil.getUID(tagetObj);
+        		this.removeMenu(tagetObj);//先清理以前的资源
+        		menuMap[uid]=nativeMenuManager;
         	}
         }
         public function removeMenu(tagetObj:Object):void{

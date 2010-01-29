@@ -12,6 +12,7 @@
    		import cn.smartinvoke.executor.Executor;
    		Executor.onLoadComplete=function():void{
    			//Alert.show("over");
+   			Alert.show(Executor.applicationId);
    		}
    	]]>
    </mx:Script>

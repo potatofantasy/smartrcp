@@ -12,6 +12,7 @@ package cn.smartinvoke.executor
 	import flash.system.*;
 	import flash.utils.*;
 	
+	import mx.controls.Alert;
 	import mx.core.Application;
 	import mx.utils.UIDUtil;
 	

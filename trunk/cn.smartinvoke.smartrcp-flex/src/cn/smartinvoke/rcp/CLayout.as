@@ -9,6 +9,8 @@ package cn.smartinvoke.rcp
 		
 		public var closeable:Boolean=true;
 		public var moveable:Boolean=true;
+		//当前layout的viewId所对应的swf是否是模块swf
+		public var isModuleSwf:Boolean=true;
 		
 		public var viewId:String=null;
 		
