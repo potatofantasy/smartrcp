@@ -19,7 +19,12 @@ import cn.smartinvoke.util.Log;
 
 public class FlashViewer implements IServerObject{
 	private static List<FlashViewer> containers = new LinkedList<FlashViewer>();
-
+	//当前打开的FlashViewer计数器
+	private static  int viewer_Num=0;
+	//返回当前的viewerNum值，并将计数器加一
+	public static synchronized int getViewNum(){
+		return viewer_Num++;
+	}
 	public static void add_Viewer(FlashViewer container) {
 		if (container != null) {
 			if (!containers.contains(container)) {
@@ -73,12 +78,14 @@ public class FlashViewer implements IServerObject{
 		}
 		return ret;
 	}
-	public FlashViewer(Composite parent){
-		
+	private Object parent=null;
+	public FlashViewer(String appId){
+		this.appId=appId;
 	}
 	private FlashContainer flashContainer;
 
-	public FlashViewer(Composite parent, String swfPath) {
+	public FlashViewer(String appId,Composite parent, String swfPath) {
+		this(appId);
 		this.createView(parent, swfPath);
 		FlashViewer.add_Viewer(this);
 	}
@@ -91,7 +98,8 @@ public class FlashViewer implements IServerObject{
 	 * @param swfPath
 	 *            第一个元素为swf运行文件路径，第二个元素为模块路径
 	 */
-	public FlashViewer(Composite parent, String[] swfPath) {
+	public FlashViewer(String appId,Composite parent, String[] swfPath) {
+		this(appId);
 		this.createView(parent, swfPath);
 		FlashViewer.add_Viewer(this);
 	}
@@ -123,7 +131,10 @@ public class FlashViewer implements IServerObject{
 	private void createFlashContainer(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout());
-		flashContainer = new FlashContainer(container);
+		//设置FlashViewer的唯一标识符
+		String appId=this.getAppId();
+		flashContainer = new FlashContainer(container,appId);
+		//flashContainer.setAppId(appId);
 		
 		//将当前的FlashViewer注册为服务对象，以便该容器内的flex的调用
 		ObjectPool.INSTANCE.putObject(flashContainer.getAppId(), this,GlobalServiceId.FlashViewer);
@@ -149,14 +160,14 @@ public class FlashViewer implements IServerObject{
 						return true;
 					}
 				}
-//				if (message.getMessage() == Win32Constant.WM_LBUTTONDOWN) {
-//					Point cursor = flashContainer.getParent().toControl(
-//							Display.getCurrent().getCursorLocation());
-//					if (flashContainer.getBounds().contains(cursor) && flashContainer.isVisible()) {
-//						createMouseClickEvent(1,message.getX(),message.getY());
-//						return true;
-//					}
-//				}
+				if (message.getMessage() == Win32Constant.WM_LBUTTONDOWN) {
+					Point cursor = flashContainer.getParent().toControl(
+							Display.getCurrent().getCursorLocation());
+					if (flashContainer.getBounds().contains(cursor) && flashContainer.isVisible()) {
+						createMouseClickEvent(1,message.getX(),message.getY());
+						return false;
+					}
+				}
 				return false;
 			}
 			
@@ -207,4 +218,19 @@ public class FlashViewer implements IServerObject{
 		}
 		
 	}
+    //-----------------
+	public Object getParent() {
+		return parent;
+	}
+	public void setParent(Object parent) {
+		this.parent = parent;
+	}
+	private String appId;
+	public String getAppId() {
+		return appId;
+	}
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+	
 }

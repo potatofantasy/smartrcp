@@ -51,9 +51,10 @@ public class FlashContainer extends Flash implements IServerObject{
 	private boolean isFlashLoaded = false;
 	private Executor executor = null;
 	public List<ILoadCompleteListener> listeners = new LinkedList<ILoadCompleteListener>();
-    
-	public FlashContainer(Composite parent) {
+	
+	public FlashContainer(Composite parent,String appId) {
 		super(parent, SWT.NO_BACKGROUND, null);
+		this.setAppId(appId);
 		//添加到全局flash容器集合
 		//FlashContainer.add_Container(this);
 		
@@ -198,8 +199,12 @@ public class FlashContainer extends Flash implements IServerObject{
     public void superDispose(){
     	super.dispose();
     }
+    private String appId;
     public String getAppId(){
-    	return this.hashCode()+"";
+    	return appId;
+    }
+    public void setAppId(String appId){
+    	this.appId=appId;
     }
     /**
      * 加载swf文件，并调用其loadModule方法，加载模块

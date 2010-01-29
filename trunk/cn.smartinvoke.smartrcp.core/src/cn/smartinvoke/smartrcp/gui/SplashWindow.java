@@ -1,6 +1,7 @@
 package cn.smartinvoke.smartrcp.gui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -8,7 +9,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import cn.smartinvoke.gui.FlashContainer;
+import cn.smartinvoke.gui.Msg;
 import cn.smartinvoke.gui.ObjectPool;
+import cn.smartinvoke.gui.OleHookInterceptor;
+import cn.smartinvoke.gui.Win32Constant;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 
@@ -32,20 +36,24 @@ public class SplashWindow {
 		 
 		 Composite composite=new Composite(shell,SWT.NONE);
 		 composite.setLayout(new FillLayout());
-		 container=new FlashContainer(composite);
-//		 container.addListener(new ILoadCompleteListener(){
-//			public void run() {
-//				RemoteObject fAppObj=new RemoteObject(container);
-//				fAppObj.setRemoteId("app");
-//				Object ret=fAppObj.call("getPerspective", null);
-//				if(ret!=null){
-//					if(ret instanceof CPerspective){
-//					 cPerspective=(CPerspective)ret;
-//					}
-//				}
-//				fAppWin.close();
-//			}
-//		 });
+		 container=new FlashContainer(composite,"splash");
+		 
+		 container.addHookInterceptor(new OleHookInterceptor(){
+
+			public boolean intercept(Msg message, int code, int param,
+					int param2) {
+				if (message.getMessage() == Win32Constant.WM_RBUTTONDOWN) {
+					Point cursor = container.getParent().toControl(
+							Display.getCurrent().getCursorLocation());
+					if (container.getBounds().contains(cursor) && container.isVisible()) {
+						return true;
+					}
+				}
+				return false;
+			}
+			 
+		 });
+		 
 		 container.loadMovie(0, CPerspective.getSplashSwfPath());
 		 
 		 Monitor primary = shell.getMonitor();
