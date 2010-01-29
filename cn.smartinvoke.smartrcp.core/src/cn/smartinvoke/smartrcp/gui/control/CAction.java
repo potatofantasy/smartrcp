@@ -33,7 +33,7 @@ public class CAction extends ServiceObject{
 	private int type=-1;
 	private String actionId=null;
 	private boolean checked=false;
-	
+	private boolean enable;
 	public String getText() {
 		return text;
 	}
@@ -63,6 +63,13 @@ public class CAction extends ServiceObject{
 	}
 	public void setDisableImageUrl(String disableImageUrl) {
 		DisableImageUrl = disableImageUrl;
+	}
+	
+	public boolean isEnable() {
+		return enable;
+	}
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
 	//-----------eclipse
     //当用户点击按钮后会调用此方法

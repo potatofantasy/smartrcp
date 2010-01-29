@@ -15,7 +15,7 @@ import cn.smartinvoke.IServerObject;
  * @author pengzhen
  *
  */
-public class CObservable implements IServerObject{
+public abstract class CObservable implements IServerObject{
 	protected List<CEventBean> listeners = new LinkedList<CEventBean>();
 	public CObservable() {
 		
@@ -35,6 +35,7 @@ public class CObservable implements IServerObject{
     		this.listeners.get(l).fireEvent(param);
     	}
     }
+    
 	/**
 	 * @param args
 	 * @throws FileNotFoundException 

@@ -18,4 +18,5 @@ public interface IServerObject {
 //	public void setAppId(String appId);
 //	public String getRemoteId();
 //	public void setRemoteId(String remoteId);
+	public  void dispose();
 }

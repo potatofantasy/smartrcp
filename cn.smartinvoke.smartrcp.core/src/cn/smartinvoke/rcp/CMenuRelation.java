@@ -1,7 +1,7 @@
 package cn.smartinvoke.rcp;
 
 public class CMenuRelation {
-	//public String id;
+	public String managerId;
     public String label;
     public Object[] actions;
 	public CMenuRelation() {

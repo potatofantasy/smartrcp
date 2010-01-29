@@ -15,6 +15,8 @@ import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 import cn.smartinvoke.util.ImageManager;
 
 public class CActionImpl extends Action{
+	//对应菜单项在菜单中的路径位置
+    public String path="";
 	public CActionImpl(){
       	
 	}
@@ -30,8 +32,6 @@ public class CActionImpl extends Action{
 		super(text,type);
 	}
     public void init(CAction bean){
-		//this.bean=bean;
-		System.out.println("create action type"+bean.getActionId());
     	this.setId(bean.getActionId());
     	this.setToolTipText(bean.getToolTip());
     	try{
@@ -49,6 +49,14 @@ public class CActionImpl extends Action{
     	}
     	}catch(Exception e){};
 	}
+//    public void update(CAction bean){
+//    	if(bean!=null){
+//    		this.setChecked(bean.isChecked());
+//    		this.setEnabled(bean.isEnable());
+//    		this.setText(bean.getText());
+//    		this.setToolTipText(bean.getToolTip());
+//    	}
+//    }
     private static CAppToolBarManager appToolBarManager;
 	public void run(){
 	   ObjectPool pool=ObjectPool.INSTANCE;
@@ -64,16 +72,21 @@ public class CActionImpl extends Action{
 			  CEventBean eventBean=listeners.get(t);
 			  if(eventBean!=null){
 				try{
-				 ToolBar toolBar=appToolBarManager.curDisplayToolBar.getControl();
-				 ToolItem toolItem=
-					 toolBar.getItem(EventFilter.cur_point);
-				 Rectangle rect = toolItem.getBounds ();
-				 Point pt = new Point (rect.x, rect.y + rect.height);
-				 //toolItem.getControl()
-				 //pt = toolBar.toDisplay (pt);
 				 CActionEvent actionEvent=new CActionEvent();
-				 actionEvent.x=pt.x;actionEvent.y=pt.y;
+				 if(EventFilter.cur_point!=null){
+				   try{
+				   ToolBar toolBar=appToolBarManager.curDisplayToolBar.getControl();
+				   ToolItem toolItem=toolBar.getItem(EventFilter.cur_point);
+				   Rectangle rect = toolItem.getBounds ();
+				   Point pt = new Point (rect.x, rect.y + rect.height);
+				   actionEvent.x=pt.x;actionEvent.y=pt.y;
+				   }catch(Throwable e){};
+				   EventFilter.cur_point=null;
+				 }
 				 actionEvent.checked=this.isChecked();
+				 actionEvent.actionId=this.getId();
+				 actionEvent.path=this.path;
+				 
 				 eventBean.fireAction(actionEvent);
 				}catch(Throwable e){
 					e.printStackTrace();

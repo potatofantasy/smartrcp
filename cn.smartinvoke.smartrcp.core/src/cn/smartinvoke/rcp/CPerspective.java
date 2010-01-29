@@ -86,5 +86,6 @@ public class CPerspective {
 	public Object[] actions=null;
 	public Object[] menuBars;
 	public CToolBar toolBar;
+	public  CWindowConfigurer windowConfigurer;
 	public CPageLayout page;
 }
