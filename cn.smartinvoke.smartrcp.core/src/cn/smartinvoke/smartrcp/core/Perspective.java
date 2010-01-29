@@ -9,6 +9,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
 
+import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CFolderLayout;
 import cn.smartinvoke.rcp.CLayout;
 import cn.smartinvoke.rcp.CPageLayout;
@@ -29,7 +30,7 @@ public class Perspective implements IPerspectiveFactory {
 		
 		
 	}*/
-	private int viewNum=0;
+	//private int viewNum=0;
 	private String viewId=FlashViewPart.ID;
 	private IPageLayout layout;
 	//²¼¾Ö¿é±í
@@ -92,18 +93,10 @@ public class Perspective implements IPerspectiveFactory {
 		  
 		  String relFolderName=layoutMap.get(refFolder);
 		  if(folderName!=null && relFolderName!=null){
-			  System.out.println(">"+folderName+"*"+folderLayout.getRelationship()+"*"+folderLayout.getRatio());
+			 // System.out.println(">"+folderName+"*"+folderLayout.getRelationship()+"*"+folderLayout.getRatio());
 		   IFolderLayout folder = layout.createFolder(folderName,folderLayout.getRelationship(),(float)folderLayout.getRatio(),
 				   relFolderName);
-		   String viewIdSstr=null;
-		   String layoutViewStr=folderLayout.getViewId();
-		   if(layoutViewStr!=null && layoutViewStr.indexOf('/')==-1){
-			   viewIdSstr=layoutViewStr;
-		   }else{
-			   viewIdSstr=viewId+":"+viewNum;
-               swfLayoutMap.put(viewNum, folderLayout);
-		       viewNum++;
-		   }
+		   String viewIdSstr=this.getViewIdString(folderLayout);
 		   folder.addView(viewIdSstr);
 		   //TODO¡¡£î£á£í£å
 		   IViewLayout viewPart=layout.getViewLayout(viewIdSstr);
@@ -129,10 +122,8 @@ public class Perspective implements IPerspectiveFactory {
 		}
 		String relFolderName=layoutMap.get(refFolder);
 		if(relFolderName!=null){
-			String viewIdSstr=viewId+":"+viewNum;
-			swfLayoutMap.put(viewNum, standaloneLayout);
-			viewNum++;
-			System.out.println(">"+viewIdSstr+"*"+standaloneLayout.getRelationship()+"*"+standaloneLayout.getRatio());
+			String viewIdSstr=this.getViewIdString(standaloneLayout);
+			//System.out.println(">"+viewIdSstr+"*"+standaloneLayout.getRelationship()+"*"+standaloneLayout.getRatio());
 			layout.addStandaloneView(viewIdSstr, standaloneLayout.isShowTitle(), standaloneLayout.getRelationship(),
 					(float)standaloneLayout.getRatio(),relFolderName);
 			
@@ -140,6 +131,18 @@ public class Perspective implements IPerspectiveFactory {
 			layout.getViewLayout(viewIdSstr).setMoveable(standaloneLayout.isMoveable());
 			
 		}
+	}
+	private String getViewIdString(CLayout layout){
+		   String viewIdSstr=null;
+		   String layoutViewStr=layout.getViewId();
+		   if(layoutViewStr!=null && layoutViewStr.endsWith(".swf")){
+			   int viewNum=FlashViewer.getViewNum();
+			   viewIdSstr=viewId+":"+viewNum;
+               swfLayoutMap.put(viewNum,layout);
+		   }else{
+			   viewIdSstr=layoutViewStr;
+		   }
+		return viewIdSstr;
 	}
 	public static Map<Integer,CLayout> swfLayoutMap=new HashMap<Integer, CLayout>();
 	

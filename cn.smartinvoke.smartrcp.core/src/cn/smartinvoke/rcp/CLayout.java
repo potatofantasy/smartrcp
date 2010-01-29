@@ -15,6 +15,8 @@ public class CLayout implements ILayout
 	
 	private boolean closeable=true;
 	private boolean moveable=true;
+	//当前layout的viewId所对应的swf是否是模块swf
+	public boolean isModuleSwf=true;
 	
 	private String viewId=null;
 	private String title;
