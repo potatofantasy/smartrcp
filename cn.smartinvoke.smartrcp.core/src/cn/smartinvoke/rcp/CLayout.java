@@ -8,23 +8,18 @@
 *  QQ：90636900*  联系到作者^_^ 
 *******************************************************************************/ 
 package cn.smartinvoke.rcp;
-public class CLayout implements ILayout
+public class CLayout extends CLayoutBasicInfo implements ILayout
 {
 	private int relationship;
 	private double ratio;
 	
 	private boolean closeable=true;
 	private boolean moveable=true;
-	//当前layout的viewId所对应的swf是否是模块swf
-	public boolean isModuleSwf=true;
 	
-	private String viewId=null;
-	private String title;
+	
 	private ICFolderLayout refLayout=null;
 	//该配置器对应的视图是否创建
 	private boolean isCreate=false;
-	
-	public String image=null;
 	public int getRelationship() {
 		return relationship;
 	}
@@ -49,29 +44,17 @@ public class CLayout implements ILayout
 	public void setMoveable(boolean moveable) {
 		this.moveable = moveable;
 	}
-	public String getViewId() {
-		return viewId;
+	public boolean isCreate() {
+		return isCreate;
 	}
-	public void setViewId(String viewId) {
-		this.viewId = viewId;
+	public void setCreate(boolean isCreate) {
+		this.isCreate = isCreate;
 	}
 	public ICFolderLayout getRefLayout() {
 		return refLayout;
 	}
 	public void setRefLayout(ICFolderLayout refLayout) {
 		this.refLayout = refLayout;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public boolean isCreate() {
-		return isCreate;
-	}
-	public void setCreate(boolean isCreate) {
-		this.isCreate = isCreate;
 	}
 	
 }

@@ -112,7 +112,6 @@ public class FlashViewer implements IServerObject{
 	private void createView(Composite parent, String[] swfPath) {
 		this.createFlashContainer(parent);
 		swfAndModulePath=swfPath;
-		Log.println("in FlashViewer's createView...");
 	}
 	/**
 	 * º”‘ÿflash
