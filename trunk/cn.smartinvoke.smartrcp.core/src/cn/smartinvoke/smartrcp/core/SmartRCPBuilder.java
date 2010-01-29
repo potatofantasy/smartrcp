@@ -1,6 +1,7 @@
 package cn.smartinvoke.smartrcp.core;
 
-import org.eclipse.jface.action.IAction;
+import java.util.List;
+
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -13,9 +14,12 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 
 import cn.smartinvoke.IServiceObjectCreator;
 import cn.smartinvoke.TypeMapper;
+import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.rcp.CMenuRelation;
 import cn.smartinvoke.rcp.CPerspective;
+import cn.smartinvoke.rcp.CWindowConfigurer;
+import cn.smartinvoke.smartrcp.gui.CAppMenuBarManager;
 import cn.smartinvoke.smartrcp.gui.CAppToolBarManager;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.smartrcp.gui.control.CAction;
@@ -102,24 +106,7 @@ public class SmartRCPBuilder {
 					for (int i = 0; i < len; i++) {
 						Object actionObj = actionArr[i];
 						if (actionObj instanceof CAction) {
-							CAction cAction = (CAction) actionObj;
-							CActionImpl actionImpl = null;
-							int declType = cAction.getType();
-							if (declType == IAction.AS_CHECK_BOX) {
-								actionImpl = new CActionImpl(cAction.getText(),
-										IAction.AS_CHECK_BOX, cAction
-												.isChecked());
-							} else if (declType == IAction.AS_RADIO_BUTTON) {
-								actionImpl = new CActionImpl(cAction.getText(),
-										IAction.AS_RADIO_BUTTON, cAction
-												.isChecked());
-							} else if(declType==-1){
-								actionImpl = new CActionImpl(cAction.getText());
-							}else{
-								actionImpl = new CActionImpl(cAction.getText(),declType);
-							}
-							actionImpl.init(cAction);
-							actionManager.addAction(actionImpl);
+							actionManager.addAction((CAction) actionObj);
 						}
 					}
 				}
@@ -135,37 +122,51 @@ public class SmartRCPBuilder {
 	public static void fillMenuBar(IMenuManager menuBar) {
 		CPerspective cPerspective = SplashWindow.getPerspective();
 		if (cPerspective != null && actionManager != null) {
+			
 			Object[] menuBarObjs = cPerspective.menuBars;
 			if (menuBarObjs != null) {
 				for (int i = 0; i < menuBarObjs.length; i++) {
 					Object obj = menuBarObjs[i];
 					if (obj instanceof CMenuRelation) {
-						fillMenuBar(menuBar,(CMenuRelation)obj);
+						CMenuRelation relation=(CMenuRelation)obj;
+						if(relation.managerId==null){
+							relation.managerId=relation.label;
+						}
+						String path=relation.managerId;
+						fillMenuBar(menuBar,relation,relation.managerId,path);
 					}
 				}
 			}
+			//设置全局服务对象
+			ObjectPool.INSTANCE.putObject(new CAppMenuBarManager(menuBar,actionManager), GlobalServiceId.App_MenuBar_Manager);
 		}
 	}
 
-	private static void fillMenuBar(IMenuManager menuBar, CMenuRelation cMenuBar) {
+	private static void fillMenuBar(IMenuManager menuBar, CMenuRelation cMenuBar,String managerId,String pathStr) {
 		if (cMenuBar == null) {
 			return;
 		}
-		MenuManager menuManager = new MenuManager(cMenuBar.label);
+		MenuManager menuManager = new MenuManager(cMenuBar.label,managerId);
 		Object[] actions = cMenuBar.actions;
 		if (actions != null) {
 			for (int a = 0; a < actions.length; a++) {
 				Object action = actions[a];
 				if (action instanceof CMenuRelation) {
-					fillMenuBar(menuManager,(CMenuRelation)action);
+					CMenuRelation relation=(CMenuRelation) action;
+					if(relation.managerId==null){
+						   relation.managerId=relation.label;
+					}
+					String path=pathStr+"/"+relation.managerId;
+					fillMenuBar(menuManager,relation,relation.managerId,path);
 				} else if (action instanceof String) {
 					String id = (String) action;
 					if (id.equals(JFaceConstant.Menu_Separator_Str)) {
 						menuManager.add(new Separator());
 					} else {
-						IAction iAction = actionManager.getAction(id);
-						if (iAction != null) {
-							menuManager.add(iAction);
+						CActionImpl actionImp = actionManager.getAction(id);
+						actionImp.path=pathStr;
+						if (actionImp != null) {
+							menuManager.add(actionImp);
 						}
 					}
 				}
@@ -177,13 +178,13 @@ public class SmartRCPBuilder {
 	public static void fillCoolBar(ICoolBarManager coolBar) {
 		CPerspective cPerspective = SplashWindow.getPerspective();
 		if (cPerspective != null && actionManager != null) {
-			CAppToolBarManager toolBarManager=new CAppToolBarManager(coolBar);
-			//添加到全局服务...
-			ObjectPool.INSTANCE.putObject(toolBarManager, GlobalServiceId.App_ToolBar_Manager);
-			
+			CAppToolBarManager toolBarManager = new CAppToolBarManager(coolBar);
+			// 添加到全局服务...
+			ObjectPool.INSTANCE.putObject(toolBarManager,
+					GlobalServiceId.App_ToolBar_Manager);
 			toolBarManager.addToolBar(cPerspective.toolBar);
 		}
-		
+
 	}
 
 	public static void preWindowOpen(IWorkbenchWindowConfigurer configurer) {
@@ -197,17 +198,30 @@ public class SmartRCPBuilder {
 		ObjectPool.INSTANCE.putObject(new ViewManager(),
 				GlobalServiceId.View_Manager);
 		if (configurer != null) {
-			configurer.setInitialSize(new Point(800, 600));
-			configurer.setShowMenuBar(true);
-			configurer.setShowCoolBar(true);
-			configurer.setShowFastViewBars(true);
-			configurer.setShowStatusLine(true);
+			CPerspective cPerspective = SplashWindow.getPerspective();
+			if (cPerspective != null) {
+				CWindowConfigurer cWinConfig = cPerspective.windowConfigurer;
+				configurer.setInitialSize(new Point(cWinConfig.shellWidth,
+						cWinConfig.shellHeight));
+				
+//				configurer.setShowPerspectiveBar(cWinConfig.showMenuBar);
+//				configurer.setShowMenuBar(cWinConfig.showMenuBar);
+//				configurer.setShowCoolBar(cWinConfig.showCoolBar);
+//				configurer.setShowStatusLine(cWinConfig.showStatusLine);
+			}
 		}
 	}
 
 	public static void postWindowOpen(Shell shell) {
-		Log.println(" postWindowOpen shell obj=" + shell);
 		ObjectPool.INSTANCE.putObject(shell, GlobalServiceId.Swt_Main_Win);
+		
+		Log.println("in postWindowOpen");
+		//加载所有的flash
+		List<FlashViewer> flashViewers=FlashViewer.getViewers();
+		for(int n=0;n<flashViewers.size();n++){
+			FlashViewer flashViewer=flashViewers.get(n);
+			flashViewer.loadFlash();
+		}
 	}
 
 	/**

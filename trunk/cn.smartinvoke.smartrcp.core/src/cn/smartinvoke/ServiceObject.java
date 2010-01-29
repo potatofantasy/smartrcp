@@ -30,4 +30,9 @@ public class ServiceObject implements IServerObject {
 		
 	}
 
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

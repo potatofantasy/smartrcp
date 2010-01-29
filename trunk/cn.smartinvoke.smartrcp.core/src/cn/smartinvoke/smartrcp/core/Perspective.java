@@ -46,6 +46,7 @@ public class Perspective implements IPerspectiveFactory {
 		if(pageLayout!=null){
 			String editorArea = layout.getEditorArea();
 			layout.setEditorAreaVisible(pageLayout.isEditorAreaVisible());
+			layout.setFixed(false);
 			layoutMap.put(pageLayout, editorArea);
 			//
 			List<CFolderLayout> folderLayouts=pageLayout.getFolderLayouts();
@@ -117,7 +118,7 @@ public class Perspective implements IPerspectiveFactory {
 		if(standaloneLayout==null){
 			return;
 		}
-		String folderName=layoutMap.get(standaloneLayout);
+		//String folderName=layoutMap.get(standaloneLayout);
 		ICFolderLayout refFolder=standaloneLayout.getRefLayout();
 		if(refFolder==null){
 			  refFolder=pageLayout;
@@ -127,7 +128,7 @@ public class Perspective implements IPerspectiveFactory {
 			  }
 		}
 		String relFolderName=layoutMap.get(refFolder);
-		if(folderName!=null && relFolderName!=null){
+		if(relFolderName!=null){
 			String viewIdSstr=viewId+":"+viewNum;
 			swfLayoutMap.put(viewNum, standaloneLayout);
 			viewNum++;

@@ -160,6 +160,10 @@ public class EventRegister implements IServerObject{
 //			System.out.println(entity.getName());
 //		}
 	}
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
 /**

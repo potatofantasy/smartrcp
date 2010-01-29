@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Event;
 import cn.smartinvoke.RemoteObject;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
+import cn.smartinvoke.util.Log;
 
 /**
  * flex监听器传递的bean数据。 当flex有监听器添加到java时，会传递此实例， 作为监听器信息，当java对应事件触发时，会跟据该信息类
@@ -123,6 +124,7 @@ public class CEventBean {
 			FlashViewer flashViewer = FlashViewer.getViewerByAppId(this.appId);
 			if (flashViewer != null) {
 				// 因为是全局服务对象，所以不要自动回收
+				//TODO 这里可以进行优化
 				this.flexEventNotifer = new RemoteObject(flashViewer
 						.getFlashContainer(), false);
 				this.flexEventNotifer
@@ -168,6 +170,10 @@ public class CEventBean {
 		// if(this.funRemoteObj!=null){
 		// this.funRemoteObj.dispose();
 		// }
+		Log.println("remove cEventBean listener:"+this.tagetId+" "+this.funId);
+		if(this.flexEventNotifer!=null){
+		 this.flexEventNotifer.asyncCall("removeListener",new Object[]{this.tagetId,this.funId});
+		}
 	}
 
 }

@@ -2,10 +2,11 @@ package cn.smartinvoke.smartrcp.gui.control;
 
 import java.util.List;
 
+import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 
 public class CNativeActionImpl extends CActionImpl {
-
+	
 	public CNativeActionImpl() {
 		
 	}
@@ -25,7 +26,17 @@ public class CNativeActionImpl extends CActionImpl {
 		this.listeners=listeners;
 	}
     public void run(){
-    	
+    	if(this.listeners!=null){
+    		CActionEvent evt=new CActionEvent();
+        	evt.actionId=this.getId();
+        	evt.checked=this.isChecked();
+        	evt.path=this.path;
+    		for(int n=0;n<this.listeners.size();n++){
+    			CEventBean eventBean=listeners.get(n);
+    			eventBean.fireAction(evt);
+    			
+    		}
+    	}
     }
     public boolean equals(Object anoth) {
 		boolean ret = false;

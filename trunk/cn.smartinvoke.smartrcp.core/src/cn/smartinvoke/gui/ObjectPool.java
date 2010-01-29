@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.IServiceObjectCreator;
 import cn.smartinvoke.ServiceObject;
 import cn.smartinvoke.TypeMapper;
@@ -186,7 +187,10 @@ public class ObjectPool {
 		PoolEntity poolEntity = this.getPoolEntity(appId);
 		if (poolEntity != null) {
 			//System.out.println("ObjectPool :dispose size="+poolEntity.objMap.size()+" id="+objId);
-			poolEntity.objMap.remove(objId);
+			Object obj=poolEntity.objMap.remove(objId);
+			if(obj!=null && obj instanceof IServerObject){
+				((IServerObject)obj).dispose();
+			}
 			//System.out.println("ObjectPool :dispose end  size="+poolEntity.objMap.size());
 		}
 		// TODO 调用析构方法

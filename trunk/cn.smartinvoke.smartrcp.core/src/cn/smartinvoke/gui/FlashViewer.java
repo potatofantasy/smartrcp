@@ -11,9 +11,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 import cn.smartinvoke.IServerObject;
+import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 import cn.smartinvoke.smartrcp.gui.control.EventFilter;
 import cn.smartinvoke.smartrcp.gui.control.EventRegister;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
+import cn.smartinvoke.util.Log;
 
 public class FlashViewer implements IServerObject{
 	private static List<FlashViewer> containers = new LinkedList<FlashViewer>();
@@ -93,25 +95,31 @@ public class FlashViewer implements IServerObject{
 		this.createView(parent, swfPath);
 		FlashViewer.add_Viewer(this);
 	}
-
+    private String[] swfAndModulePath;
 	private void createView(Composite parent, String swfPath) {
 		this.createFlashContainer(parent);
-		// 加载flash
-		if (this.swfPath != null) {
-			this.flashContainer.loadMovie(0, swfPath);
-			this.swfPath = swfPath;
-		}
+		this.swfPath=swfPath;
 	}
 
 	private void createView(Composite parent, String[] swfPath) {
 		this.createFlashContainer(parent);
-		// 加载flash
-		if (swfPath != null && swfPath.length >= 2) {
-			this.flashContainer.loadMovie(0, swfPath);
-			this.swfPath = swfPath[1];
-		}
+		swfAndModulePath=swfPath;
+		Log.println("in FlashViewer's createView...");
 	}
-
+	/**
+	 * 加载flash
+	 */
+    public void loadFlash(){
+    	// 加载flash
+		if (this.swfPath != null) {
+			this.flashContainer.loadMovie(0, swfPath);
+		}else if(this.swfAndModulePath!=null){
+			if (swfAndModulePath.length >= 2) {
+				this.flashContainer.loadMovie(0, swfAndModulePath);
+				this.swfPath = swfAndModulePath[1];
+			}
+		}
+    }
 	private void createFlashContainer(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout());
@@ -188,7 +196,11 @@ public class FlashViewer implements IServerObject{
 		//删除监听器
 		ObjectPool pool=ObjectPool.INSTANCE;
 		EventRegister eventRegister=(EventRegister)pool.getObject(GlobalServiceId.Event_Register);
-		eventRegister.removeListeners(this.flashContainer.getAppId());
+		String appId=this.flashContainer.getAppId();
+		eventRegister.removeListeners(appId);
+		//释放action监听器资源
+		CActionManager actionManager=(CActionManager)pool.getObject(GlobalServiceId.CAction_Manager);
+		actionManager.desposeResource(appId);
 		// 删除对象池中的对应服务类
 		if (this.flashContainer != null) {
 			this.flashContainer.dispose();
