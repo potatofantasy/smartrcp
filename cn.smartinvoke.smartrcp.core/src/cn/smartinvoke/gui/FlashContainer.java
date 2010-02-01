@@ -244,11 +244,11 @@ public class FlashContainer extends Flash implements IServerObject{
 		   super.dispose();
 		   ObjectPool.INSTANCE.clearAppPool(this.getAppId());
 	   }
-	   
 	}
 	//自动垃圾回收
 	protected void finalize(){
 		this.dispose();
+		
 	}
 //	private OleDispatch oleDispatch;
 //	public OleDispatch getOleDispatch(){

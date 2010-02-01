@@ -20,6 +20,7 @@ import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.rcp.CMenuRelation;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.rcp.CWindowConfigurer;
+import cn.smartinvoke.smartrcp.CApplication;
 import cn.smartinvoke.smartrcp.gui.CAppMenuBarManager;
 import cn.smartinvoke.smartrcp.gui.CAppToolBarManager;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
@@ -40,7 +41,7 @@ public class SmartRCPBuilder {
 	private static SplashWindow splash_win = SplashWindow.INSTANCE;
 
 	private SmartRCPBuilder() {
-
+        
 	}
 
 	/**
@@ -52,6 +53,8 @@ public class SmartRCPBuilder {
 		// ----------- 注册全局服务
 		ObjectPool objectPool = ObjectPool.INSTANCE;
 		objectPool.objectCreator = objectCreator;
+		
+		objectPool.putObject(new CApplication(), GlobalServiceId.Cur_Application);
 		objectPool.putObject(new CActionManager(),
 				GlobalServiceId.CAction_Manager);
 		objectPool.putObject(new FlashViewInvoker(),

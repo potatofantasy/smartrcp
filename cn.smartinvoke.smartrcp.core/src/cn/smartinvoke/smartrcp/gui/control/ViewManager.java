@@ -1,15 +1,20 @@
 package cn.smartinvoke.smartrcp.gui.control;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 
+import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CLayoutBasicInfo;
-import cn.smartinvoke.smartrcp.core.FlashViewPart;
+import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
+import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 
 /**
  * 视图管理器，主要是flex调用此类的方法，实现java与flex的同步 这里的视图包括：ViewPart ,Shell窗口
@@ -31,7 +36,7 @@ public class ViewManager {
 	 * @param basicInfo
 	 * @return
 	 */
-	public int showViewPart(CLayoutBasicInfo basicInfo,boolean isMultiple, int state) {
+	public int openViewPart(CLayoutBasicInfo basicInfo,boolean isMultiple, int state) {
 		try {
 			int appId = -1;
 			if (basicInfo != null) {
@@ -60,6 +65,78 @@ public class ViewManager {
 		} catch (Throwable e) {
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+	public void showViewPart(String appId){
+		if(appId!=null){
+		 FlashViewer flashViewer=this.findFlashViewer(appId);
+		 if(flashViewer!=null){
+		  IServerObject parent=flashViewer.getParent();
+		  if(parent instanceof IViewPart){
+		    SmartRCPBuilder.window.getActivePage().bringToTop((IViewPart)parent);
+		  }
+		 }
+		}
+	}
+	/**
+	 * 关闭加载了modulePath模块的所有视图
+	 * @param modulePath
+	 */
+	public void closeViewParts(String modulePath){
+		if(modulePath!=null){
+		  List<FlashViewer> views=this.findFlashViewers(modulePath);
+		  for(int n=0;n<views.size();n++){
+			  FlashViewer viewer=views.get(n);
+			  this.closeViewPart(viewer.getParent());
+		  }
+		}
+	}
+	
+	/**
+	 * 关闭指定appId的视图
+	 * @param appId
+	 */
+	public void closeViewPart(String appId){
+		if(appId!=null){
+			 FlashViewer flashViewer=this.findFlashViewer(appId);
+			 if(flashViewer!=null){
+			  this.closeViewPart(flashViewer.getParent());
+			 }
+		}
+	}
+	private void closeViewPart(IServerObject parent){
+		if(parent!=null && parent instanceof FlashViewPart){
+			FlashViewPart flashViewPart=(FlashViewPart)parent;
+			
+			SmartRCPBuilder.window.getActivePage().hideView(flashViewPart);
+			flashViewPart.dispose();
+		}
+	}
+	//--------------------FlashView的管理方法
+	public List<FlashViewer> findFlashViewers(String modulePath){
+		List<FlashViewer> ret=new LinkedList<FlashViewer>();
+		if(modulePath!=null){
+			modulePath=CPerspective.getRuntimeSwfFolder() + "/"+modulePath;
+			List<FlashViewer> curViews=FlashViewer.getViewers();//当前的所有FlashViewer
+			for(int n=0;n<curViews.size();n++){
+				FlashViewer viewer=curViews.get(n);
+				if(viewer.getSwfPath().equals(modulePath)){
+					ret.add(viewer);
+				}
+			}
+		}
+		return ret;
+	}
+	public FlashViewer findFlashViewer(String appId){
+		if(appId!=null){
+			List<FlashViewer> curViews=FlashViewer.getViewers();//当前的所有FlashViewer
+			for(int n=0;n<curViews.size();n++){
+				FlashViewer viewer=curViews.get(n);
+				if(viewer.getAppId().equals(appId)){
+					return viewer;
+				}
+			}
+		}
+		return null;
 	}
 	
 }

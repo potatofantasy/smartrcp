@@ -24,7 +24,7 @@ public class CActionImpl extends Action{
 		this(text, style);
 		this.setChecked(checked);
 	}
-
+    
 	public CActionImpl(String text) {
 		super(text);
 	}

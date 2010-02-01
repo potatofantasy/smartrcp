@@ -17,6 +17,7 @@ import cn.smartinvoke.rcp.CPageLayout;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.rcp.CStandaloneLayout;
 import cn.smartinvoke.rcp.ICFolderLayout;
+import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
 public class Perspective implements IPerspectiveFactory {
 	public static final String ID="cn.smartinvoke.smartrcp.core.Perspective";
