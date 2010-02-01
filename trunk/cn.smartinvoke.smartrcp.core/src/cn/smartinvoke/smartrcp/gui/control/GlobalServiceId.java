@@ -1,10 +1,13 @@
 package cn.smartinvoke.smartrcp.gui.control;
 
 public class GlobalServiceId {
-	
+	//当前引用程序实例
+	public static final String Cur_Application="cn.smartinvoke.smartrcp.CApplication";
+	//启动窗口
 	public static final String Splash_Win="smartrcpSplash_Win";
-	
+	//引用程序工具栏
 	public static final String App_ToolBar_Manager="smartrcp_App_ToolBar_Manager";
+	
 	public static final String App_MenuBar_Manager="smartrcp_App_MenuBar_Manager";
 	
     public static final String Event_Register="smartrcpEventRegister";

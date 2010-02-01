@@ -1,18 +1,22 @@
-package cn.smartinvoke.smartrcp.core;
+package cn.smartinvoke.smartrcp.gui;
 
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.presentations.AbstractPresentationFactory;
+import org.eclipse.ui.presentations.IPresentablePart;
 
+import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPerspective;
+import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.util.ImageManager;
 
-public class FlashViewPart extends ViewPart {
-	public static final String ID = "cn.smartinvoke.smartrcp.core.FlashViewPart"; //$NON-NLS-1$
+public class FlashViewPart extends ViewPart implements IServerObject{
+	public static final String ID = "cn.smartinvoke.smartrcp.gui.FlashViewPart"; //$NON-NLS-1$
 	private CLayoutBasicInfo layoutInfo;
 
 	private FlashViewer flashViewer;
@@ -33,6 +37,8 @@ public class FlashViewPart extends ViewPart {
 				}else{
 				  flashViewer = new FlashViewer(secondId, parent, CPerspective.getRuntimeSwfFolder() + "/" + viewId);
 				}
+				//设置父亲控件
+				this.flashViewer.setParent(this);
 				// 设置布局信息
 				this.setViewTitle(layoutInfo.getTitle());
 				
@@ -66,12 +72,13 @@ public class FlashViewPart extends ViewPart {
     }
 	@Override
 	public void setFocus() {
-
+         
 	}
 
 	public void dispose() {
 		//删除透视图对象中的layout信息对象
 		try{
+		 
 		 Perspective.swfLayoutMap.remove(Integer.valueOf(this.flashViewer.getAppId()));
 		 if (this.flashViewer != null) {
 			this.flashViewer.dispose();

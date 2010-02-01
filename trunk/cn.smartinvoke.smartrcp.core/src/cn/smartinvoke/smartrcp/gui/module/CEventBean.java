@@ -64,7 +64,20 @@ public class CEventBean {
 	public void setAppId(String appId) {
 		this.appId = appId;
 	}
+    public Object fireResEvent(Object param) {
+    	Object ret=null;
+		try {
+			this.init();
 
+			if (this.flexEventNotifer != null) {
+				ret=this.flexEventNotifer.call("fireEvent", new Object[] {
+						this.tagetId, this.funId, param });
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
 	public void fireEvent(Object param) {
 		try {
 			this.init();
@@ -77,7 +90,7 @@ public class CEventBean {
 			e.printStackTrace();
 		}
 	}
-
+    
 	public void fireEvent(Event evt) {
 		try {
 			this.init();

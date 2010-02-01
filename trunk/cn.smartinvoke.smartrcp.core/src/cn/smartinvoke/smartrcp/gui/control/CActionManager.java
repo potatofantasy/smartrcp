@@ -8,10 +8,11 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IAction;
 
+import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 
 
-public class CActionManager {
+public class CActionManager implements IServerObject{
 	/**
 	 *
 	 */
@@ -155,6 +156,10 @@ public class CActionManager {
 				}
 			}
 		}
+	}
+
+	public void dispose() {
+		
 	}
 }
 
