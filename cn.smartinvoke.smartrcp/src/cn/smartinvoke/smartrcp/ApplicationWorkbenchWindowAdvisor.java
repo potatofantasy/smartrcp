@@ -8,6 +8,7 @@ import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
     public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
+    	
         super(configurer);
     }
 

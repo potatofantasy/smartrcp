@@ -65,7 +65,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		 *将flex传递过来的CAction数组，初始化为对应的jface Action对象，并将该对象
      * 存储到CActionManager中，key为action的id，值为该action
 		 */
-		SmartRCPBuilder.createActions();
+		SmartRCPBuilder.createActions(window);
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
