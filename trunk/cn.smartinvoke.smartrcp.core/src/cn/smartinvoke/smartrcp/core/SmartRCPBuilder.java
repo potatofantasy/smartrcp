@@ -6,9 +6,11 @@ import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -49,7 +51,7 @@ public class SmartRCPBuilder {
 	 */
 	public static void init(IServiceObjectCreator objectCreator) {
 		// TODO 程序的初始化
-
+		
 		// ----------- 注册全局服务
 		ObjectPool objectPool = ObjectPool.INSTANCE;
 		objectPool.objectCreator = objectCreator;
@@ -219,7 +221,13 @@ public class SmartRCPBuilder {
 
 	public static void postWindowOpen(Shell shell) {
 		ObjectPool.INSTANCE.putObject(shell, GlobalServiceId.Swt_Main_Win);
-		
+		String[] args=org.eclipse.equinox.internal.app.CommandLineArgs.getAllArgs();
+		if(args!=null){
+		   for(int i=0;i<args.length;i+=2){
+			   //String arg=args[i];
+			   MessageDialog.openInformation(shell, args[i], args[i+1]);
+		   }
+		}
 		Log.println("in postWindowOpen");
 		//加载所有的flash
 		List<FlashViewer> flashViewers=FlashViewer.getViewers();

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.presentations.AbstractPresentationFactory;
 import org.eclipse.ui.presentations.IPresentablePart;
@@ -20,10 +21,11 @@ public class FlashViewPart extends ViewPart implements IServerObject{
 	private CLayoutBasicInfo layoutInfo;
 
 	private FlashViewer flashViewer;
-
+    public IWorkbenchWindow window;
 	@Override
 	public void createPartControl(Composite parent) {
 		try {
+			this.window=this.getViewSite().getWorkbenchWindow();
 			String secondId = this.getViewSite().getSecondaryId();
 			Map<Integer, CLayoutBasicInfo> layoutMap = Perspective.swfLayoutMap;
 			layoutInfo = layoutMap.get(Integer.valueOf(secondId));
