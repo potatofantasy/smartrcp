@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" creationComplete="init()" horizontalAlign="center" verticalAlign="middle">
+	<mx:Script>
+		<![CDATA[
+			import org.eclipse.swt.SWT;
+			import cn.smartinvoke.smartrcp.gui.module.CShellEvent;
+			import cn.smartinvoke.smartrcp.gui.FlashShell;
+			import cn.smartinvoke.RemoteObject;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import cn.smartinvoke.smartrcp.CApplication;
+			import cn.smartinvoke.smartrcp.gui.module.CEvent;
+			[Bindable]
+			public var listData:ArrayCollection=new ArrayCollection();
+			function init():void{
+			   	var baseUrl:String=CApplication.Instance.getBaseFolder();
+			   	var moduleFolder:String=baseUrl+"/views";
+			   	Alert.show(moduleFolder);
+			   	
+			   	var folder:RemoteObject=new RemoteObject();
+			   	folder.create("java.io.File",[moduleFolder]);
+			   	
+			   	var subFiles:Array=folder.call("list") as Array;
+			   	if(subFiles!=null){
+			   		for each(var fileName in subFiles){
+			   			listData.addItem({label:"views/"+fileName,data:"views/"+fileName});
+			   		}
+			   	}
+				//
+			}
+			var flashShell:FlashShell=null;
+			function onClick():void{
+				this.onCloseClick();//关闭以前的
+				if(this.flashShell==null){
+				 flashShell=new FlashShell(SWT.DIALOG_TRIM);
+				 flashShell.setSize(400,400);
+				 var swfPath:String=this.swfList.selectedItem.data;
+				 flashShell.setText(swfPath);
+				 flashShell.setImage("/icons/alphab_sort_co.gif");
+				 flashShell.createFlashContainer(swfPath);
+				 flashShell.addListener(CShellEvent.Event_Closed,this.onShellClose,this);
+				 flashShell.open();
+				}else{
+				 flashShell.setVisible(true);
+				}
+			}
+			function onCloseClick():void{
+				if(flashShell!=null){
+					flashShell.setVisible(false);
+				}
+			}
+			function onShellClose(evt:CShellEvent):Boolean{
+				//Alert.show("in onShellClose");
+				flashShell.setVisible(false);
+				return false;
+			}
+		]]>
+	</mx:Script>
+	<mx:Label text="窗口列表"/>
+	<mx:List id="swfList" width="300" color="blue"
+            dataProvider="{listData}"/>
+	<mx:Button label="打开flash窗口" click="onClick()"/>
+	<mx:Button label="关闭flash窗口" click="onCloseClick()"/>
+</gui:RCPModule> 

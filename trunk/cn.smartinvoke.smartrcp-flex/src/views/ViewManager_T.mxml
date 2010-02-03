@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" horizontalAlign="center" verticalAlign="middle">
+	<mx:Script>
+		<![CDATA[ 
+			import cn.smartinvoke.smartrcp.gui.FlashViewer;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import cn.smartinvoke.rcp.CLayoutBasicInfo;
+			import cn.smartinvoke.smartrcp.gui.control.ViewManager;
+			var path:String="views/AppMenuBar_T.swf";//"cn.smartinvoke.smartrcp.WebBrowser";//"views/ContextMenu_T.swf";
+			function openView():void{
+				var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
+				basicInfo.viewId=path;
+				basicInfo.title="右键菜单";
+				basicInfo.image="/icons/allteamstrms_rep.gif";
+			    ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);
+			   //Alert.show(appId+"");
+			}
+			function closeView():void{
+				ViewManager.Instance.closeViewParts(this.path);
+			}
+			function getView():void{
+				var str:String="";
+				/*var arr:ArrayCollection=
+				   ViewManager.Instance.findAppIds(this.path);
+				for each(var item:String in arr){
+					
+						str+=item+" ";
+				}*/
+				var viewManager:ViewManager=ViewManager.Instance;
+				var openedView:ArrayCollection=viewManager.findFlashViewers(this.path);
+				if(openedView!=null && openedView.length>0){
+				  var flashView:FlashViewer=openedView[0] as FlashViewer;
+				  //Alert.show(flashView.getTitle());
+				  this.infoLabel.text=flashView.getTitle();
+				}
+				
+			}
+			function showView():void{
+				var appId:String=this.inputID.text;
+				ViewManager.Instance.showViewPart(appId);
+			}
+			function maxView():void{
+				var appId:String=this.inputID.text;
+				ViewManager.Instance.setState(appId,ViewManager.STATE_MAXIMIZED);
+			}
+			function minView():void{
+				var appId:String=this.inputID.text;
+				ViewManager.Instance.setState(appId,ViewManager.STATE_MINIMIZED);
+			}
+			function restoreView():void{
+				var appId:String=this.inputID.text;
+				ViewManager.Instance.setState(appId,ViewManager.STATE_RESTORED);
+			}
+		]]>
+	</mx:Script>
+	<mx:Label id="infoLabel" width="100%"/>
+	<mx:HBox width="100%">
+	 <mx:Button label="打开视图" click="openView()"/> 
+	 <mx:Button label="关闭视图" click="closeView()"/>
+	 <mx:Button label="获得视图" click="getView()"/>
+	</mx:HBox>
+	<mx:HBox width="100%">
+		 <mx:Button label="最大化视图" click="maxView()"/>
+		 <mx:Button label="最小化视图" click="minView()"/>
+		 <mx:Button label="恢复视图" click="restoreView()"/>
+	</mx:HBox>
+	<mx:HBox width="100%">
+		<mx:Label text="视图appId"/><mx:TextInput id="inputID"/><mx:Button label="显示视图" click="showView()"/>
+	</mx:HBox>
+</gui:RCPModule>

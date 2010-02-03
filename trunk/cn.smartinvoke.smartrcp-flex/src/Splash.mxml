@@ -17,7 +17,7 @@
 	 		import cn.smartinvoke.rcp.CPageLayout;
 	 		
 	 		public override function getAutomatic():Boolean{
-			   return true;
+			   return false;
 		    }
 	 		public override function getPerspective():CPerspective{
    		     
@@ -30,12 +30,15 @@
    			treeLayout.title="导航";
    			treeLayout.closeable=true;
    			treeLayout.image="/icons/sample.gif";
+   			
    var contentLayout:CFolderLayout=new CFolderLayout("views/ContextMenu_T.swf",
                 CPageLayout.RIGHT,0.5,treeLayout,true,false);
                 contentLayout.closeable=true;
   contentLayout.title="内容面板";
   contentLayout.image="/icons/sample2.gif";
-    var perpertyLayout:CFolderLayout=new CFolderLayout("views/AppMenuBar_T.swf",
+  
+  
+    var perpertyLayout:CFolderLayout=new CFolderLayout("views/FlashShell_T.swf",
                 CPageLayout.BOTTOM,0.5,treeLayout,true,false);
                  			perpertyLayout.title="属性"; 
                  			perpertyLayout.closeable=true;
@@ -46,8 +49,8 @@
                 
    page.addFolderLayout(treeLayout);
    page.addFolderLayout(contentLayout);
-  // page.addFolderLayout(perpertyLayout);
-   page.addStandaloneLayout(toolBarLayout);
+   page.addFolderLayout(perpertyLayout);
+   //page.addStandaloneLayout(toolBarLayout);
    
              ret.page=page;
              ret.toolBar=new CToolBar();

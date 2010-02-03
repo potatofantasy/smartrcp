@@ -1,6 +1,7 @@
 package cn.smartinvoke.gui
 {
-	import cn.smartinvoke.RemoteObject;
+	import cn.smartinvoke.pool.ObjectPool;
+	import cn.smartinvoke.smartrcp.gui.FlashViewer;
 	
 	import mx.events.FlexEvent;
 	import mx.modules.Module;
@@ -9,13 +10,15 @@ package cn.smartinvoke.gui
     */
 	public class RCPModule extends Module
 	{
-		public var flashViewer:RemoteObject=null;//容器对象的引用
+		public var flashViewer:FlashViewer=null;//容器对象的引用
 		public var flashContainer:FlashContainer=null;
 		public var contextMenuManager:CContextMenuManager=null
 		public function RCPModule()
 		{
 			super();
-			//this.addEventListener(FlexEvent.CREATION_COMPLETE,this.init);
+			var pool:ObjectPool=ObjectPool.INSTANCE;
+			pool.removeObject("app");
+			pool.addObject(this,"app");
 		}
 		private function init(evt:FlexEvent):void{
 			//引用与当前模块相对应的java对象FlashViewer
