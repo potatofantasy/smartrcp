@@ -36,7 +36,7 @@ package cn.smartinvoke
 		  tagetObj["remoteId"]=objId;
 		  return tagetObj;
         } 
-        public function call(methodName:String,pars:Array):Object{
+        public function call(methodName:String,pars:Array=null):Object{
           if(pars==null){
           	pars=new Array();
           }

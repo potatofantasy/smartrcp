@@ -2,6 +2,7 @@ package cn.smartinvoke.rcp
 {
 	public class GlobalServiceId
 	{
+		public static const  Cur_Application:String="cn.smartinvoke.smartrcp.CApplication";
 		public static const  Splash_Win:String="smartrcpSplash_Win";
 		
 		public static const App_ToolBar_Manager:String="smartrcp_App_ToolBar_Manager";

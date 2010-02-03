@@ -1,9 +1,9 @@
 package cn.smartinvoke.gui
 {
-	import cn.smartinvoke.RemoteObject;
 	import cn.smartinvoke.executor.Executor;
 	import cn.smartinvoke.pool.ObjectPool;
 	import cn.smartinvoke.rcp.GlobalServiceId;
+	import cn.smartinvoke.smartrcp.gui.FlashViewer;
 	import cn.smartinvoke.smartrcp.gui.control.CEventNotifer;
 	
 	import flash.events.*;
@@ -18,12 +18,13 @@ package cn.smartinvoke.gui
 	import mx.modules.ModuleManager;
 	public class RCPApplication extends Application
 	{
+		private var clsResource_rcpModule:RCPModule;
 		/**
 		 *当前鼠标下的控件
 		 */
 		private var _mouseOverTaget:Object=null;
 		
-		public var flashViewer:RemoteObject=null;//容器对象的引用
+		public var flashViewer:FlashViewer=null;//容器对象的引用
 		public var flashContainer:FlashContainer=null;//
 		public var contextMenuManager:CContextMenuManager=null;
 		
@@ -42,15 +43,21 @@ package cn.smartinvoke.gui
 			//添加全局服务对象
    			ObjectPool.INSTANCE.addObject(new CEventNotifer(),GlobalServiceId.Flex_CEvent_Notifer);
 			Executor.init();
-			
-			Executor.onLoadComplete=this.onJavaCreate;
+			//Executor.onLoadComplete=this.onJavaCreate;
 		}
-		private function onJavaCreate():void{
-			this.flashViewer=new RemoteObject();
-			this.flashViewer.remoteId=GlobalServiceId.FlashViewer;
-			this.flashContainer=new FlashContainer();
+		public function onJavaCreate(flashViewer:FlashViewer,flashContainer:FlashContainer):void{
+			this.flashViewer=flashViewer//new FlashViewer();
+			//Alert.show(this.flashViewer+"");
+			this.flashContainer=flashContainer;//new FlashContainer();
 			//右键菜单管理器
 			this.contextMenuManager=new CContextMenuManager(this);
+			this.onJavaLoaded();
+		}
+		/**
+		 *当java加载flash完毕，全局变量准备好后调用此方法，子类可以重载此方法实现自己的功能
+		 */
+		protected function onJavaLoaded():void{
+			
 		}
 		private function onMouseOver(evt:Event):void{
 			_mouseOverTaget=evt.target;
@@ -90,10 +97,14 @@ package cn.smartinvoke.gui
                     var module:Module=createObj as Module;
                     if(module!=null){
                      if(module is RCPModule){ 
+                      try{
                      	var rcpModule:RCPModule=module as RCPModule;
                      	rcpModule.flashViewer=this.flashViewer;
                      	rcpModule.flashContainer=this.flashContainer;
                      	rcpModule.contextMenuManager=this.contextMenuManager;
+                     }catch( e:Error){
+                     		
+                     }
                      }
                      module.percentWidth=100;
                      module.percentHeight=100;

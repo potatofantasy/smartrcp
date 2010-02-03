@@ -3,12 +3,13 @@ package cn.smartinvoke.gui
 	import cn.smartinvoke.rcp.GlobalServiceId;
 	
 	import org.eclipse.swt.Obserable;
-
-	public class FlashContainer  extends Obserable
+[Bindable]
+	[RemoteClass(alias="cn.smartinvoke.gui.FlashContainer")]
+	public class FlashContainer  extends  Obserable
 	{
-		public function FlashContainer(param:Array=null)
+		public function FlashContainer()
 		{
-			super(param);
+			super();		
 			this.remoteId=GlobalServiceId.FlashViewer_Control;
 		}
 	    
