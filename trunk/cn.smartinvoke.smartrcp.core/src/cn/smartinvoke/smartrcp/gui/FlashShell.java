@@ -1,5 +1,6 @@
 package cn.smartinvoke.smartrcp.gui;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,10 +26,15 @@ import cn.smartinvoke.util.Log;
 public class FlashShell implements IServerObject{
 	private Shell shell = null;
 	private FlashViewer flashViewer;
-	
-	public FlashShell() {
+	private boolean isDebug=false;
+	public FlashShell(boolean isDebug) {
+	   this.isDebug=isDebug;
        this.shell=new Shell();
        this.init();
+	}
+	public FlashShell() {
+	       this.shell=new Shell();
+	       this.init();
 	}
 	public FlashShell(int style) {
 	    this.shell=new Shell(style);
@@ -42,26 +48,37 @@ public class FlashShell implements IServerObject{
 	    this.shell=new Shell(shell,style);
 	    this.init();
 	}
+	public void createFlashContainer(String appPath){
+	   if(appPath!=null){
+		this.createFlashContainer(appPath, null);
+	   }
+	}
 	/**
 	 * 创建flash容器
 	 * @param isModule
 	 * @param swfPath
 	 */
-	public void createFlashContainer(String swfPath,boolean isModule){
+	public void createFlashContainer(String appPath,String modulePath){
 		//--------创建FlashContainer
-		if(swfPath!=null){
+		if(appPath!=null){
 		 this.shell.setLayout(new FillLayout());
 		 int appId=FlashViewer.getViewNum();
-		 if(isModule){
-		   String[] paths = new String[] {
-						CPerspective.getRuntimeSWFPath(),
-						CPerspective.getRuntimeSwfFolder() + "/" + swfPath };
+		 if(modulePath!=null){
+		   String[] paths = new String[] {appPath,
+						CPerspective.getRuntimeSwfFolder() + "/" + modulePath };
 		   flashViewer=new FlashViewer(appId+"",this.shell,paths);
 		 }else{
-		   String fullPath=CPerspective.getRuntimeSwfFolder() + "/" + swfPath;
+		   String fullPath=null;
+		   //如果是debug程序传入的参数
+		   if(new File(appPath).exists()){
+			   fullPath=appPath;
+		   }else{
+			   fullPath=CPerspective.getRuntimeSwfFolder() + "/" + appPath;
+		   }
 		   flashViewer=new FlashViewer(appId+"",this.shell,fullPath); 
 		 }
 		 flashViewer.setParent(this);
+		 flashViewer.debugModule=this.isDebug;//是否为debug模式
 		}else{
 			throw new RuntimeException("swfPath can not be null");
 		}

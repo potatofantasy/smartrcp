@@ -11,6 +11,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 import cn.smartinvoke.IServerObject;
+import cn.smartinvoke.RemoteObject;
+import cn.smartinvoke.rcp.CPerspective;
+import cn.smartinvoke.smartrcp.gui.FlashShell;
+import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 import cn.smartinvoke.smartrcp.gui.control.EventFilter;
 import cn.smartinvoke.smartrcp.gui.control.EventRegister;
@@ -82,11 +86,12 @@ public class FlashViewer implements IServerObject {
 	}
 
 	private IServerObject parent = null;
-
+    private RemoteObject flexApp=null;
+    //是否是debug
+    public boolean debugModule=false;
 	private FlashViewer(String appId) {
 		this.appId = appId;
 	}
-
 	private FlashContainer flashContainer;
 
 	public FlashViewer(String appId, Composite parent, String swfPath) {
@@ -144,8 +149,18 @@ public class FlashViewer implements IServerObject {
 		// 设置FlashViewer的唯一标识符
 		String appId = this.getAppId();
 		flashContainer = new FlashContainer(container, appId);
-		// flashContainer.setAppId(appId);
-
+		//flex当前顶层对象代理
+		this.flexApp=new RemoteObject(flashContainer);
+        this.flexApp.setRemoteId("app");
+        
+        //当flex加载完毕后传递容器变量给flex application对象
+        flashContainer.addListener(new ILoadCompleteListener(){
+        	public void run(){
+        	   flexApp.asyncCall("onJavaCreate", new Object[]{FlashViewer.this,flashContainer});
+        	}
+        });
+        
+        
 		// 将当前的FlashViewer注册为服务对象，以便该容器内的flex的调用
 		ObjectPool.INSTANCE.putObject(flashContainer.getAppId(), this,
 				GlobalServiceId.FlashViewer);
@@ -219,9 +234,10 @@ public class FlashViewer implements IServerObject {
 	}
 
 	public String getSwfPath() {
+		
 		return swfPath;
 	}
-
+    
 	public void dispose() {
 
 		// 从全局容器集合中删除
@@ -261,5 +277,47 @@ public class FlashViewer implements IServerObject {
 	}
 	public void setAppId(String appId) {
 		this.appId = appId;
+	}
+	public String getTitle(){
+		if(this.parent==null){
+			return null;
+		}
+		if(this.parent instanceof FlashViewPart){
+			FlashViewPart viewPart=(FlashViewPart)this.parent;
+			return viewPart.getViewTitle();
+		}else 
+		if(this.parent instanceof FlashShell){
+			FlashShell shell=(FlashShell)this.parent;
+			return shell.getText();
+		}else{
+			return null;
+		}
+	}
+	public void setTitle(String title){
+		if(this.parent!=null && title!=null){
+			if(this.parent instanceof FlashViewPart){
+				FlashViewPart viewPart=(FlashViewPart)this.parent;
+				viewPart.setViewTitle(title);
+			}else 
+			if(this.parent instanceof FlashShell){
+				FlashShell shell=(FlashShell)this.parent;
+				shell.setText(title);
+			}
+		}
+	}
+	/**
+	 * flex调用此方法请求当前flashViewer下的flex application加载模块
+	 * @param moduleUrl
+	 */
+	public void setDebugModule(String moduleUrl){
+	  if(this.debugModule){
+		if(moduleUrl!=null){
+			moduleUrl=CPerspective.getRuntimeSwfFolder()+"/"+moduleUrl;
+			this.flexApp.asyncCall("loadModule", new Object[]{moduleUrl});
+		}
+	  }
+	}
+	public Object invokeFlex(String methodName,Object[] pars){
+		return this.flexApp.call(methodName, pars);
 	}
 }

@@ -49,6 +49,7 @@ public class ObjectPool {
 		if (appId == null || object == null || key == null) {
 			return null;
 		}
+		
 		PoolEntity poolEntity = this.getPoolEntity(appId);
 		Map map = poolEntity.objMap;
 		if (map.get(key)==null) {
@@ -76,6 +77,7 @@ public class ObjectPool {
 	 * @return
 	 */
 	public String putObject(Object object,String key){
+		
 		this.globalMap.put(key, object);
 		return key;
 	}

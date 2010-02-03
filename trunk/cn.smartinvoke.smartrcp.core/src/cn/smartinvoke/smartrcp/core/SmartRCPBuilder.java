@@ -16,6 +16,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 
 import cn.smartinvoke.IServiceObjectCreator;
+import cn.smartinvoke.ProtocolBuilder;
 import cn.smartinvoke.TypeMapper;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.gui.ObjectPool;
@@ -23,6 +24,7 @@ import cn.smartinvoke.rcp.CMenuRelation;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.rcp.CWindowConfigurer;
 import cn.smartinvoke.smartrcp.CApplication;
+import cn.smartinvoke.smartrcp.DebugServer;
 import cn.smartinvoke.smartrcp.gui.CAppMenuBarManager;
 import cn.smartinvoke.smartrcp.gui.CAppToolBarManager;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
@@ -218,30 +220,39 @@ public class SmartRCPBuilder {
 			}
 		}
 	}
-
+    public static Shell Main_Shell=null;
 	public static void postWindowOpen(Shell shell) {
+		Main_Shell=shell;
 		ObjectPool.INSTANCE.putObject(shell, GlobalServiceId.Swt_Main_Win);
-		String[] args=org.eclipse.equinox.internal.app.CommandLineArgs.getAllArgs();
-		if(args!=null){
-		   for(int i=0;i<args.length;i+=2){
-			   //String arg=args[i];
-			   MessageDialog.openInformation(shell, args[i], args[i+1]);
-		   }
-		}
-		Log.println("in postWindowOpen");
+		
+		//Log.println("in postWindowOpen");
 		//加载所有的flash
 		List<FlashViewer> flashViewers=FlashViewer.getViewers();
 		for(int n=0;n<flashViewers.size();n++){
 			FlashViewer flashViewer=flashViewers.get(n);
 			flashViewer.loadFlash();
 		}
+		openDebugServer();
 	}
-
+	/**
+	 * 打开debug服务，接收flexBuilder的请求
+	 */
+    private static void openDebugServer(){
+      String[] args=org.eclipse.equinox.internal.app.CommandLineArgs.getAllArgs();	
+      if(args!=null){
+    	  for(int i=0;i<args.length;i++){
+    		  String arg=args[i];
+    		  if(arg.equals("-dbm")){
+    			  DebugServer.start();
+    		  }
+    	  }
+      }
+    }
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+          //ProtocolBuilder
 	}
 
 }

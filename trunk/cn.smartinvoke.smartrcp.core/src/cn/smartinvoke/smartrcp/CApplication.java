@@ -2,9 +2,7 @@ package cn.smartinvoke.smartrcp;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.adaptor.EclipseStarter;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.service.application.ApplicationDescriptor;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.rcp.CPerspective;
@@ -32,6 +30,17 @@ public class CApplication implements IServerObject {
 	public void exit(){
 		PlatformUI.getWorkbench().close();
 	}
+	public String getRuntimeSwfPath(){
+		return CPerspective.getRuntimeSWFPath();
+	}
+	private String debugPath;
+	public void setDebugPath(String path){
+		this.debugPath=path;
+	}
+	public String getDebugPath(){
+		return this.debugPath;
+	}
+	
 	/**
 	 * @param args
 	 */
