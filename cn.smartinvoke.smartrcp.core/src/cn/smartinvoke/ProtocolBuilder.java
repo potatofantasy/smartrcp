@@ -372,7 +372,7 @@ class MyAmf3Output extends Amf3Output {
         while (it.hasNext()){
              String propName = (String)it.next();
              Object value = null;
-             value =ObjectPool.INSTANCE.getObjectkey(instance);
+             value =ObjectPool.INSTANCE.putObject(this.appId, instance);
              writeObjectProperty(propName, value);
         }
         writeObjectEnd();

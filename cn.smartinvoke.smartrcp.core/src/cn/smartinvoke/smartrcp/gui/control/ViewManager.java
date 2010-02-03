@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.internal.WorkbenchPage;
@@ -133,6 +134,7 @@ public class ViewManager {
 			  if(parent!=null && parent instanceof FlashViewPart){
 					FlashViewPart flashViewPart=(FlashViewPart)parent;
 					IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
+				    
 					//首先获得焦点
 					page.activate(flashViewPart);
 					//最大化
@@ -161,7 +163,21 @@ public class ViewManager {
 		}
 		return ret;
 	}
-	private List<FlashViewer> findFlashViewers(String modulePath){
+	/**
+	 * 获得当前获得焦点的viewPart
+	 * @return
+	 */
+	public FlashViewer getActiveViewPart(){
+		FlashViewer ret=null;
+		IWorkbenchPart part=SmartRCPBuilder.window.getActivePage().getActivePart();
+		
+		if(part!=null && part instanceof FlashViewPart){
+			FlashViewPart flashViewPart=(FlashViewPart)part;
+			ret=flashViewPart.getFlashViewer();
+		}
+		return ret;
+	}
+	public List<FlashViewer> findFlashViewers(String modulePath){
 		List<FlashViewer> ret=new LinkedList<FlashViewer>();
 		if(modulePath!=null){
 			modulePath=CPerspective.getRuntimeSwfFolder() + "/"+modulePath;
@@ -176,7 +192,7 @@ public class ViewManager {
 		return ret;
 	}
 	
-	private FlashViewer findFlashViewer(String appId){
+	public FlashViewer findFlashViewer(String appId){
 		if(appId!=null){
 			List<FlashViewer> curViews=FlashViewer.getViewers();//当前的所有FlashViewer
 			for(int n=0;n<curViews.size();n++){
