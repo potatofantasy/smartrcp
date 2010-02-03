@@ -19,8 +19,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
-		//初始化smartRCP并传入类加载器，这样cn.smartinvoke.smartrcp.core才能动态创建服务类
-		SmartRCPBuilder.init(new MyServiceObjectCreator());
+		
 	}
 
 	public static BundleContext context;
