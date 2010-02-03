@@ -160,14 +160,14 @@ public class FlashViewer implements IServerObject {
         	}
         });
         
-        
+      /*  
 		// 将当前的FlashViewer注册为服务对象，以便该容器内的flex的调用
 		ObjectPool.INSTANCE.putObject(flashContainer.getAppId(), this,
 				GlobalServiceId.FlashViewer);
 		// 将flash控件作为服务类
 		ObjectPool.INSTANCE.putObject(flashContainer.getAppId(),
 				flashContainer, GlobalServiceId.FlashViewer_Control);
-
+*/
 		flashContainer.addHookInterceptor(new OleHookInterceptor() {
 			public boolean intercept(Msg message, int code, int param,
 					int param2) {

@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Menu;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.rcp.CMenuRelation;
+import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 import cn.smartinvoke.smartrcp.gui.module.CObservable;
 import cn.smartinvoke.smartrcp.util.JFaceConstant;
 import cn.smartinvoke.util.Log;
@@ -271,6 +272,11 @@ private  void fillMenu(IMenuManager menuBar, CMenuRelation menuRelation,String m
 		}
 		if(this.rootMenu!=null){
 			this.rootMenu.dispose();
+		}
+		//
+		for(int n=0;n<this.listeners.size();n++){
+			CEventBean bean=this.listeners.get(n);
+			bean.dispose();
 		}
 		}catch(Throwable e){};
 	}
