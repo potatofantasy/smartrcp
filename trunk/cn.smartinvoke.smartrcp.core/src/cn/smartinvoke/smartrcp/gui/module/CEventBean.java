@@ -173,6 +173,13 @@ public class CEventBean {
     public String toString(){
     	return this.appId;
     }
+    public void dispose(){
+    	//TODO CEventBean 对象内存的清理
+    	/*Log.println("remove cEventBean listener:"+this.tagetId+" "+this.funId);
+		if(this.flexEventNotifer!=null){
+		 this.flexEventNotifer.asyncCall("removeListener",new Object[]{this.tagetId,this.funId});
+		}*/
+    }
 	/**
 	 * 释放flex ObjectPool中的资源，避免内存泄露
 	 */
@@ -183,10 +190,10 @@ public class CEventBean {
 		// if(this.funRemoteObj!=null){
 		// this.funRemoteObj.dispose();
 		// }
-		Log.println("remove cEventBean listener:"+this.tagetId+" "+this.funId);
+		/*Log.println("remove cEventBean listener:"+this.tagetId+" "+this.funId);
 		if(this.flexEventNotifer!=null){
 		 this.flexEventNotifer.asyncCall("removeListener",new Object[]{this.tagetId,this.funId});
-		}
+		}*/
 	}
 
 }

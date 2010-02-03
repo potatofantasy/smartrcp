@@ -48,8 +48,9 @@ public class ViewManager {
 				if(viewId!=null){
 				   if(viewId.endsWith(".swf")){//如果是swf
 					  appId = FlashViewer.getViewNum();
-					  Perspective.swfLayoutMap.put(Integer.valueOf(appId),basicInfo);
 					  basicInfo.autoLoad=true;//设置为true，以便FlashViewPart自动加载swf
+					  Perspective.swfLayoutMap.put(Integer.valueOf(appId),basicInfo);
+					  
 					  SmartRCPBuilder.window.getActivePage().showView(FlashViewPart.ID, appId + "",state);
 				   }else{
 					  if(isMultiple){
