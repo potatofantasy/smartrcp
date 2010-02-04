@@ -52,28 +52,43 @@ public class Perspective implements IPerspectiveFactory {
 			layout.setFixed(pageLayout.fixed);
 			layoutMap.put(pageLayout, editorArea);
 			//
-			List<CFolderLayout> folderLayouts=pageLayout.getFolderLayouts();
-			if(folderLayouts!=null){
-			  for(int i=0;i<folderLayouts.size();i++){
-				  CFolderLayout folderLayout=folderLayouts.get(i);
-				  layoutMap.put(folderLayout, "folderLayout"+i);
-				  folderLayout.setCreate(false);
+			List<CLayout> layouts=pageLayout.getLayouts();
+			if(layouts!=null){
+			  for(int i=0;i<layouts.size();i++){
+				  CLayout cLayout=layouts.get(i);
+				  if(cLayout instanceof CFolderLayout){
+				   CFolderLayout folderLayout=(CFolderLayout)cLayout;
+				   layoutMap.put(folderLayout, "folderLayout"+i);
+				   folderLayout.setCreate(false);
+				  }
+			  }
+			 //设置布局
+			  for(int i=0;i<layouts.size();i++){
+				  CLayout cLayout=layouts.get(i);
+				if(cLayout!=null){
+				  if(cLayout instanceof CFolderLayout){
+					createFolder((CFolderLayout)cLayout);
+				  }
+				  if(cLayout instanceof CStandaloneLayout){
+					createStandaloneFolder((CStandaloneLayout)cLayout);
+				  }
+				}
 			  }
 			}
 			//设置布局
+			//
+			/*List<CStandaloneLayout> standaloneLayouts=pageLayout.getStandaloneLayouts();
+			if(standaloneLayouts!=null){
+				for(int t=0;t<standaloneLayouts.size();t++){
+					createStandaloneFolder(standaloneLayouts.get(t));
+				}
+			}
 			if(folderLayouts!=null){
 				  for(int i=0;i<folderLayouts.size();i++){
 					  createFolder(folderLayouts.get(i));
 				  }
-		    }
-			//
-			List<CStandaloneLayout> standaloneLayouts=pageLayout.getStandaloneLayouts();
-			if(standaloneLayouts!=null){
-				for(int t=0;t<standaloneLayouts.size();t++){
-					//CStandaloneLayout standaloneLayout=standaloneLayouts.get(t);
-					createStandaloneFolder(standaloneLayouts.get(t));
-				}
-			}
+		    }*/
+			
 		}
 		
 	}

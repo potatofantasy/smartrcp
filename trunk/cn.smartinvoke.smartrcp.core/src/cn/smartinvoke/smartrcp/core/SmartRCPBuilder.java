@@ -7,6 +7,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
@@ -210,13 +211,14 @@ public class SmartRCPBuilder {
 			CPerspective cPerspective = SplashWindow.getPerspective();
 			if (cPerspective != null) {
 				CWindowConfigurer cWinConfig = cPerspective.windowConfigurer;
+				configurer.setShellStyle(cWinConfig.shellStyle);
 				configurer.setInitialSize(new Point(cWinConfig.shellWidth,
 						cWinConfig.shellHeight));
 				
-//				configurer.setShowPerspectiveBar(cWinConfig.showMenuBar);
-//				configurer.setShowMenuBar(cWinConfig.showMenuBar);
-//				configurer.setShowCoolBar(cWinConfig.showCoolBar);
-//				configurer.setShowStatusLine(cWinConfig.showStatusLine);
+				configurer.setShowPerspectiveBar(cWinConfig.showPerspectiveBar);
+				configurer.setShowMenuBar(cWinConfig.showMenuBar);
+				configurer.setShowCoolBar(cWinConfig.showCoolBar);
+				configurer.setShowStatusLine(cWinConfig.showStatusLine);
 			}
 		}
 	}
@@ -224,6 +226,16 @@ public class SmartRCPBuilder {
 	public static void postWindowOpen(Shell shell) {
 		Main_Shell=shell;
 		ObjectPool.INSTANCE.putObject(shell, GlobalServiceId.Swt_Main_Win);
+		CPerspective cPerspective = SplashWindow.getPerspective();
+		if (cPerspective != null) {
+			CWindowConfigurer cWinConfig = cPerspective.windowConfigurer;
+			shell.setText(cWinConfig.shellTitle);
+			ImageDescriptor imageDescriptor=
+				ImageManager.getImageDescriptor(cWinConfig.shellImage);
+			if(imageDescriptor!=null){
+				shell.setImage(imageDescriptor.createImage());
+			}
+		}
 		// 全局服务 对象设置视图管理器
 		ViewManager viewManager=new ViewManager();
 		IWorkbenchWindow window=SmartRCPBuilder.window;
