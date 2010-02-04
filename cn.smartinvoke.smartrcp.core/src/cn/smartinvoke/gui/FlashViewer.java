@@ -1,5 +1,6 @@
 package cn.smartinvoke.gui;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import org.eclipse.swt.widgets.Event;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.RemoteObject;
+import cn.smartinvoke.exception.InvokeException;
+import cn.smartinvoke.exception.Messages;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.gui.FlashShell;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
@@ -19,6 +22,7 @@ import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 import cn.smartinvoke.smartrcp.gui.control.EventFilter;
 import cn.smartinvoke.smartrcp.gui.control.EventRegister;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
+import cn.smartinvoke.util.HelpMethods;
 import cn.smartinvoke.util.Log;
 
 public class FlashViewer implements IServerObject {
@@ -85,11 +89,11 @@ public class FlashViewer implements IServerObject {
 		return ret;
 	}
 
-	private IServerObject parent = null;
+	private Object parent = null;
     private RemoteObject flexApp=null;
     //是否是debug
     public boolean debugModule=false;
-	private FlashViewer(String appId) {
+	public FlashViewer(String appId) {
 		this.appId = appId;
 	}
 	private FlashContainer flashContainer;
@@ -232,18 +236,35 @@ public class FlashViewer implements IServerObject {
 	public void setFlashContainer(FlashContainer flashContainer) {
 		this.flashContainer = flashContainer;
 	}
-
 	public String getSwfPath() {
-		
 		return swfPath;
 	}
+	public void setSwfPath(String path){
+		this.swfPath=path;
+	}
+	//--------------
+    public boolean equals(Object obj){
+    	boolean ret=false;
+    	if(obj!=null && obj instanceof FlashViewer){
+    		FlashViewer other=(FlashViewer)obj;
+    		return this.appId.equals(other.appId);
+    	}
+    	return ret;
+    }
+    public int hashCode(){
+    	return this.appId.hashCode();
+    }
     
 	public void dispose() {
-
+        
 		// 从全局容器集合中删除
 		if (containers.contains(this)) {
 			Log.println("in FlashViewer dispose");
 			FlashViewer.remove_Viewer(this);
+		}
+		
+		if(this.parent instanceof FlashViewPart 
+				|| parent instanceof FlashShell){//当前flashViewer对象是flash容器对象
 			// 删除监听器
 			ObjectPool pool = ObjectPool.INSTANCE;
 			EventRegister eventRegister = (EventRegister) pool
@@ -262,11 +283,11 @@ public class FlashViewer implements IServerObject {
 	}
 
 	// -----------------
-	public IServerObject getParent() {
+	public Object getParent() {
 		return parent;
 	}
 
-	public void setParent(IServerObject parent) {
+	public void setParent(Object parent) {
 		this.parent = parent;
 	}
 
@@ -277,6 +298,9 @@ public class FlashViewer implements IServerObject {
 	}
 	public void setAppId(String appId) {
 		this.appId = appId;
+	}
+	public String getFlexAppId(){
+		return appId;
 	}
 	public String getTitle(){
 		if(this.parent==null){
@@ -317,7 +341,46 @@ public class FlashViewer implements IServerObject {
 		}
 	  }
 	}
-	public Object invokeFlex(String methodName,Object[] pars){
-		return this.flexApp.call(methodName, pars);
+	public Object invoke(String methodName,Object[] pars){
+		if(this.parent instanceof FlashViewPart || this.parent instanceof FlashShell){
+		  return this.flexApp.call(methodName, pars);
+		}else{
+		  return invokeObject(parent,methodName,pars);
+		}
+	}
+	private Object invokeObject(Object callObj,String methodName,Object[] pars){
+        Object retObj=null;
+        if(callObj!=null){
+           Class cls=callObj.getClass();
+           if(pars==null){
+        	   pars=new Object[0];
+           }
+   		   Method ivkMethod=HelpMethods.getMethod(cls, methodName, pars);
+		   if(ivkMethod==null){//没有对应的方法则报告异常
+				InvokeException invokException=
+					new InvokeException(InvokeException.TYPE_INVOK_METHOD_NULL,
+							Messages.INSTANCE.getMsg(Messages.IVK_METHOD_NOT_FOUND,new String[]{cls.getName(),methodName}));
+				
+				throw invokException;
+		   }else{
+			   try{
+                  retObj=ivkMethod.invoke(callObj, pars);
+			   }catch(Exception e){
+				 InvokeException invokException=
+					new InvokeException(InvokeException.TYPE_INVOK_METHOD_EXCEPTION,
+							Messages.INSTANCE.getMsg(Messages.IVK_METHOD_EXCEPTION,
+							new String[]{cls.getName(),methodName,e.getMessage()}));
+				
+				 throw invokException;
+			   }
+		   }
+        }else{//被调用对象为空，抛出异常
+        	InvokeException invokException=
+				new InvokeException(InvokeException.TYPE_INVOK_OBJECT_NULL,
+						Messages.INSTANCE.getMsg(Messages.IVK_OBJECT_NOT_FOUND,new String[]{""}));
+			
+			throw invokException;
+        }
+        return retObj;
 	}
 }

@@ -101,6 +101,8 @@ public class SmartRCPBuilder {
 	 */
 	public static void createActions(IWorkbenchWindow window) {
 		SmartRCPBuilder.window=window;
+		
+		
 		CPerspective cPerspective = SplashWindow.getPerspective();
 		if (cPerspective != null) {
 			Object[] actionArr = cPerspective.actions;
@@ -200,12 +202,10 @@ public class SmartRCPBuilder {
 		// TODO 将Display对象注册为全局服务对象，并且添加事件处理程序
 		// System.out.println();
 		Display curDisp = Display.getCurrent();
-		// Log.println("shell obj="+configurer.getWindow().getShell());
 		ObjectPool.INSTANCE.putObject(curDisp, GlobalServiceId.Swt_Display);
 		EventFilter.exeFilter(curDisp);
-		// 设置视图管理器
-		ObjectPool.INSTANCE.putObject(new ViewManager(),
-				GlobalServiceId.View_Manager);
+		
+		
 		if (configurer != null) {
 			CPerspective cPerspective = SplashWindow.getPerspective();
 			if (cPerspective != null) {
@@ -224,7 +224,12 @@ public class SmartRCPBuilder {
 	public static void postWindowOpen(Shell shell) {
 		Main_Shell=shell;
 		ObjectPool.INSTANCE.putObject(shell, GlobalServiceId.Swt_Main_Win);
-		
+		// 全局服务 对象设置视图管理器
+		ViewManager viewManager=new ViewManager();
+		IWorkbenchWindow window=SmartRCPBuilder.window;
+		viewManager.initIWorkbenchPageListener(window.getActivePage());
+		ObjectPool.INSTANCE.putObject(viewManager,
+				GlobalServiceId.View_Manager);
 		//Log.println("in postWindowOpen");
 		//加载所有的flash
 		List<FlashViewer> flashViewers=FlashViewer.getViewers();

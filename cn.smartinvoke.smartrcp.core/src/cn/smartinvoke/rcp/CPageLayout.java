@@ -13,6 +13,7 @@ import java.util.LinkedList;
  public class CPageLayout  implements ICFolderLayout{
 	 
 	private boolean editorAreaVisible=true;
+	public boolean fixed=false;
     private LinkedList<CFolderLayout> folderLayouts=null;
     
     private LinkedList<CStandaloneLayout> standaloneLayouts=null;

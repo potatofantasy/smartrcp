@@ -49,7 +49,7 @@ public class Perspective implements IPerspectiveFactory {
 		if(pageLayout!=null){
 			String editorArea = layout.getEditorArea();
 			layout.setEditorAreaVisible(pageLayout.isEditorAreaVisible());
-			layout.setFixed(false);
+			layout.setFixed(pageLayout.fixed);
 			layoutMap.put(pageLayout, editorArea);
 			//
 			List<CFolderLayout> folderLayouts=pageLayout.getFolderLayouts();
@@ -98,8 +98,13 @@ public class Perspective implements IPerspectiveFactory {
 			 // System.out.println(">"+folderName+"*"+folderLayout.getRelationship()+"*"+folderLayout.getRatio());
 		   IFolderLayout folder = layout.createFolder(folderName,folderLayout.getRelationship(),(float)folderLayout.getRatio(),
 				   relFolderName);
+		   if(folderLayout.placeholderViewId!=null){
+			   folder.addPlaceholder(folderLayout.placeholderViewId+":*");
+		   }
 		   String viewIdSstr=this.getViewIdString(folderLayout);
-		   folder.addView(viewIdSstr);
+		   if(viewIdSstr!=null){
+		    folder.addView(viewIdSstr);
+		   }
 		   //TODO¡¡£î£á£í£å
 		   IViewLayout viewPart=layout.getViewLayout(viewIdSstr);
 		   viewPart.setCloseable(folderLayout.isCloseable());
@@ -125,13 +130,13 @@ public class Perspective implements IPerspectiveFactory {
 		String relFolderName=layoutMap.get(refFolder);
 		if(relFolderName!=null){
 			String viewIdSstr=this.getViewIdString(standaloneLayout);
-			//System.out.println(">"+viewIdSstr+"*"+standaloneLayout.getRelationship()+"*"+standaloneLayout.getRatio());
-			layout.addStandaloneView(viewIdSstr, standaloneLayout.isShowTitle(), standaloneLayout.getRelationship(),
+			if(viewIdSstr!=null){
+			 layout.addStandaloneView(viewIdSstr, standaloneLayout.isShowTitle(), standaloneLayout.getRelationship(),
 					(float)standaloneLayout.getRatio(),relFolderName);
 			
-			layout.getViewLayout(viewIdSstr).setCloseable(standaloneLayout.isCloseable());
-			layout.getViewLayout(viewIdSstr).setMoveable(standaloneLayout.isMoveable());
-			
+			 layout.getViewLayout(viewIdSstr).setCloseable(standaloneLayout.isCloseable());
+			 layout.getViewLayout(viewIdSstr).setMoveable(standaloneLayout.isMoveable());
+			}
 		}
 	}
 	private String getViewIdString(CLayout layout){

@@ -9,6 +9,7 @@
 *******************************************************************************/ 
 package cn.smartinvoke.gui;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import cn.smartinvoke.ProtocolBuilder;
@@ -57,7 +58,13 @@ public class Executor {
 						ret = this.call(reqPack);
 					}
 				} catch (Throwable e) {//e.printStackTrace();
-					  ret=ProtocolBuilder.getProtocolStr(new InvokeException(e.getMessage()),this.appId);
+					  if(e instanceof InvocationTargetException){
+						InvocationTargetException ta=(InvocationTargetException)e;
+						 ret=
+							 ProtocolBuilder.getProtocolStr(new InvokeException(ta.getCause().getMessage()),this.appId);
+					  }else{
+					     ret=ProtocolBuilder.getProtocolStr(new InvokeException(e.getMessage()),this.appId);
+					  }
 				}
 			}
 		}else{//报文错误
@@ -125,16 +132,16 @@ public class Executor {
 				
 				throw invokException;
 		   }else{
-			   try{
+			  // try{
                   retObj=ivkMethod.invoke(callObj, pars);
-			   }catch(Exception e){
+			   /*}catch(Exception e){
 				 InvokeException invokException=
 					new InvokeException(InvokeException.TYPE_INVOK_METHOD_EXCEPTION,
 							Messages.INSTANCE.getMsg(Messages.IVK_METHOD_EXCEPTION,
 							new String[]{cls.getName(),methodName,e.getMessage()}));
 				
 				 throw invokException;
-			   }
+			   }*/
 		   }
         }else{//被调用对象为空，抛出异常
         	InvokeException invokException=
