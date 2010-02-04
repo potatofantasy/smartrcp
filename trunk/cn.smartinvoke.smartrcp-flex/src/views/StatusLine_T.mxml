@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" horizontalAlign="center" verticalAlign="middle">
+	<mx:Script>
+		<![CDATA[
+			public function setInfo(text:String):void{
+				this.indexLabel.htmlText=text;
+			}
+		]]>
+	</mx:Script>
+	<mx:Text id="indexLabel" text="功能列表" width="100%" height="100%"/>
+</gui:RCPModule>

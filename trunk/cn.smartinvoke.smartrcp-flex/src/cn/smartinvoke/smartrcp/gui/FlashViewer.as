@@ -12,15 +12,19 @@ package cn.smartinvoke.smartrcp.gui
 			super();
 			this.remoteId=GlobalServiceId.FlashViewer;
 		}
+		public function getFlexAppId():String{
+			return this.call("getFlexAppId",arguments) as String;
+		}
 		public function setTitle(title:String):void{
 			this.call("setTitle",arguments);
 		}
 		public function getTitle():String{
 			return this.call("getTitle",arguments) as String;
 		}
-		public function invokeFlex(methodName:String,params:Array):Object{
-			return this.call("invokeFlex",[methodName,params]);
+		public function invoke(methodName:String,params:Array=null):Object{
+			return this.call("invoke",[methodName,params]);
 		}
+		//debug调用此方法
 		public function setDebugModule(url:String):void{
 			this.call("setDebugModule",arguments);
 		}

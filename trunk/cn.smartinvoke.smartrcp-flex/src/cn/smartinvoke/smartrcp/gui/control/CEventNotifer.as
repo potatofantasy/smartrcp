@@ -40,7 +40,10 @@ package cn.smartinvoke.smartrcp.gui.control
         		var pool:ObjectPool =ObjectPool.INSTANCE;
         		var uidStr:String=tagetId+funId;
         		var listenerArr:Array=pool.getObject(uidStr) as Array;
-        		
+        		if(listenerArr==null){
+        			//Alert.show("cEventNotifer fireAction listenerArr==null");
+        			return;
+        		}
         		var taget:Object=listenerArr[0];
         		var fun:Object=listenerArr[1];
         		if(taget!=null){

@@ -2,7 +2,7 @@
 <gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
 	layout="vertical" creationComplete="init()">
 	<mx:Script>
-		<![CDATA[
+		<![CDATA[ 
 			import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 			import cn.smartinvoke.smartrcp.gui.control.CAppMenuBarManager;
 			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;

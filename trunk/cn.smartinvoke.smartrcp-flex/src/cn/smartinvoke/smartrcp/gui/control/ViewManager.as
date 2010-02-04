@@ -22,8 +22,8 @@ package cn.smartinvoke.smartrcp.gui.control
 		{
 			this.remoteId=GlobalServiceId.View_Manager;
 		}
-        public function openViewPart( basicInfo:CLayoutBasicInfo,isMultiple:Boolean,state:int):void{
-        	this.call("openViewPart",arguments);
+        public function openViewPart( basicInfo:CLayoutBasicInfo,isMultiple:Boolean,state:int):FlashViewer{
+        	return this.call("openViewPart",arguments) as FlashViewer;
         }
         
         public function closeViewPart(appId:String):void{
@@ -56,6 +56,9 @@ package cn.smartinvoke.smartrcp.gui.control
         }
         public function closeViewParts(modulePath:String):void{
 	      this.call("closeViewParts",arguments);
+        }
+        public function resetViews():void{
+        	this.call("resetViews",arguments);
         }
 	}
 }

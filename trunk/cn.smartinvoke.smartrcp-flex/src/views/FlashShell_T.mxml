@@ -16,7 +16,7 @@
 			function init():void{
 			   	var baseUrl:String=CApplication.Instance.getBaseFolder();
 			   	var moduleFolder:String=baseUrl+"/views";
-			   	Alert.show(moduleFolder);
+			   //	Alert.show(moduleFolder);
 			   	
 			   	var folder:RemoteObject=new RemoteObject();
 			   	folder.create("java.io.File",[moduleFolder]);
