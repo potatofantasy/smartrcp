@@ -10,74 +10,45 @@
 	 </mx:Style>
 	 <mx:Script>
 	 	<![CDATA[
+	 		import cn.smartinvoke.rcp.CPageLayout;
 	 		import cn.smartinvoke.rcp.CStandaloneLayout;
 	 		import cn.smartinvoke.rcp.CToolBar;
 	 		import org.eclipse.swt.SWT;
 	 		import cn.smartinvoke.rcp.CFolderLayout;
-	 		import cn.smartinvoke.rcp.CPageLayout;
 	 		
 	 		public override function getAutomatic():Boolean{
 			   return false;
 		    }
 	 		public override function getPerspective():CPerspective{
-   		     
-             var page:CPageLayout=new CPageLayout(); 
-   			page.editorAreaVisible=false;
-   			
-   var treeLayout:CFolderLayout=new CFolderLayout("KeyEvent_T.swf",
-                 CPageLayout.TOP,0.5,page,false,true);
-                 treeLayout.isModuleSwf=false;
-   			treeLayout.title="导航";
-   			treeLayout.closeable=true;
-   			treeLayout.image="/icons/sample.gif";
-   			
-   var contentLayout:CFolderLayout=new CFolderLayout("views/ContextMenu_T.swf",
-                CPageLayout.RIGHT,0.5,treeLayout,true,false);
-                contentLayout.closeable=true;
-  contentLayout.title="内容面板";
-  contentLayout.image="/icons/sample2.gif";
-  
-  
-    var perpertyLayout:CFolderLayout=new CFolderLayout("views/FlashShell_T.swf",
-                CPageLayout.BOTTOM,0.5,treeLayout,true,false);
-                 			perpertyLayout.title="属性"; 
-                 			perpertyLayout.closeable=true;
-                 			 
-                 			var path:String="views/AppToolBar_T.swf";//"org.eclipse.ui.browser.view"
-                 			var toolBarLayout:CStandaloneLayout=
-                 			 new CStandaloneLayout(path,CPageLayout.LEFT,.5,contentLayout,true,true,true);
-                
-   page.addFolderLayout(treeLayout);
-   page.addFolderLayout(contentLayout);
-   page.addFolderLayout(perpertyLayout);
-   //page.addStandaloneLayout(toolBarLayout);
-   
-             ret.page=page;
-             ret.toolBar=new CToolBar();
-             ret.toolBar.type=SWT.BOTTOM;
-             ret.toolBar.actionIds=["first","-","first1","first2","-","first3"];
-             
-   			return ret;
-   		}
-   		function onClick():void{
+	 			
+   			   return ret;
+   		    }
+   		    private function onClick():void{
    			 this.closeWin();
-   		}
+   		    }
+   		//--------
+   		public var firstText:String="&amp;测试 \t CTRL+S";
 	 	]]>
 	 </mx:Script>
 	 <mx:Button label="关闭" click="onClick()"/>
+	 
+	 
 	<rcp:CPerspective id="ret">
+	
+	<!--action的定义 -->
    	<rcp:actions>
-   		<rcp:CAction  id="actionFirst" type="{CAction.AS_CHECK_BOX}" checked="true" actionId="first" text="&amp;测试 \\\t CTRL+S" toolTip="toolTipTest..." 
-   			hoverImageUrl="/icons/collapseall(5).gif"
-   			imageUrl="/icons/collapseall(4).gif"/>
-   		<rcp:CAction  actionId="first1" type="{CAction.AS_RADIO_BUTTON}" text="测试2" toolTip="toolTipTest1..." imageUrl="/icons/sample.gif"/>
-   		<rcp:CAction  actionId="first2" type="{CAction.AS_RADIO_BUTTON}" text="测试3" toolTip="toolTipTest2..." imageUrl="/icons/sample2.gif"/>
-   		<rcp:CAction  actionId="first3" type="{CAction.AS_DROP_DOWN_MENU}" text="测试4" toolTip="toolTipTest3..." imageUrl="/icons/sample3.gif"/>
+   		<rcp:CAction  actionId="first" type="{CAction.AS_CHECK_BOX}" checked="true" 
+   			text="{firstText}" toolTip="toolTipTest..."
+   			imageUrl="/icons/call_hierarchy.gif"/>
+   		<rcp:CAction  actionId="first1" type="{CAction.AS_RADIO_BUTTON}" text="测试2" toolTip="toolTipTest1..." />
+   		<rcp:CAction  actionId="first2" type="{CAction.AS_RADIO_BUTTON}" text="测试3" toolTip="toolTipTest2..." />
+   		<rcp:CAction  actionId="first3" type="{CAction.AS_DROP_DOWN_MENU}" text="测试4" toolTip="toolTipTest3..."/>
    		
    		<rcp:CAction  actionId="a1"  text="a1" toolTip="a1..."/>
    		<rcp:CAction  actionId="a2"  text="a2" toolTip="a2..."/>
    		<rcp:CAction  actionId="a3"  text="a3" toolTip="a1..."/>
    	</rcp:actions>
+   	<!--菜单栏-->
    	<rcp:menuBars>
    		<rcp:CMenuRelation label="文件">
    		 <rcp:actions>
@@ -105,5 +76,39 @@
    		 </rcp:actions>
    		</rcp:CMenuRelation>
    	</rcp:menuBars>
+   	<!--工具栏-->
+   	<rcp:toolBar>
+   		<rcp:CToolBar type="{SWT.LEFT}"> 
+   			<rcp:actionIds>
+   				<mx:String>first</mx:String>
+   			</rcp:actionIds>
+   		</rcp:CToolBar>
+   	</rcp:toolBar>
+   	<rcp:windowConfigurer>
+   		<rcp:CWindowConfigurer shellWidth="1000" shellHeight="800" 
+   			showPerspectiveBar="false" showStatusLine="false" shellImage="/icons/types.gif"
+   			 shellTitle="超级牛B程序..."
+   			/>
+   	</rcp:windowConfigurer>
+   	<!--视图布局-->
+    <rcp:page>
+    	<rcp:CPageLayout id="page" editorAreaVisible="false">
+	 	<rcp:layouts>
+	 	  <mx:ArrayCollection>
+	 	     
+	 	       <rcp:CStandaloneLayout id="layoutNav"
+	 	        viewId="views/TreeViewPart.swf" relationship="{CPageLayout.LEFT}" ratio="0.25" refLayout="{this.page}" showTitle="false">
+	           </rcp:CStandaloneLayout>
+	 	       <rcp:CFolderLayout id="layoutContent" viewId="views/ViewManager_T.swf" title="开始界面"
+	 	  		placeholderViewId="cn.smartinvoke.smartrcp.gui.FlashViewPart"
+	 	  		 relationship="{CPageLayout.TOP}" ratio="0.5" refLayout="{page}" moveable="true"
+	 	  		/>
+	           <rcp:CFolderLayout placeholderViewId="cn.smartinvoke.smartrcp.WebBrowser"
+	            relationship="{CPageLayout.BOTTOM}" ratio="0.5" refLayout="{this.layoutContent}"/>
+	 	    
+	 	  </mx:ArrayCollection>
+	 	</rcp:layouts>
+	  </rcp:CPageLayout>
+    </rcp:page>
 </rcp:CPerspective>
 </spl:SplashApp>

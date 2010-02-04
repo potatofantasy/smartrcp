@@ -10,7 +10,7 @@
 			import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 			import cn.smartinvoke.smartrcp.gui.control.CAppMenuBarManager;
 			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
-			import cn.smartinvoke.rcp.CAction;
+			import cn.smartinvoke.rcp.CAction; 
 			import org.eclipse.swt.CEventType;
 			import org.eclipse.swt.widgets.Display;
 			

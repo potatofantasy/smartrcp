@@ -51,7 +51,7 @@ package cn.smartinvoke.smartrcp.gui.control
 
    }
     //------------------------------------
-    public function addListener(listener:Function,thisObject:Object=null):void{
+    public function addListener(listener:Function,thisObject:Object):void{
 			if(listener==null){
 				return;
 			}
@@ -61,7 +61,7 @@ package cn.smartinvoke.smartrcp.gui.control
 			}
 	}
 	public function removeListener(
-		   listener:Function,thisObject:Object=null):void{
+		   listener:Function,thisObject:Object):void{
 		   var bean:CEventBean=HelpMethod.removeListener(listener,thisObject);
 		   if(bean!=null){
 		   	  this.call('removeListener',[bean]);

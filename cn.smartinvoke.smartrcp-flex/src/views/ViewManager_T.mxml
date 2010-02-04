@@ -8,14 +8,15 @@
 			import mx.controls.Alert;
 			import cn.smartinvoke.rcp.CLayoutBasicInfo;
 			import cn.smartinvoke.smartrcp.gui.control.ViewManager;
-			var path:String="views/AppMenuBar_T.swf";//"cn.smartinvoke.smartrcp.WebBrowser";//"views/ContextMenu_T.swf";
-			function openView():void{
+			var path:String="cn.smartinvoke.smartrcp.WebBrowser";//"cn.smartinvoke.smartrcp.WebBrowser";//"views/ContextMenu_T.swf";
+			function openView():void{  
 				var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
-				basicInfo.viewId=path;
+				basicInfo.viewId=this.path;//"cn.smartinvoke.smartrcp.WebBrowser";
 				basicInfo.title="右键菜单";
 				basicInfo.image="/icons/allteamstrms_rep.gif";
-			    ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);
-			   //Alert.show(appId+"");
+			    var openedView:FlashViewer=ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);
+			    openedView.invoke("openUrl",["http://www.google.com"]);
+			    Alert.show(openedView+"");
 			}
 			function closeView():void{
 				ViewManager.Instance.closeViewParts(this.path);
@@ -34,7 +35,8 @@
 				  var flashView:FlashViewer=openedView[0] as FlashViewer;
 				  //Alert.show(flashView.getTitle());
 				  this.infoLabel.text=flashView.getTitle();
-				}
+				  flashView.invoke("openUrl",["http://www.javaeye.com"]);
+				} 
 				
 			}
 			function showView():void{

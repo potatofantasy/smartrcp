@@ -12,7 +12,7 @@ package cn.smartinvoke.smartrcp.util
 		public function HelpMethod()
 		{
 		}
-        public static function createEventBean(listener:Function,thisObject:Object=null):CEventBean{
+        public static function createEventBean(listener:Function,thisObject:Object):CEventBean{
         	//-------构造事件信息的UID
 			var thisObjId:String="app";
 			if(thisObject!=null){
@@ -32,7 +32,7 @@ package cn.smartinvoke.smartrcp.util
 			
 			return bean;
         }
-        public static function removeListener(listener:Function,thisObject:Object=null):CEventBean{
+        public static function removeListener(listener:Function,thisObject:Object):CEventBean{
         	if(listener!=null){
 		   	 //删除池引用
 		   	 var listenerId:String=UIDUtil.getUID(listener);
@@ -40,6 +40,7 @@ package cn.smartinvoke.smartrcp.util
 			 if(thisObject!=null){
 			    thisObjId=UIDUtil.getUID(thisObject);
 			 }
+			 
 			 var eventUid:String=thisObjId+listenerId;
 			 ObjectPool.INSTANCE.removeObject(eventUid);
 			 //传递事件信息给java

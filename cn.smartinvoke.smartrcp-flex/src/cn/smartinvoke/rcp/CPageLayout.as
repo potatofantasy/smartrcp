@@ -8,7 +8,7 @@ package cn.smartinvoke.rcp
 	 [Bindable]
 	[RemoteClass(alias="cn.smartinvoke.rcp.CPageLayout")]
 	public class CPageLayout implements ICFolderLayout
-	{
+	{ 
 	    public static const  LEFT:int = 1;
         public static const  RIGHT:int = 2;
         public static const  TOP:int = 3;
@@ -17,20 +17,24 @@ package cn.smartinvoke.rcp
         public static const  RATIO_MAX:Number = 0.95;
         public static const  DEFAULT_FASTVIEW_RATIO:Number = 0.3;
         public static const  DEFAULT_VIEW_RATIO:Number = 0.5;
-
-        public var editorAreaVisible:Boolean=false;
-        public var folderLayouts:ArrayCollection=new ArrayCollection();
+       
         
-        public var standaloneLayouts:ArrayCollection=new ArrayCollection();
+        public var layouts:ArrayCollection=null;//new ArrayCollection();
+        //public var standaloneLayouts:ArrayCollection=null;//new ArrayCollection();
+        
+         [Inspectable(type="Boolean")]
+        public var editorAreaVisible:Boolean=false;
+        [Inspectable(type="Boolean")]
+        public var fixed:Boolean=false;
+        
 		public function CPageLayout()
 		{
+			
 		}
-        public function addFolderLayout(folderLayout:CFolderLayout):void{
-        	this.folderLayouts.addItem(folderLayout);
+        public function addLayout(layout:CLayout):void{
+           if(layout!=null){
+        	this.layouts.addItem(layout);
+           }
         }
-        public function addStandaloneLayout(standaloneLayout:CStandaloneLayout):void{
-        	this.standaloneLayouts.addItem(standaloneLayout);
-        }
-        
 	}
 }

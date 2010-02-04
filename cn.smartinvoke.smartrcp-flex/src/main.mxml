@@ -11,8 +11,8 @@
    		import mx.controls.Alert;
    		import cn.smartinvoke.executor.Executor;
    		protected override function onJavaLoaded():void{
-   			this.flashViewer.setDebugModule("views/ContextMenu_T.swf");
-   		}
+   			this.flashViewer.setDebugModule("views/ViewManager_T.swf");
+   		} 
    	]]>
    </mx:Script>
 </rcp:RCPApplication>
