@@ -9,7 +9,6 @@ Bundle-Activator: cn.smartinvoke.smartrcp.Activator
 Bundle-Vendor: pengzhen
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.ui.browser,
  cn.smartinvoke.smartrcp.core
 Eclipse-LazyStart: true
 Bundle-ClassPath: .,flex-messaging-common.jar,flex-messaging-core.jar
