@@ -6,6 +6,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.ViewPart;
 
 public class WebBrowser extends ViewPart {
@@ -21,7 +23,7 @@ public class WebBrowser extends ViewPart {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout());
 		browser=new Browser(container,SWT.NONE);
-		browser.setText(this.getViewSite().getSecondaryId());
+		//browser.setText(this.getViewSite().getSecondaryId());
 		//browser.setUrl("http://smartinvoke.cn");
 		//
 		createActions();
@@ -60,5 +62,7 @@ public class WebBrowser extends ViewPart {
 	public void setFocus() {
 		// Set the focus
 	}
-
+    public static void main(String[] args) {
+    	
+	}
 }
