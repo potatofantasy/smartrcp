@@ -7,6 +7,7 @@ public class CWindowConfigurer {
     public int shellWidth=800;
     public int shellHeight=600;
     public String shellTitle;
+    public String shellImage;
     public boolean showPerspectiveBar=true;
     public boolean showMenuBar=true;
     public boolean showCoolBar=true;

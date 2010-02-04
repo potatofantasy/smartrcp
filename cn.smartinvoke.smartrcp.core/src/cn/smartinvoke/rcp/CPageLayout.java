@@ -14,23 +14,13 @@ import java.util.LinkedList;
 	 
 	private boolean editorAreaVisible=true;
 	public boolean fixed=false;
-    private LinkedList<CFolderLayout> folderLayouts=null;
+    private LinkedList<CLayout> layouts=null;
     
-    private LinkedList<CStandaloneLayout> standaloneLayouts=null;
-
-	public LinkedList<CFolderLayout> getFolderLayouts() {
-		return folderLayouts;
+	public LinkedList<CLayout> getLayouts() {
+		return layouts;
 	}
-	public void setFolderLayouts(LinkedList<CFolderLayout> folderLayouts) {
-		this.folderLayouts = folderLayouts;
-	}
-
-	public LinkedList<CStandaloneLayout> getStandaloneLayouts() {
-		return standaloneLayouts;
-	}
-
-	public void setStandaloneLayouts(LinkedList<CStandaloneLayout> standaloneLayouts) {
-		this.standaloneLayouts = standaloneLayouts;
+	public void setLayouts(LinkedList<CLayout> layouts) {
+		this.layouts = layouts;
 	}
 	public boolean isEditorAreaVisible() {
 		return editorAreaVisible;
