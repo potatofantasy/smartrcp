@@ -163,6 +163,7 @@ public class FlashShell implements IServerObject{
 	}
 	//----------------------------
 	public void dispose() {
+		 this.shell.dispose();
 		//Log.println("in flashShell dispose");
 		//this.flashViewer.dispose();
 		//this.shell.dispose();

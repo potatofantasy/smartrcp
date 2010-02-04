@@ -88,5 +88,6 @@ public class FlashViewPart extends ViewPart implements IServerObject{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		super.dispose();
 	}
 }
