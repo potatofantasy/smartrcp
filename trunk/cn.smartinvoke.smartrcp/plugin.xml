@@ -37,16 +37,22 @@
             id="cn.smartinvoke.smartrcp.navigationView">
       </view>-->
       <view
-            class="cn.smartinvoke.smartrcp.core.FlashViewPart" allowMultiple="true"
-            id="cn.smartinvoke.smartrcp.core.FlashViewPart" name="flashView">
+            class="cn.smartinvoke.smartrcp.gui.FlashViewPart" allowMultiple="true"
+            id="cn.smartinvoke.smartrcp.gui.FlashViewPart" name="flashView">
       </view>
       <view
+            allowMultiple="true"
+            class="cn.smartinvoke.smartrcp.WebBrowser"
+            id="cn.smartinvoke.smartrcp.WebBrowser"
+            name="浏览器">
+      </view>
+     <!--<view
             allowMultiple="true"
             class="org.eclipse.ui.internal.browser.WebBrowserView"
             id="org.eclipse.ui.browser.view"
             
             name="浏览器">
-      </view>
+      </view>-->
    </extension>
    <extension
          point="org.eclipse.ui.commands">
