@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
-import org.eclipse.ui.internal.WorkbenchPage;
+import org.eclipse.ui.internal.PartListenerList2;
 import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.IServerObject;
@@ -21,6 +23,9 @@ import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
+import cn.smartinvoke.smartrcp.gui.module.CObservable;
+import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
+import cn.smartinvoke.util.Log;
 
 /**
  * 视图管理器，主要是flex调用此类的方法，实现java与flex的同步 这里的视图包括：ViewPart ,Shell窗口
@@ -28,23 +33,32 @@ import cn.smartinvoke.smartrcp.gui.FlashViewPart;
  * @author pengzhen
  * 
  */
-public class ViewManager {
+public class ViewManager  extends CObservable implements IServerObject{
     private IWorkbenchPage page;
+    public static FlashViewer fillViewerList(String num,String viewId,IWorkbenchPart workbenchPart){
+    	//创建与java ViewPart对应的FlashViewer
+		 FlashViewer flashViewer=new FlashViewer(num+"");
+		 flashViewer.setSwfPath(viewId);
+		 flashViewer.setParent(workbenchPart);
+		   //添加到flashViewer集合
+		   //这里的flashViewer代表的并不是Flash容器，而是将swt的ViewPart 当做FlashViewer来对待
+		 FlashViewer.add_Viewer(flashViewer);
+		 return flashViewer;
+    }
 	public ViewManager() {
         
 	}
 	public void initIWorkbenchPageListener(IWorkbenchPage page){
 		this.page=page;
-		//IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
 		if(page!=null){
 			page.addPartListener(new IPartListener(){
 
 				public void partActivated(IWorkbenchPart part) {
-					
+					fireEvent(CPartEvent.Part_Activated, part);
 				}
 
 				public void partBroughtToTop(IWorkbenchPart part) {
-					
+					fireEvent(CPartEvent.Part_BroughtToTop, part);
 				}
 
 				public void partClosed(IWorkbenchPart part) {
@@ -53,21 +67,43 @@ public class ViewManager {
 					for(int n=0;n<curViews.size();n++){
 						FlashViewer viewer=curViews.get(n);
 						if(viewer.getParent().equals(part)){//
+							fireFlashViewer(CPartEvent.Part_Closed,viewer);
 							curViews.remove(n);
 							break;
 						}
 					}
-				}
-
-				public void partDeactivated(IWorkbenchPart part) {
 					
 				}
 
-				public void partOpened(IWorkbenchPart part) {
-					//TODO 调用同步逻辑
+				public void partDeactivated(IWorkbenchPart part) {
+					fireEvent(CPartEvent.Part_Deactivated, part);
 				}
-				
+				public void partOpened(IWorkbenchPart part) {
+					fireEvent(CPartEvent.Part_Opened, part);
+				}
 			});
+		}
+	}
+	private void fireEvent(int type,IWorkbenchPart part){
+		//FlashViewer flashViewer=null;
+		if(part!=null){
+			List<FlashViewer> flashViewers=FlashViewer.getViewers();
+			for(int n=0;n<flashViewers.size();n++){
+				FlashViewer flashViewer=flashViewers.get(n);
+				if(flashViewer.getParent().equals(part)){
+					fireFlashViewer(type,flashViewer);
+					break;
+				}
+			}
+		}
+	}
+	private void fireFlashViewer(int type,FlashViewer flashViewer){
+		if(flashViewer!=null){
+			CPartEvent partEvent=new CPartEvent();
+			partEvent.type=type;
+			partEvent.taget=flashViewer;
+			
+			ViewManager.this.fireEvent(partEvent);
 		}
 	}
     //private Map<String,Integer> multiplViewNum=new HashMap<String, Integer>();
@@ -106,15 +142,7 @@ public class ViewManager {
 					    showView=page.showView(viewId);
 					  }
 					  if(showView!=null){
-					   //创建与java ViewPart对应的FlashViewer
-					   FlashViewer flashViewer=new FlashViewer(num+"");
-					   flashViewer.setSwfPath(viewId);
-					   flashViewer.setParent(showView);
-					   //添加到flashViewer集合
-					   //这里的flashViewer代表的并不是Flash容器，而是将swt的ViewPart 当做FlashViewer来对待
-					   FlashViewer.add_Viewer(flashViewer);
-					   
-					   ret=flashViewer;
+					   ret=fillViewerList(num+"", viewId, showView);
 					  }
 				   }
 				}
@@ -273,12 +301,59 @@ public class ViewManager {
 		}
 		return null;
 	}
+	private ViewPart findViewPart(String appId){
+		ViewPart ret=null;
+		FlashViewer flashViewer=this.findFlashViewer(appId);
+		if(flashViewer!=null){
+			Object parent=flashViewer.getParent();
+			if(parent instanceof IViewPart){
+			  	 ret=(ViewPart)parent;
+			}
+		}
+		return ret;
+	}
 	public void resetViews(){
 		this.page.resetPerspective();
+		/*this.page.activate(part);
+		this.page.bringToTop(part);
+		this.page.close();
+		this.page.hideView(view);
+		this.page.isPartVisible(part);
+		this.page.setPartState(ref, state)
+		this.page.f*/
+	}
+	public void close(){
+		this.page.close();
+	}
+	public void activate(String appId){
+		ViewPart viewPart=this.findViewPart(appId);
+		if(viewPart!=null){
+			this.page.activate(viewPart);
+		}
+	}
+	public void bringToTop(String appId){
+		ViewPart viewPart=this.findViewPart(appId);
+		if(viewPart!=null){
+			this.page.bringToTop(viewPart);
+		}
+	}
+	public void hideView(String appId){
+		ViewPart viewPart=this.findViewPart(appId);
+		if(viewPart!=null){
+			this.page.hideView(viewPart);
+		}
+	}
+	public boolean isPartVisible(String appId){
+		ViewPart viewPart=this.findViewPart(appId);
+		//if(viewPart!=null){
+		return this.page.isPartVisible(viewPart);
 	}
 	public static void main(String[] args) {
 		System.out.println(IWorkbenchPage.STATE_MAXIMIZED);
 		System.out.println(IWorkbenchPage.STATE_MINIMIZED);
 		System.out.println(IWorkbenchPage.STATE_RESTORED);
+	}
+	public void dispose() {
+		
 	}
 }

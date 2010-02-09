@@ -75,19 +75,7 @@ public class Perspective implements IPerspectiveFactory {
 				}
 			  }
 			}
-			//…Ë÷√≤ºæ÷
-			//
-			/*List<CStandaloneLayout> standaloneLayouts=pageLayout.getStandaloneLayouts();
-			if(standaloneLayouts!=null){
-				for(int t=0;t<standaloneLayouts.size();t++){
-					createStandaloneFolder(standaloneLayouts.get(t));
-				}
-			}
-			if(folderLayouts!=null){
-				  for(int i=0;i<folderLayouts.size();i++){
-					  createFolder(folderLayouts.get(i));
-				  }
-		    }*/
+			
 			
 		}
 		
@@ -153,6 +141,7 @@ public class Perspective implements IPerspectiveFactory {
 			 layout.getViewLayout(viewIdSstr).setMoveable(standaloneLayout.isMoveable());
 			}
 		}
+		
 	}
 	private String getViewIdString(CLayout layout){
 		   String viewIdSstr=null;

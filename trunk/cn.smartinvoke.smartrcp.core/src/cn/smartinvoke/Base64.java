@@ -1,6 +1,9 @@
 package cn.smartinvoke;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
 
 public class Base64 {
 	private static final byte[] encodingTable = { (byte) 'A', (byte) 'B',
@@ -172,14 +175,15 @@ public class Base64 {
 		return true;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args)throws Exception {
+		File musicFile=new File("C:/kk.mp3");
+		InputStream in=new FileInputStream(musicFile);
+		byte[] bts=new byte[(int)musicFile.length()];
+		in.read(bts);
 		
-		//System.out.println(Integer.toBinaryString(0x3f));
-		String data = "pzxiaoxiao130130@gmail.com";
-		byte[] result = Base64.encode(data.getBytes());
-		System.out.println(Base64.decode("8vAD1xHgvX/VNZcXJvG/yg==".getBytes()));
-		
-		File f=new File("C:/388.jpg");
-		System.out.println(f.length());
+		String str=new String(Base64.encode(bts));
+		FileWriter fw=new FileWriter("C:/pack.txt");
+		fw.write(str);
+		fw.flush();
 	}
 }

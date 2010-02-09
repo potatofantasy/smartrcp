@@ -1,15 +1,21 @@
 package cn.smartinvoke.gui;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IActionBars;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.RemoteObject;
@@ -18,6 +24,8 @@ import cn.smartinvoke.exception.Messages;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.gui.FlashShell;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
+import cn.smartinvoke.smartrcp.gui.control.CAction;
+import cn.smartinvoke.smartrcp.gui.control.CActionImpl;
 import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 import cn.smartinvoke.smartrcp.gui.control.EventFilter;
 import cn.smartinvoke.smartrcp.gui.control.EventRegister;
@@ -93,6 +101,7 @@ public class FlashViewer implements IServerObject {
     private RemoteObject flexApp=null;
     //是否是debug
     public boolean debugModule=false;
+    private Map<String,Object> dataMap=new HashMap<String, Object>();
 	public FlashViewer(String appId) {
 		this.appId = appId;
 	}
@@ -184,6 +193,11 @@ public class FlashViewer implements IServerObject {
 						return true;
 					}
 				}
+				//鼠标mouseOver
+				if (message.getMessage() == Win32Constant.WM_MOUSEHOVER){
+					
+					return false;
+				}
 				if (message.getMessage() == Win32Constant.WM_MBUTTONDOWN) {
 					Point cursor = flashContainer.getParent().toControl(
 							Display.getCurrent().getCursorLocation());
@@ -254,9 +268,27 @@ public class FlashViewer implements IServerObject {
     public int hashCode(){
     	return this.appId.hashCode();
     }
-    
+    public void setData(String key,Object data){
+ 	   if(key!=null){
+ 		 this.dataMap.put(key, data);
+ 	   }
+ 	}
+ 	public void removeData(String key){
+ 		if(key!=null){
+ 			this.dataMap.remove(key);
+ 		}
+ 	}
+ 	public Object getData(String key){
+ 		//Object ret=null;
+ 		if(key!=null){
+ 			return this.dataMap.get(key);
+ 		}else{
+ 			return null;
+ 		}
+ 		//return ret;
+ 	}
 	public void dispose() {
-        
+        this.dataMap.clear();
 		// 从全局容器集合中删除
 		if (containers.contains(this)) {
 			Log.println("in FlashViewer dispose");
@@ -290,7 +322,36 @@ public class FlashViewer implements IServerObject {
 	public void setParent(Object parent) {
 		this.parent = parent;
 	}
-
+	public void addAction(CAction cAction){
+    	if(cAction==null){
+			return;
+		}
+		CActionImpl actionImpl = null;
+		int declType = cAction.getType();
+		if (declType == IAction.AS_CHECK_BOX) {
+			actionImpl = new CActionImpl(cAction.getText(),
+					IAction.AS_CHECK_BOX, cAction
+							.isChecked());
+		} else if (declType == IAction.AS_RADIO_BUTTON) {
+			actionImpl = new CActionImpl(cAction.getText(),
+					IAction.AS_RADIO_BUTTON, cAction
+							.isChecked());
+		} else if(declType==-1){
+			actionImpl = new CActionImpl(cAction.getText());
+		}else{
+			actionImpl = new CActionImpl(cAction.getText(),declType);
+		}
+		actionImpl.init(cAction);
+		if(this.parent instanceof FlashViewPart){
+		  FlashViewPart viewPart=(FlashViewPart)parent;
+		 IToolBarManager toolBarManager=viewPart.getToolBarManager();
+		 IMenuManager menuManager=viewPart.getMenuManager();
+		 toolBarManager.add(actionImpl);
+		 toolBarManager.update(true);
+		 menuManager.add(actionImpl);
+		 menuManager.updateAll(true);
+		}
+    }
 	private String appId;
 
 	public String getAppId() {
@@ -301,6 +362,14 @@ public class FlashViewer implements IServerObject {
 	}
 	public String getFlexAppId(){
 		return appId;
+	}
+	private Object data;
+	
+	public Object getData() {
+		return data;
+	}
+	public void setData(Object data) {
+		this.data = data;
 	}
 	public String getTitle(){
 		if(this.parent==null){

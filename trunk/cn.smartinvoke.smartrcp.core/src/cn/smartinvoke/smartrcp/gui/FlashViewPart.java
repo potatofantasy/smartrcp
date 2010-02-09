@@ -2,8 +2,12 @@ package cn.smartinvoke.smartrcp.gui;
 
 import java.util.Map;
 
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.presentations.AbstractPresentationFactory;
@@ -14,6 +18,8 @@ import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
+import cn.smartinvoke.smartrcp.gui.control.CAction;
+import cn.smartinvoke.smartrcp.gui.control.CActionImpl;
 import cn.smartinvoke.util.ImageManager;
 
 public class FlashViewPart extends ViewPart implements IServerObject{
@@ -76,7 +82,12 @@ public class FlashViewPart extends ViewPart implements IServerObject{
 	public void setFocus() {
          
 	}
-
+    public IToolBarManager getToolBarManager(){
+    	return this.getViewSite().getActionBars().getToolBarManager();
+    }
+    public IMenuManager getMenuManager(){
+    	return this.getViewSite().getActionBars().getMenuManager();
+    }
 	public void dispose() {
 		//删除透视图对象中的layout信息对象
 		try{
