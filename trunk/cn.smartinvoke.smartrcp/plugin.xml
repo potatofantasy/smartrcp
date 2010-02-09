@@ -113,6 +113,10 @@
                name="appName"
                value="RCP Product">
          </property>
+         <property
+               name="preferenceCustomization"
+               value="preferences.ini">
+         </property>
       </product>
    </extension>
 
