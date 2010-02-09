@@ -27,7 +27,7 @@
    			 this.closeWin();
    		    }
    		//--------
-   		public var firstText:String="&amp;测试 \t CTRL+S";
+   		public var firstText:String="&测试 \t CTRL+S";
 	 	]]>
 	 </mx:Script>
 	 <mx:Button label="关闭" click="onClick()"/>
@@ -86,7 +86,7 @@
    	</rcp:toolBar>
    	<rcp:windowConfigurer>
    		<rcp:CWindowConfigurer shellWidth="1000" shellHeight="800" 
-   			showPerspectiveBar="false" showStatusLine="false" shellImage="/icons/types.gif"
+   			showPerspectiveBar="false" showStatusLine="true" shellImage="/icons/types.gif"
    			 shellTitle="超级牛B程序..."
    			/>
    	</rcp:windowConfigurer>
@@ -96,7 +96,7 @@
 	 	<rcp:layouts>
 	 	  <mx:ArrayCollection>
 	 	     
-	 	       <rcp:CStandaloneLayout id="layoutNav"
+	 	       <rcp:CStandaloneLayout id="layoutNav" title="功能列表" closeable="false"
 	 	        viewId="views/TreeViewPart.swf" relationship="{CPageLayout.LEFT}" ratio="0.25" refLayout="{this.page}" showTitle="false">
 	           </rcp:CStandaloneLayout>
 	 	       <rcp:CFolderLayout id="layoutContent" viewId="views/ViewManager_T.swf" title="开始界面"

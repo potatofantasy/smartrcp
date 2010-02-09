@@ -2,13 +2,23 @@
 <gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
 	layout="vertical" horizontalAlign="center" verticalAlign="middle">
 	<mx:Script>
-		<![CDATA[ 
+		<![CDATA[
+			import cn.smartinvoke.RemoteObject;
+			import mx.managers.DragManager;
+			import mx.managers.CursorManager; 
 			import cn.smartinvoke.smartrcp.gui.FlashViewer;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import cn.smartinvoke.rcp.CLayoutBasicInfo;
 			import cn.smartinvoke.smartrcp.gui.control.ViewManager;
 			var path:String="cn.smartinvoke.smartrcp.WebBrowser";//"cn.smartinvoke.smartrcp.WebBrowser";//"views/ContextMenu_T.swf";
+			
+			[Embed(source="yflexskin.swf",symbol="DragManager_copyCursor")]
+			[Bindable]public var cursorRes:Class;
+			function init():void{
+				this.flashViewer.addAction(this.actionFirst);
+				this.flashViewer.addAction(this.actionSec);
+			}
 			function openView():void{  
 				var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
 				basicInfo.viewId=this.path;//"cn.smartinvoke.smartrcp.WebBrowser";
@@ -16,7 +26,7 @@
 				basicInfo.image="/icons/allteamstrms_rep.gif";
 			    var openedView:FlashViewer=ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);
 			    openedView.invoke("openUrl",["http://www.google.com"]);
-			    Alert.show(openedView+"");
+			    
 			}
 			function closeView():void{
 				ViewManager.Instance.closeViewParts(this.path);
@@ -57,6 +67,12 @@
 			}
 		]]>
 	</mx:Script>
+	<rcp:CAction  id="actionFirst" actionId="first" type="{CAction.AS_CHECK_BOX}" checked="true" 
+   			text="helloMenu" toolTip="toolTipTest..."
+   			imageUrl="/icons/call_hierarchy.gif"/>
+   			<rcp:CAction  id="actionSec" actionId="sec" text="navTest" toolTip="toolTipTest..."
+   			imageUrl="/icons/nav.gif"/>
+   			<mx:Button label="获得父亲容器" click="init()"/>
 	<mx:Label id="infoLabel" width="100%"/>
 	<mx:HBox width="100%">
 	 <mx:Button label="打开视图" click="openView()"/> 
