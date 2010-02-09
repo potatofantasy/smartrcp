@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" horizontalAlign="center" verticalAlign="middle">
+	<mx:Script>
+		<![CDATA[
+			import cn.smartinvoke.smartrcp.CApplication;
+			import mx.controls.Alert;
+			import cn.smartinvoke.smartrcp.gui.CMessageDialog;
+			function openMessageDialog():void{
+				var dialog:CMessageDialog=new CMessageDialog("标题","消息",CMessageDialog.INFORMATION,["button1","button2"],0);
+				
+				var type:int=dialog.open();
+				Alert.show(type+"");
+			}
+			function openAppDialog():void{
+				var app:CApplication=CApplication.Instance;
+				var fun:Function=app[this.listType.selectedItem.data];
+				if(fun!=null){
+				  var ret:Object=fun.apply(app,["标题","消息"]);
+				  Alert.show("返回 "+ret);
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Panel title="CApplication中的对话框"  paddingLeft="100" paddingRight="0"
+            styleName="opaquePanel" width="60%" height="50%">
+	     <mx:LinkButton label="打开MessageDialog" click="openMessageDialog()"/>
+	</mx:Panel>
+	
+	<mx:Panel title="CApplication中的对话框"  paddingLeft="100" paddingRight="0"
+            styleName="opaquePanel" width="60%" height="50%" layout="horizontal">
+           <mx:List id="listType">
+           	 <mx:Array>
+           	 	<mx:Object label="Confirm对话框" data="openConfirm"/>
+           	 	<mx:Object label="Question对话框" data="openQuestion"/>
+           	 	<mx:Object label="Error对话框" data="openError"/>
+           	 	<mx:Object label="Information对话框" data="openInformation"/>
+           	 	<mx:Object label="Warning对话框" data="openWarning"/>
+           	 </mx:Array>
+           </mx:List>
+		   <mx:LinkButton label="打开ApplicationDialog" click="openAppDialog()"/>
+	</mx:Panel>
+	
+</gui:RCPModule>

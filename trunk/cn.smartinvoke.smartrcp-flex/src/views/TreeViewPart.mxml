@@ -3,6 +3,8 @@
 	layout="vertical" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
+			import mx.events.DragEvent;
 			import mx.controls.Alert;
 			import cn.smartinvoke.rcp.CLayoutBasicInfo;
 			import cn.smartinvoke.smartrcp.gui.control.ViewManager;
@@ -15,47 +17,82 @@
 			function init():void{				
 			    Display.getCurrent().addListener(CEventType.KeyDown,this.onKeyEvent,this);
 				Display.getCurrent().addListener(CEventType.KeyUp,this.onKeyEvent,this);
+				ViewManager.Instance.addListener(this.onViewModify,this);
+			}
+			private function onViewModify(evt:CPartEvent):void{
+				var str:String=evt.taget.getTitle();
+				if(evt.type==CPartEvent.Part_Closed){
+					str+=" closed";
+				}else if(evt.type==CPartEvent.Part_Opened){
+					str+=" opened";
+				}else if(evt.type==CPartEvent.Part_Activated){
+					str+=" actived";
+				}
+				this.labelStatus.text=str;
 			}
 			private function onKeyEvent(evt:CEvent):void{
 				var info:String=evt.type+"  "+evt.character+" "+evt.time;
-				//this.setInfo(info);
+				labelStatus.text=info;
 			}
 			private function onItemDbClick(evt:ListEvent):void{
 				var selItem:XML=Tree(evt.target).selectedItem as XML;
 				//Alert.show(selItem+"");
 				if(selItem!=null){
 					var modulePath:String=selItem.@module;
+				   if(modulePath!=null && modulePath!=""){
 					var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
 					basicInfo.isModuleSwf=true;
 					basicInfo.title=selItem.@label;
 					basicInfo.viewId=modulePath;
 					ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);
+				   }
 				}
 			}
 			
-			
+			private function onDragEnter(evt:DragEvent):void {
+				Alert.show(evt+"");
+				
+			}
 		]]>
 	</mx:Script>
 	<mx:XMLList id="treeData">
          <node>
-            <node label="菜单">
+            <node label="界面">
+              <node label="菜单">
                 <node label="菜单栏" module="views/AppMenuBar_T.swf"/>
                 <node label="右键单栏" module="views/ContextMenu_T.swf"/>
+              </node>
+              <node label="事件">
+                <node label="键盘事件"/>
+                <node label="鼠标事件"/>
+                
+              </node>
+              <node label="工具栏" module="views/AppToolBar_T.swf"/>
+              <node label="状态栏" module="views/AppToolBar_T.swf"/>
+              <node label="视图管理">
+                 <node label="视图调用" module="views/ViewManager_T.swf"/>
+                 <node label="数据传递"/>
+              </node>
+              <node label="对话框" module="views/Dialog_T.swf"/>
             </node>
-            <node label="工具栏" module="views/AppToolBar_T.swf"/>
-            <node label="键盘事件">
-            </node>
-            <node label="视图管理" module="views/ViewManager_T.swf"/>
-            <node label="状态栏"/>
             <node label="扩展API">
                <node label="调用J2SE库"/>
                <node label="扩展库"/>
+               <node label="Java事件通知"/>
                <node label="调用eclipse插件视图"/>
             </node>
+            <node label="应用程序管理"/>
         </node>
     </mx:XMLList>
-    <mx:Label text="功能列表" width="100%"/>
-	<mx:Tree width="100%" height="100%" dataProvider="{this.treeData}"  itemDoubleClick="this.onItemDbClick(event)"
-		labelField="@label" showRoot="false" doubleClickEnabled="true">
-	</mx:Tree>
+    <mx:Panel title="功能列表" cornerRadius="0" paddingLeft="0" paddingRight="0"
+            styleName="opaquePanel" width="100%" height="100%">
+	 <mx:Tree width="100%" height="100%" dataProvider="{this.treeData}"  itemDoubleClick="this.onItemDbClick(event)"
+		labelField="@label" showRoot="false" doubleClickEnabled="true" borderThickness="0">
+	 </mx:Tree>
+	 <mx:ControlBar horizontalAlign="right">
+            <mx:Image id="image"
+                    source="@Embed('info.png')"/>
+                    <mx:Label id="labelStatus" width="100%"/>
+     </mx:ControlBar>
+	</mx:Panel>
 </gui:RCPModule> 

@@ -4,6 +4,8 @@ package cn.smartinvoke.smartrcp.gui.control
 	import cn.smartinvoke.rcp.CLayoutBasicInfo;
 	import cn.smartinvoke.rcp.GlobalServiceId;
 	import cn.smartinvoke.smartrcp.gui.FlashViewer;
+	import cn.smartinvoke.smartrcp.gui.module.CEventBean;
+	import cn.smartinvoke.smartrcp.util.HelpMethod;
 	
 	import mx.collections.ArrayCollection;
 	[Bindable]
@@ -22,6 +24,24 @@ package cn.smartinvoke.smartrcp.gui.control
 		{
 			this.remoteId=GlobalServiceId.View_Manager;
 		}
+		//----------------------监听器
+        public function addListener(listener:Function,thisObject:Object):void{
+			if(listener==null){
+				return;
+			}
+			var bean:CEventBean=HelpMethod.createEventBean(listener,thisObject);
+			if(bean!=null){
+			 this.call("addListener",[bean]);
+			}
+	   }
+	   public function removeListener(
+		   listener:Function,thisObject:Object):void{
+		   var bean:CEventBean=HelpMethod.removeListener(listener,thisObject);
+		   if(bean!=null){
+		   	  this.call('removeListener',[bean]);
+		   }
+	   }
+	   //--------------
         public function openViewPart( basicInfo:CLayoutBasicInfo,isMultiple:Boolean,state:int):FlashViewer{
         	return this.call("openViewPart",arguments) as FlashViewer;
         }
@@ -59,6 +79,22 @@ package cn.smartinvoke.smartrcp.gui.control
         }
         public function resetViews():void{
         	this.call("resetViews",arguments);
+        }
+        public function close():void{
+	      this.call("close",arguments);
+        }
+        public function activate(appId:String):void{
+	      this.call("activate",arguments);
+        }
+        public function bringToTop(appId:String):void{
+	     this.call("bringToTop",arguments);
+        }
+        public function hideView(appId:String):void{
+	       this.call("hideView",arguments);
+        }
+        public function isPartVisible(appId:String):Boolean{
+	         var retObj:Object=this.call("isPartVisible",arguments);
+	         return retObj as Boolean;
         }
 	}
 }

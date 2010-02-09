@@ -18,7 +18,7 @@
 			var dropDownMenu:CNativeMenuBuilder;
 			function init():void{
 			    //Alert.show("create complete");
-			    this.action=new CAction("test","测试","/icons/ant.gif","hello...");
+			    this.action=new CAction("test","测试","/icons/types.gif","hello...");
 			    this.action.type=CAction.AS_DROP_DOWN_MENU;//下拉菜单样式
 			    
 			    //添加到全局action管理器，这样toolBar才可以根据该action的id添加此按钮
