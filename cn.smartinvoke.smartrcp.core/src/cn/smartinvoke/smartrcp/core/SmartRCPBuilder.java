@@ -9,10 +9,19 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IPerspectiveListener;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 
@@ -28,6 +37,7 @@ import cn.smartinvoke.smartrcp.CApplication;
 import cn.smartinvoke.smartrcp.DebugServer;
 import cn.smartinvoke.smartrcp.gui.CAppMenuBarManager;
 import cn.smartinvoke.smartrcp.gui.CAppToolBarManager;
+import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.smartrcp.gui.control.CAction;
 import cn.smartinvoke.smartrcp.gui.control.CActionImpl;
@@ -206,7 +216,6 @@ public class SmartRCPBuilder {
 		ObjectPool.INSTANCE.putObject(curDisp, GlobalServiceId.Swt_Display);
 		EventFilter.exeFilter(curDisp);
 		
-		
 		if (configurer != null) {
 			CPerspective cPerspective = SplashWindow.getPerspective();
 			if (cPerspective != null) {
@@ -221,6 +230,61 @@ public class SmartRCPBuilder {
 				configurer.setShowStatusLine(cWinConfig.showStatusLine);
 			}
 		}
+		//添加透视图监听器
+		configurer.getWindow().addPerspectiveListener(new IPerspectiveListener(){
+
+			public void perspectiveActivated(IWorkbenchPage page,
+					IPerspectiveDescriptor perspective) {
+				page.addPartListener(new IPartListener2(){
+
+					public void partActivated(IWorkbenchPartReference partRef) {
+						
+					}
+
+					public void partBroughtToTop(IWorkbenchPartReference partRef) {
+						
+					}
+
+					public void partClosed(IWorkbenchPartReference partRef) {
+						
+					}
+
+					public void partDeactivated(IWorkbenchPartReference partRef) {
+						
+					}
+
+					public void partHidden(IWorkbenchPartReference partRef) {
+						
+					}
+
+					public void partInputChanged(IWorkbenchPartReference partRef) {
+						
+					}
+
+					public void partOpened(IWorkbenchPartReference partRef) {
+						IWorkbenchPart workbenchPart=partRef.getPart(true);
+					  if(!(workbenchPart instanceof FlashViewPart)){
+						String id=FlashViewer.getViewNum()+"";
+						Log.println("opened view="+workbenchPart);
+						ViewManager.fillViewerList(id,partRef.getId(),workbenchPart);
+					  }
+					}
+
+					public void partVisible(IWorkbenchPartReference partRef) {
+						
+					}
+					
+				});
+				
+				
+			}
+
+			public void perspectiveChanged(IWorkbenchPage page,
+					IPerspectiveDescriptor perspective, String changeId) {
+				
+			}
+           
+        });
 	}
     public static Shell Main_Shell=null;
 	public static void postWindowOpen(Shell shell) {
@@ -235,6 +299,7 @@ public class SmartRCPBuilder {
 			if(imageDescriptor!=null){
 				shell.setImage(imageDescriptor.createImage());
 			}
+			
 		}
 		// 全局服务 对象设置视图管理器
 		ViewManager viewManager=new ViewManager();
@@ -242,6 +307,7 @@ public class SmartRCPBuilder {
 		viewManager.initIWorkbenchPageListener(window.getActivePage());
 		ObjectPool.INSTANCE.putObject(viewManager,
 				GlobalServiceId.View_Manager);
+		
 		//Log.println("in postWindowOpen");
 		//加载所有的flash
 		List<FlashViewer> flashViewers=FlashViewer.getViewers();

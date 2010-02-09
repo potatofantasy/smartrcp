@@ -41,8 +41,10 @@ public class FlashShell implements IServerObject{
 	    this.init();
 	}
 	public FlashShell(Shell shell) {
-	    this.shell=new Shell(shell);
+	  // if(shell!=null){
+	    this.shell=shell;
 	    this.init();
+	   //}
 	}
 	public FlashShell(Shell shell,int style) {
 	    this.shell=new Shell(shell,style);
@@ -97,9 +99,9 @@ public class FlashShell implements IServerObject{
         this.shell.addDisposeListener(new DisposeListener() {
 		    
 			public void widgetDisposed(DisposeEvent e) {
+			   if(flashViewer!=null){
 				 flashViewer.dispose();
-				//shell.close();
-				//Log.println("Flash shell dispose="+e);
+			   }
 			}
 		});
 		this.shell.addShellListener(new ShellListener() {
@@ -110,7 +112,9 @@ public class FlashShell implements IServerObject{
 			public void shellClosed(ShellEvent e) {
 			   	e.doit=this.fireEvent(CShellEvent.Event_Closed,e);	
 			   	if(e.doit){
-			   		flashViewer.dispose();
+			   		if(flashViewer!=null){
+			   		 flashViewer.dispose();
+			   		}
 			   		shell.dispose();	
 			   	}
 			}
@@ -185,7 +189,9 @@ public class FlashShell implements IServerObject{
 
 	public void close(String objId) {
 	   try{
-		flashViewer.dispose();
+		if(flashViewer!=null){
+		 flashViewer.dispose();
+		}
 		this.shell.close();
 		this.shell.dispose();
 		ObjectPool.INSTANCE.removeObject(this.flashViewer.getAppId(), objId);

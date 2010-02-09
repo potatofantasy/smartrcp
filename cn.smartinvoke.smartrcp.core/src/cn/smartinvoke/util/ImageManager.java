@@ -9,12 +9,13 @@ import java.util.Stack;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 public class ImageManager {
 
 	public ImageManager() {
-
+       
 	}
 
 	private static ImageRegistry imageRegistry;
@@ -78,7 +79,16 @@ public class ImageManager {
 			return imageRegistry.getDescriptor(key);
 		}
 	}
-
+    public static Image getImage(String key){
+    	Image ret=null;
+    	if(key!=null){
+    	 ImageDescriptor imageDescriptor=getImageDescriptor(key);
+    	 if(imageDescriptor!=null){
+    		 ret=imageDescriptor.createImage();
+    	 }
+    	}
+    	return ret;
+    }
 	/**
 	 * @param args
 	 * @throws MalformedURLException
