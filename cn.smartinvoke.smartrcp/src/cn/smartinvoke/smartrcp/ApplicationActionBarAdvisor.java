@@ -1,21 +1,29 @@
 package cn.smartinvoke.smartrcp;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.ControlContribution;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
+import org.eclipse.ui.internal.util.StatusLineContributionItem;
 
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 /**
@@ -74,6 +82,34 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void fillCoolBar(ICoolBarManager coolBar) {
 		
 		SmartRCPBuilder.fillCoolBar(coolBar);
+	}
+	protected void fillStatusLine(IStatusLineManager statusLine) {
+		  //ToolBarManager barManager=null;
+		  statusLine.add(new Action("action1",Activator.getImageDescriptor("/icons/sample2.gif")){
+		  });
+		  Image image=Activator.getImageDescriptor("/icons/sample2.gif").createImage();
+		  statusLine.setErrorMessage(image, "error...");
+		  
+		  statusLine.setMessage(image, "message................");
+//		  statusLine.add(new GroupMarker(StatusLineManager.BEGIN_GROUP));
+//		  statusLine.add(new MyStatusLineControl());
+//		  statusLine.add(new Separator());
+//		  statusLine.appendToGroup(StatusLineManager.BEGIN_GROUP,new MyStatusLineControl());
+	}
+}
+class MyStatusLineControl extends ContributionItem{
+  
+	public void fill(Composite parent) {
+		ToolBarManager barManager=new ToolBarManager();
+		
+		barManager.add(new Action("action1",Activator.getImageDescriptor("/icons/sample2.gif")){
+			
+		});
+        barManager.add(new Action("action2",Activator.getImageDescriptor("/icons/sample3.gif")){
+			
+		});
+      ToolBar toolBar=  barManager.createControl(parent);
+      toolBar.setParent(parent);
 	}
 }
 class MyDropDownMenu extends ControlContribution{
