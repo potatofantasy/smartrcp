@@ -45,7 +45,7 @@ package cn.smartinvoke.smartrcp
 		}
 		//-----------------常用对话框
 		public function openConfirm(title:String,message:String):Boolean{
-			return this.call("openConfirm",arguments) as Boolean;
+			return this.call("openConfirm",[this.appId,title,message]) as Boolean;
 		}
 		public function openQuestion(title:String,message:String):Boolean{
 			return this.call("openQuestion",arguments) as Boolean;

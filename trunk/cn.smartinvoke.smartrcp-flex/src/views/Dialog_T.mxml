@@ -24,7 +24,7 @@
 	</mx:Script>
 	<mx:Panel title="CApplication中的对话框"  paddingLeft="100" paddingRight="0"
             styleName="opaquePanel" width="60%" height="50%">
-	     <mx:LinkButton label="打开MessageDialog" click="openMessageDialog()"/>
+	     <mx:Button label="打开MessageDialog" click="openMessageDialog()"/>
 	</mx:Panel>
 	
 	<mx:Panel title="CApplication中的对话框"  paddingLeft="100" paddingRight="0"
@@ -38,7 +38,7 @@
            	 	<mx:Object label="Warning对话框" data="openWarning"/>
            	 </mx:Array>
            </mx:List>
-		   <mx:LinkButton label="打开ApplicationDialog" click="openAppDialog()"/>
+		   <mx:Button label="打开ApplicationDialog" click="openAppDialog()"/>
 	</mx:Panel>
 	
 </gui:RCPModule>
