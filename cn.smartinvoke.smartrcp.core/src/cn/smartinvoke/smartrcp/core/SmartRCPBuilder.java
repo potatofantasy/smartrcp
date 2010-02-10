@@ -204,7 +204,7 @@ public class SmartRCPBuilder {
 			// 添加到全局服务...
 			ObjectPool.INSTANCE.putObject(toolBarManager,
 					GlobalServiceId.App_ToolBar_Manager);
-			toolBarManager.addToolBar(cPerspective.toolBar);
+			toolBarManager.fillToolBar(cPerspective.toolBar);
 		}
 
 	}

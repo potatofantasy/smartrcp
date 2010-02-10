@@ -3,6 +3,7 @@ package cn.smartinvoke.smartrcp.gui.control;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.ToolBar;
@@ -75,11 +76,17 @@ public class CActionImpl extends Action{
 				 CActionEvent actionEvent=new CActionEvent();
 				 if(EventFilter.cur_point!=null){
 				   try{
-				   ToolBar toolBar=appToolBarManager.curDisplayToolBar.getControl();
-				   ToolItem toolItem=toolBar.getItem(EventFilter.cur_point);
-				   Rectangle rect = toolItem.getBounds ();
-				   Point pt = new Point (rect.x, rect.y + rect.height);
-				   actionEvent.x=pt.x;actionEvent.y=pt.y;
+					   List<ToolBarManager> visualableToolBars=appToolBarManager.visualableToolBars;
+					   for(ToolBarManager toolBarManager:visualableToolBars){
+				        ToolBar  toolBar=toolBarManager.getControl();
+				        ToolItem toolItem=toolBar.getItem(EventFilter.cur_point);
+				        if(toolItem!=null){
+				         Rectangle rect = toolItem.getBounds ();
+				         Point pt = new Point (rect.x, rect.y + rect.height);
+				         actionEvent.x=pt.x;actionEvent.y=pt.y;
+				         break;
+				        }
+					   }
 				   }catch(Throwable e){};
 				   EventFilter.cur_point=null;
 				 }

@@ -9,8 +9,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import cn.smartinvoke.IServerObject;
+import cn.smartinvoke.gui.FlashContainer;
+import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.rcp.CPerspective;
+import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 
 /**
@@ -80,9 +83,13 @@ public class CApplication implements IServerObject {
 	   
 	}
 	//---------------------常用对话框
-	public  boolean openConfirm(String title, String message) {
+	public  boolean openConfirm(String appId,String title, String message) {
+		//FlashViewer flashViewer=FlashViewer.getViewerByAppId(appId);
+		//flashViewer.isBreak=true;
+		
 		Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
-		return MessageDialog.openConfirm(mainShell, title, message);
+		boolean ret= MessageDialog.openConfirm(mainShell, title, message);
+		return ret;
 	}
 	public  void openError(String title, String message) {
 		Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
