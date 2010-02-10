@@ -40,7 +40,7 @@
    		<rcp:CAction  actionId="first" type="{CAction.AS_CHECK_BOX}" checked="true" 
    			text="{firstText}" toolTip="toolTipTest..."
    			imageUrl="/icons/call_hierarchy.gif"/>
-   		<rcp:CAction  actionId="first1" type="{CAction.AS_RADIO_BUTTON}" text="测试2" toolTip="toolTipTest1..." />
+   		<rcp:CAction  actionId="first1" imageUrl="/icons/nav.gif" type="{CAction.AS_RADIO_BUTTON}" text="first1" toolTip="toolTipTest1..." />
    		<rcp:CAction  actionId="first2" type="{CAction.AS_RADIO_BUTTON}" text="测试3" toolTip="toolTipTest2..." />
    		<rcp:CAction  actionId="first3" type="{CAction.AS_DROP_DOWN_MENU}" text="测试4" toolTip="toolTipTest3..."/>
    		
@@ -78,9 +78,11 @@
    	</rcp:menuBars>
    	<!--工具栏-->
    	<rcp:toolBar>
-   		<rcp:CToolBar type="{SWT.LEFT}"> 
+   		<rcp:CToolBar type="{CToolBar.Image_Text_Horizontal}"> 
    			<rcp:actionIds>
-   				<mx:String>first</mx:String>
+   			    <mx:ArrayCollection>
+   			           <mx:String>first</mx:String><mx:String>first1</mx:String>
+   			    </mx:ArrayCollection>				
    			</rcp:actionIds>
    		</rcp:CToolBar>
    	</rcp:toolBar>

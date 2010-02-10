@@ -3,6 +3,8 @@
 	layout="vertical" creationComplete="init()" show="onShow()">
 	<mx:Script>
 		<![CDATA[
+			import cn.smartinvoke.smartrcp.util.JFaceConstant;
+			import cn.smartinvoke.rcp.CToolBar;
 			import mx.controls.Alert;
 			import cn.smartinvoke.smartrcp.gui.MainShell;
 			import cn.smartinvoke.smartrcp.gui.control.CAppToolBarManager;
@@ -42,7 +44,8 @@
 			    
 			    var toolBarManager:CAppToolBarManager=CAppToolBarManager.Instance;
 			  	//toolBarManager.insertItem(this.action.actionId);
-			  	toolBarManager.insertAfter("first",this.action.actionId);
+			  	//id为first的action是在splash.mxml中定义进去的
+			  	toolBarManager.insertItem(this.action.actionId);
 			} 
 			function onDelClick():void{
 			    CAppToolBarManager.Instance.removeItem(this.action.actionId);
@@ -59,8 +62,27 @@
 				CActionManager.Instance.updateEnable(this.action.actionId,enable);
 				enable=!enable;
 			}
+			function changeToolBarStyle():void{
+				var curToolBar:CToolBar=CAppToolBarManager.Instance.getCurToolBar();
+				if(curToolBar!=null){
+				  curToolBar.type=listType.selectedItem.data;
+				  Alert.show(curToolBar.toString());
+				  CAppToolBarManager.Instance.fillToolBar(curToolBar);
+				}
+			}
+			function addSpace():void{
+				var curToolBar:CToolBar=CAppToolBarManager.Instance.getCurToolBar();
+				if(curToolBar!=null){
+					//first1是id为first1的action，此action必须在CActionManager中。
+					//这里的first1在splash.mxml中定义进去的
+					var index:int=curToolBar.actionIds.getItemIndex("first1");
+					curToolBar.actionIds.addItemAt(JFaceConstant.Menu_Separator_Str,index);
+					CAppToolBarManager.Instance.fillToolBar(curToolBar);
+				}
+			}
 		]]>
 	</mx:Script>
+	
     <rcp:CMenuRelation id="relation">
     	<rcp:actions>
     		<mx:String>a1</mx:String>
@@ -82,7 +104,21 @@
 		<rcp:CAction actionId="a1" text="hello1"/><rcp:CAction actionId="a2" text="hello2"/>
 		<rcp:CAction actionId="a3" text="hello3"/><rcp:CAction actionId="a4" text="hello4"/>
 	</mx:Array>
-    <mx:HBox width="100%" height="30%" id="vbox1" backgroundColor="#778899" horizontalAlign="center">
+    <mx:HBox width="100%" height="30%" id="vbox1" backgroundColor="#778899" horizontalAlign="center" verticalAlign="middle">
+        <mx:VBox width="50%" height="100%">
+            <mx:Label text="选择样式"/>
+        	<mx:List id="listType" width="200">
+        	  <mx:dataProvider>
+        	  	<mx:ArrayCollection>
+        	  	 <mx:Object label="图标右字符" data="{CToolBar.Image_Text_Horizontal}"/>
+           	 	 <mx:Object label="图标下字符" data="{CToolBar.Image_Text_Vertical}"/>
+           	 	 <mx:Object label="图标" data="{CToolBar.Image}"/>
+        	  	</mx:ArrayCollection>
+        	  </mx:dataProvider>
+        	</mx:List>
+        	<mx:Button label="更改样式" click="changeToolBarStyle()"/>
+        	<mx:Button label="添加分隔符" click="addSpace()"/>
+        </mx:VBox>
     	<mx:Button label="添加工具按钮" click="onAddClick()"/>
     	<mx:Button label="删除工具按钮" click="onDelClick()"/>
     	<mx:Button label="清空工具栏" click="removeAllItems()"/>
