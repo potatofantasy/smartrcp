@@ -6,7 +6,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import cn.smartinvoke.gui.FlashContainer;
@@ -23,10 +22,10 @@ public class SplashWindow {
     public FlashContainer container;
     private Display display;
     Thread thread;
-	private SplashWindow(){
+	public SplashWindow(){
 	   	 //FileDialog
 	}
-    public void open(){
+    public boolean open(){
     	 display=Display.getCurrent();
     	 
    	     shell = new Shell(display,SWT.NO_TRIM | SWT.TOOL);// SWT.NO_TRIM | SWT.TOO
@@ -74,7 +73,8 @@ public class SplashWindow {
 		      if (!display.readAndDispatch()) {
 		        display.sleep();
 		      }
-		 }		 
+		 }
+		 return true;
    }
    private static CPerspective perspective=null;
    public static CPerspective getPerspective(){

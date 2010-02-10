@@ -155,7 +155,7 @@ public class FlashViewer implements IServerObject {
 			}
 		}
 	}
-
+    public boolean isBreak=false;
 	private void createFlashContainer(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout());
@@ -184,6 +184,10 @@ public class FlashViewer implements IServerObject {
 		flashContainer.addHookInterceptor(new OleHookInterceptor() {
 			public boolean intercept(Msg message, int code, int param,
 					int param2) {
+//				if(isBreak){
+//					return true;
+//				}
+			
 				if (message.getMessage() == Win32Constant.WM_RBUTTONDOWN) {
 					Point cursor = flashContainer.getParent().toControl(
 							Display.getCurrent().getCursorLocation());
