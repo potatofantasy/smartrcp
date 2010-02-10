@@ -3,6 +3,7 @@ package cn.smartinvoke.smartrcp;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.ControlContribution;
+import org.eclipse.jface.action.CoolBarManager;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -18,6 +19,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
@@ -85,14 +87,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 	protected void fillStatusLine(IStatusLineManager statusLine) {
 		  //ToolBarManager barManager=null;
-		  statusLine.add(new Action("action1",Activator.getImageDescriptor("/icons/sample2.gif")){
-		  });
-		  Image image=Activator.getImageDescriptor("/icons/sample2.gif").createImage();
-		  statusLine.setErrorMessage(image, "error...");
 		  
-		  statusLine.setMessage(image, "message................");
 //		  statusLine.add(new GroupMarker(StatusLineManager.BEGIN_GROUP));
-//		  statusLine.add(new MyStatusLineControl());
+		  statusLine.add(new MyStatusLineControl());
+		  statusLine.update(true);
 //		  statusLine.add(new Separator());
 //		  statusLine.appendToGroup(StatusLineManager.BEGIN_GROUP,new MyStatusLineControl());
 	}
@@ -100,16 +98,19 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 class MyStatusLineControl extends ContributionItem{
   
 	public void fill(Composite parent) {
-		ToolBarManager barManager=new ToolBarManager();
+		CoolBar coolBar=new CoolBar(parent,SWT.FLAT);
+		CoolBarManager coolBarManager=new CoolBarManager(coolBar);
+		ToolBarManager toolBarManager=new ToolBarManager();
 		
-		barManager.add(new Action("action1",Activator.getImageDescriptor("/icons/sample2.gif")){
+		toolBarManager.add(new Action("action1",Activator.getImageDescriptor("/icons/sample2.gif")){
 			
 		});
-        barManager.add(new Action("action2",Activator.getImageDescriptor("/icons/sample3.gif")){
+		toolBarManager.add(new Action("action2",Activator.getImageDescriptor("/icons/sample3.gif")){
 			
 		});
-      ToolBar toolBar=  barManager.createControl(parent);
-      toolBar.setParent(parent);
+        coolBarManager.add(toolBarManager);
+        
+        coolBar.setParent(parent);
 	}
 }
 class MyDropDownMenu extends ControlContribution{
