@@ -1,10 +1,21 @@
 package cn.smartinvoke.smartrcp
 {
 	import cn.smartinvoke.RemoteObject;
+	import cn.smartinvoke.gui.RCPApplication;
 	import cn.smartinvoke.rcp.GlobalServiceId;
+	import cn.smartinvoke.smartrcp.gui.FlashShell;
+	import cn.smartinvoke.smartrcp.gui.FlashViewPart;
+	
+	import org.eclipse.swt.widgets.Shell;
 
 	public class CApplication extends RemoteObject
 	{
+		/**
+		 */
+		 //--------------------类资源
+		 var shell:FlashShell;
+   		 var viewPart:FlashViewPart;
+   		
 		public static var Instance:CApplication=new CApplication();
 		public function CApplication()
 		{
@@ -45,19 +56,24 @@ package cn.smartinvoke.smartrcp
 		}
 		//-----------------常用对话框
 		public function openConfirm(title:String,message:String):Boolean{
-			return this.call("openConfirm",[this.appId,title,message]) as Boolean;
+			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+			return this.call("openConfirm",[shell,title,message]) as Boolean;
 		}
 		public function openQuestion(title:String,message:String):Boolean{
-			return this.call("openQuestion",arguments) as Boolean;
+			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+			return this.call("openQuestion",[shell,title,message]) as Boolean;
 		}
 		public function openError(title:String,message:String):void{
-			 this.call("openError",arguments);
+			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+			 this.call("openError",[shell,title,message]);
 		}
 		public function openInformation(title:String,message:String):void{
-			 this.call("openInformation",arguments);
+			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+			 this.call("openInformation",[shell,title,message]);
 		}
 		public function openWarning(title:String,message:String):void{
-			 this.call("openWarning",arguments);
+			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+			 this.call("openWarning",[shell,title,message]);
 		}
 		
 	}

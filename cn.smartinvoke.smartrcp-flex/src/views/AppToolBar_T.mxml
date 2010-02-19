@@ -3,6 +3,9 @@
 	layout="vertical" creationComplete="init()" show="onShow()">
 	<mx:Script>
 		<![CDATA[
+			import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
+			import cn.smartinvoke.smartrcp.CApplication;
+			import cn.smartinvoke.smartrcp.gui.control.ViewManager;
 			import cn.smartinvoke.smartrcp.util.JFaceConstant;
 			import cn.smartinvoke.rcp.CToolBar;
 			import mx.controls.Alert;
@@ -31,6 +34,15 @@
 			    dropDownMenu.initAction(this.cActions);
 			    dropDownMenu.initMenu(this.relation);
 			    dropDownMenu.addListener(this.onDropDownMenuClick,this);
+			    
+			    //-------------当此视图退出时，删除对应的工具栏
+			    ViewManager.Instance.addListener(this.viewEventHandler,this);
+			}
+			function viewEventHandler(evt:CPartEvent):void{
+				//CApplication.Instance.openInformation("title",evt.type+"");
+				if(evt.type==CPartEvent.Part_Closed){
+					CAppToolBarManager.Instance.removeItem(this.action.actionId);
+				}
 			}
 			function onShow():void{
 				Alert.show("on show");

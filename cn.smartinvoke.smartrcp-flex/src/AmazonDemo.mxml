@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:fc="http://www.adobe.com/2006/fc"
+	layout="absolute">
+	
+	<mx:Script>
+		<![CDATA[
+		import flash.display.Sprite;
+    import flash.display.StageAlign;
+    import flash.display.StageScaleMode;
+    import flash.events.*;
+    import flash.media.Camera;
+    import flash.media.Video;
+
+		 private var video:Video;
+		
+			 public function CameraExample() {
+            stage.scaleMode = StageScaleMode.NO_SCALE;
+            stage.align = StageAlign.TOP_LEFT;
+            
+            var camera:Camera = Camera.getCamera();
+            
+            if (camera != null) {
+                camera.addEventListener(ActivityEvent.ACTIVITY, activityHandler);
+                video = new Video(camera.width * 2, camera.height * 2);
+                video.attachCamera(camera);
+                addChild(video);
+            } else {
+                trace("You need a camera.");
+            }
+        }
+        
+        private function activityHandler(event:ActivityEvent):void {
+            trace("activityHandler: " + event);
+        }
+
+		]]>
+	</mx:Script>
+	<mx:Button label="test" click="CameraExample()"/>
+</mx:Application>

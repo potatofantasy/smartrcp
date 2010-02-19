@@ -28,9 +28,12 @@ package cn.smartinvoke.gui
 		public var flashContainer:FlashContainer=null;//
 		public var contextMenuManager:CContextMenuManager=null;
 		
+		public static var Instance:RCPApplication=null;
 		public function RCPApplication()
-		{
+		{ 
 			super();
+			RCPApplication.Instance=this;
+			
 			this.addEventListener(FlexEvent.PREINITIALIZE,this.preInitialize);
 			//用于右键控件监听
 			this.addEventListener(MouseEvent.MOUSE_OVER,this.onMouseOver);

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
+			import mx.collections.ArrayCollection;
+			import cn.smartinvoke.smartrcp.util.JFaceConstant;
+			import cn.smartinvoke.rcp.CToolBar;
+			import cn.smartinvoke.smartrcp.gui.ViewPartActionBar;
+			import cn.smartinvoke.smartrcp.gui.FlashViewPart;
+			import cn.smartinvoke.RemoteObject;
+		    var actionBar:ViewPartActionBar=null;
+			function init():void{
+				var parent:RemoteObject=this.flashViewer.getParent();
+				//如果存载当前flash的容器时viewPart，才具有此功能
+				if(parent is FlashViewPart){
+				   var viewPart:FlashViewPart=parent as FlashViewPart;
+				   this.actionBar=viewPart.getPartActionBar();
+				}
+			}
+			function addToolAndMenu():void{
+				if(this.actionBar!=null){
+				   this.actionBar.addAction(this.idWaite);
+				   this.actionBar.addAction(this.idType);
+				   this.actionBar.addAction(this.idNav);
+				   
+				   var toolBar:CToolBar=new CToolBar();
+				   toolBar.actionIds=new ArrayCollection(["actionWaite",JFaceConstant.Menu_Separator_Str,
+				   "actionType",JFaceConstant.Menu_Separator_Str,"actionNav"]);
+				   
+				   this.actionBar.fillToolBar(toolBar);
+				   
+				   this.actionBar.clearDropDownMenus(); 
+				   this.actionBar.addDropDownMenu("actionWaite",null);//添加主菜单
+				   this.actionBar.addDropDownMenu(JFaceConstant.Menu_Separator_Str,null);
+				   this.actionBar.addDropDownMenu("actionType","类型");
+				   this.actionBar.addDropDownMenu("actionNav","导航");
+				   
+				   this.actionBar.addListener("actionWaite",onActionItemClick,this);
+				   this.actionBar.addListener("actionNav",onActionItemClick,this);
+				   this.actionBar.addListener("actionType",onActionItemClick,this);
+				}
+			}
+			function onActionItemClick(evt:CActionEvent):void{
+				//Alert.show(evt+"");
+				this.labelInfo.text=evt.actionId+" clicked ; path="+evt.path+" ";
+			}
+			function clearAll():void{
+			  if(this.actionBar!=null){
+				this.actionBar.clearToolBar();
+				this.actionBar.clearDropDownMenus();
+			  }
+			}
+		]]>
+	</mx:Script>
+	<rcp:CAction id="idWaite" actionId="actionWaite" imageUrl="/icons/att_class_obj.gif" text="缓冲"/>
+	<rcp:CAction id="idType" actionId="actionType" imageUrl="/icons/types.gif" text="typeMenu"/>
+	<rcp:CAction id="idNav" actionId="actionNav" imageUrl="/icons/nav.gif" text="navMenu"/>
+	<mx:Panel title="ViewPart工具栏和下拉菜单的实现" cornerRadius="0" horizontalAlign="center" verticalAlign="middle"
+            styleName="opaquePanel" width="100%" height="100%">
+            <mx:Label id="labelInfo" width="100%"/>
+            <mx:Button label="添加工具栏和下拉菜单" click="addToolAndMenu()"/>
+            <mx:Button label="清空工具栏和下拉菜单" click="clearAll()"/>
+    </mx:Panel> 
+</gui:RCPModule>

@@ -1,6 +1,9 @@
 package cn.smartinvoke.smartrcp.gui
 {
 	import cn.smartinvoke.RemoteObject;
+	import cn.smartinvoke.gui.RCPApplication;
+	
+	import org.eclipse.swt.widgets.Shell;
 	[Bindable]
 	[RemoteClass(alias="cn.smartinvoke.smartrcp.gui.CMessageDialog")]
 	public class CMessageDialog extends RemoteObject
@@ -32,7 +35,10 @@ package cn.smartinvoke.smartrcp.gui
     
 	public function CMessageDialog( dialogTitle:String,dialogMessage:String, dialogImageType:int,
             dialogButtonLabels:Array, defaultIndex:int){
-		this.createRemoteObject(arguments);
+            var mainShell:Shell=RCPApplication.Instance.flashViewer.getShell();
+		this.createRemoteObject([mainShell,dialogTitle,dialogMessage,dialogImageType,
+		    dialogButtonLabels,defaultIndex]);
+		    
 	}
 	public function open():int{
 		return this.call('open',arguments) as int;

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
 	layout="vertical" horizontalAlign="center" verticalAlign="middle">
-	<mx:Script>
+	<mx:Script>  
 		<![CDATA[
 			import cn.smartinvoke.smartrcp.CApplication;
 			import mx.controls.Alert;
 			import cn.smartinvoke.smartrcp.gui.CMessageDialog;
 			function openMessageDialog():void{
-				var dialog:CMessageDialog=new CMessageDialog("标题","消息",CMessageDialog.INFORMATION,["button1","button2"],0);
+				var dialog:CMessageDialog=new  CMessageDialog("标题","消息",CMessageDialog.INFORMATION,["button1","button2"],0);
 				
 				var type:int=dialog.open();
 				Alert.show(type+"");
