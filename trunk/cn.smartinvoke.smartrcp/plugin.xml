@@ -57,14 +57,14 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            name="Mail"
+            name="SmartRCP牛逼"
             id="cn.smartinvoke.smartrcp.category">
       </category>
       <command
-            name="Open Mailbox"
-            description="Opens a mailbox"
+            name="测试"
+            description="测试"
             categoryId="cn.smartinvoke.smartrcp.category"
-            id="cn.smartinvoke.smartrcp.open">
+            id="test">
       </command>
       <command
             name="Open Message Dialog"
@@ -76,9 +76,9 @@
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="cn.smartinvoke.smartrcp.open"
+            commandId="test"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+2">
+            sequence="CTRL+T">
       </key>
       <key
             commandId="cn.smartinvoke.smartrcp.openMessage"
@@ -90,6 +90,15 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+X">
       </key>
+   </extension>
+    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.ui.internal.keys.KeysPreferencePage"
+            id="org.test.maild.keys"
+            name="Keys">
+      </page>
+      
    </extension>
    <extension
          id="product"
