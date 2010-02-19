@@ -2,16 +2,20 @@
 <rcp:RCPApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:rcp="cn.smartinvoke.gui.*"
 	 backgroundColor="white" layout="vertical" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
    <mx:Style>
-   	global{
+   	global{ 
    	 font-size:12px;
    	}
    </mx:Style>
    <mx:Script>
    	<![CDATA[
+   		import cn.smartinvoke.smartrcp.gui.FlashViewPart;
+   		import cn.smartinvoke.smartrcp.gui.FlashShell;
    		import mx.controls.Alert;
    		import cn.smartinvoke.executor.Executor;
+   		
    		protected override function onJavaLoaded():void{
-   			this.flashViewer.setDebugModule("views/ViewManager_T.swf");
+   			//Alert.show(this.flashViewer.getParent()+"");
+   			this.flashViewer.setDebugModule("views/Dialog_T.swf");
    		} 
    	]]>
    </mx:Script>

@@ -53,24 +53,32 @@
 				Alert.show(evt+"");
 				
 			}
+			private function setMin():void{
+				ViewManager.Instance.setState(this.flashViewer.appId,ViewManager.STATE_MINIMIZED);
+			}
 		]]>
 	</mx:Script>
 	<mx:XMLList id="treeData">
          <node>
             <node label="界面">
-              <node label="菜单">
+              <node label="全局Action及应用">
+                <node label="工具栏" module="views/AppToolBar_T.swf"/>
                 <node label="菜单栏" module="views/AppMenuBar_T.swf"/>
-                <node label="右键单栏" module="views/ContextMenu_T.swf"/>
               </node>
+              <node label="右键菜单" module="views/ContextMenu_T.swf"/>
               <node label="事件">
+                <node label="全局事件"/>
                 <node label="键盘事件"/>
                 <node label="鼠标事件"/>
-                
+                <node label="快捷键"/>
+                <node label="扩展事件"/>
               </node>
-              <node label="工具栏" module="views/AppToolBar_T.swf"/>
+              
               <node label="状态栏" module="views/AppToolBar_T.swf"/>
               <node label="视图管理">
+                 <node label="视图工具栏和下拉菜单"/>
                  <node label="视图调用" module="views/ViewManager_T.swf"/>
+                 <node label="工具栏和下拉菜单" module="views/ViewPartActionBar_T.swf"/>
                  <node label="数据传递"/>
               </node>
               <node label="对话框" module="views/Dialog_T.swf"/>
@@ -93,6 +101,7 @@
             <mx:Image id="image"
                     source="@Embed('info.png')"/>
                     <mx:Label id="labelStatus" width="100%"/>
+            <mx:Button label="最小化" click="setMin()"/>
      </mx:ControlBar>
 	</mx:Panel>
 </gui:RCPModule> 

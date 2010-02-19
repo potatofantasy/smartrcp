@@ -16,8 +16,7 @@
 			[Embed(source="yflexskin.swf",symbol="DragManager_copyCursor")]
 			[Bindable]public var cursorRes:Class;
 			function init():void{
-				this.flashViewer.addAction(this.actionFirst);
-				this.flashViewer.addAction(this.actionSec);
+			   
 			}
 			function openView():void{  
 				var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();

@@ -10,6 +10,7 @@
 	 </mx:Style>
 	 <mx:Script>
 	 	<![CDATA[
+	 		import cn.smartinvoke.smartrcp.util.CWorkbenchActions;
 	 		import cn.smartinvoke.rcp.CPageLayout;
 	 		import cn.smartinvoke.rcp.CStandaloneLayout;
 	 		import cn.smartinvoke.rcp.CToolBar;
@@ -37,6 +38,9 @@
 	
 	<!--action的定义 -->
    	<rcp:actions>
+   	    <rcp:CAction actionId="{CWorkbenchActions.QUIT}" text="退出"/>
+   	    <rcp:CAction actionId="{CWorkbenchActions.PREFERENCES}" text="设置"/>
+   	     <rcp:CAction actionId="{CWorkbenchActions.HELP_CONTENTS}" text="帮助"/>
    		<rcp:CAction  actionId="first" type="{CAction.AS_CHECK_BOX}" checked="true" 
    			text="{firstText}" toolTip="toolTipTest..."
    			imageUrl="/icons/call_hierarchy.gif"/>
@@ -50,6 +54,13 @@
    	</rcp:actions>
    	<!--菜单栏-->
    	<rcp:menuBars>
+   	    <rcp:CMenuRelation label="程序">
+   	    	<rcp:actions>
+   	    		<mx:String>{CWorkbenchActions.ID_QUIT}</mx:String>
+   	    		<mx:String>{CWorkbenchActions.ID_PREFERENCES}</mx:String>
+   	    		
+   	    	</rcp:actions>
+   	    </rcp:CMenuRelation>
    		<rcp:CMenuRelation label="文件">
    		 <rcp:actions>
    		 	<mx:String>first</mx:String>
@@ -75,6 +86,11 @@
    		 	<mx:String>a2</mx:String>
    		 </rcp:actions>
    		</rcp:CMenuRelation>
+   		<rcp:CMenuRelation label="帮助">
+   		 <rcp:actions>
+   		    <mx:String>{CWorkbenchActions.ID_HELP_CONTENTS}</mx:String>
+   		 </rcp:actions>
+   		 </rcp:CMenuRelation>
    	</rcp:menuBars>
    	<!--工具栏-->
    	<rcp:toolBar>

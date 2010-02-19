@@ -10,11 +10,13 @@ package cn.smartinvoke.smartrcp.gui
  import cn.smartinvoke.smartrcp.util.HelpMethod;
  
  import org.eclipse.swt.widgets.Shell;
+ [Bindable]
+ [RemoteClass(alias="cn.smartinvoke.smartrcp.gui.FlashShell")]
  public class FlashShell extends RemoteObject {
  public function FlashShell(style:int=0,parent:Shell=null){
-	 super();
+	 super();                         
 	 var param:Array=[];
-	 if(style!=0){
+	 if(style!=0){ 
 	 	if(parent==null){
 	 		param=[style];
 	 	}else{
