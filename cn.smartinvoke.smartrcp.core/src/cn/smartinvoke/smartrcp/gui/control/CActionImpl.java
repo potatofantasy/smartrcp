@@ -11,13 +11,13 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.smartrcp.gui.CAppToolBarManager;
+import cn.smartinvoke.smartrcp.gui.module.CActionEntity;
 import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 import cn.smartinvoke.util.ImageManager;
 
 public class CActionImpl extends Action{
-	//对应菜单项在菜单中的路径位置
-    public String path="";
+	
 	public CActionImpl(){
       	
 	}
@@ -32,8 +32,11 @@ public class CActionImpl extends Action{
 	public CActionImpl(String text,int type) {
 		super(text,type);
 	}
+	
     public void init(CAction bean){
     	this.setId(bean.getActionId());
+    	 // Associate the action with a pre-defined command, to allow key bindings.
+    	this.setActionDefinitionId(bean.getActionId());
     	this.setToolTipText(bean.getToolTip());
     	try{
     	String imgUrl=bean.getImageUrl();
@@ -42,11 +45,11 @@ public class CActionImpl extends Action{
     	}
 		String hoverImg=bean.getHoverImageUrl();
 		if(hoverImg!=null){
-    		this.setImageDescriptor(ImageManager.getImageDescriptor(hoverImg));
+    		this.setHoverImageDescriptor(ImageManager.getImageDescriptor(hoverImg));
     	}
 		String disableImg=bean.getDisableImageUrl();
 		if(disableImg!=null){
-    		this.setImageDescriptor(ImageManager.getImageDescriptor(disableImg));
+    		this.setDisabledImageDescriptor(ImageManager.getImageDescriptor(disableImg));
     	}
     	}catch(Exception e){};
 	}
@@ -92,7 +95,7 @@ public class CActionImpl extends Action{
 				 }
 				 actionEvent.checked=this.isChecked();
 				 actionEvent.actionId=this.getId();
-				 actionEvent.path=this.path;
+				 actionEvent.path=this.getDescription();
 				 
 				 eventBean.fireAction(actionEvent);
 				}catch(Throwable e){

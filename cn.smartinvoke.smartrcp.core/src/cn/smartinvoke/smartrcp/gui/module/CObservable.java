@@ -10,6 +10,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Menu;
 
 import cn.smartinvoke.IServerObject;
+import cn.smartinvoke.util.Log;
 /**
  * 可监听的
  * @author pengzhen
@@ -17,8 +18,10 @@ import cn.smartinvoke.IServerObject;
  */
 public abstract class CObservable implements IServerObject{
 	protected List<CEventBean> listeners = new LinkedList<CEventBean>();
+	//记录所有的CObservable实例，当有FlashViwer关闭时，轮询此集合回收对应的监听器对象
+	private static List<CObservable> observers=new LinkedList<CObservable>();
 	public CObservable() {
-		
+		observers.add(this);
 	}
     public void addListener(CEventBean eventBean){
       if(eventBean!=null){
@@ -35,7 +38,29 @@ public abstract class CObservable implements IServerObject{
     		this.listeners.get(l).fireEvent(param);
     	}
     }
+    public void delListeners(String appId){
+    	if(appId!=null){
+    		for(int n=0;n<listeners.size();n++){
+    			CEventBean eventBean=listeners.get(n);
+    			if(eventBean.getAppId().equals(appId)){
+    				listeners.remove(n);
+    				n--;
+    			}
+    		}
+    	}
+    }
+    public void dispose() {
+    	observers.remove(this);
+	}
     
+    public static void deleteListeners(String appId){
+       Log.println("delete CObservable listeners app="+appId);
+       if(appId!=null){
+    	   for(int n=0;n<observers.size();n++){
+    		   observers.get(n).delListeners(appId);
+    	   }
+       }
+    }
 	/**
 	 * @param args
 	 * @throws FileNotFoundException 
@@ -45,6 +70,8 @@ public abstract class CObservable implements IServerObject{
 		BufferedReader br=new BufferedReader(reader);
 		MenuManager manager=null;
 		Menu menu=null;
+		
+		CEventBean bean=null;
 		
 	}
 }

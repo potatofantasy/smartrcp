@@ -349,11 +349,9 @@ public class ViewManager  extends CObservable implements IServerObject{
 		return this.page.isPartVisible(viewPart);
 	}
 	public static void main(String[] args) {
-		System.out.println(IWorkbenchPage.STATE_MAXIMIZED);
-		System.out.println(IWorkbenchPage.STATE_MINIMIZED);
-		System.out.println(IWorkbenchPage.STATE_RESTORED);
+		
 	}
 	public void dispose() {
-		
+		super.dispose();
 	}
 }

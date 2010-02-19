@@ -279,6 +279,9 @@ private  void fillMenu(IMenuManager menuBar, CMenuRelation menuRelation,String m
 			bean.dispose();
 		}
 		}catch(Throwable e){};
+		
+		//调用父类的dispose注销掉自己
+		super.dispose();
 	}
 	/**
 	 * @param args

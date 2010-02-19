@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchPart;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.RemoteObject;
@@ -30,6 +31,7 @@ import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 import cn.smartinvoke.smartrcp.gui.control.EventFilter;
 import cn.smartinvoke.smartrcp.gui.control.EventRegister;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
+import cn.smartinvoke.smartrcp.gui.module.CObservable;
 import cn.smartinvoke.util.HelpMethods;
 import cn.smartinvoke.util.Log;
 
@@ -86,7 +88,7 @@ public class FlashViewer implements IServerObject {
 			for (int i = 0; i < containers.size(); i++) {
 				FlashViewer temp = containers.get(i);
 				if (temp != null) {
-					String id = temp.getFlashContainer().getAppId();
+					String id = temp.getAppId();
 					if (id != null && id.equals(appId)) {
 						ret = temp;
 						break;
@@ -140,7 +142,7 @@ public class FlashViewer implements IServerObject {
 		this.createFlashContainer(parent);
 		swfAndModulePath = swfPath;
 	}
-
+    public boolean isLoaded=false;
 	/**
 	 * 加载flash
 	 */
@@ -148,9 +150,11 @@ public class FlashViewer implements IServerObject {
 		// 加载flash
 		if (this.swfPath != null) {
 			this.flashContainer.loadMovie(0, swfPath);
+			//this.isLoaded=true;
 		} else if (this.swfAndModulePath != null) {
 			if (swfAndModulePath.length >= 2) {
 				this.flashContainer.loadMovie(0, swfAndModulePath);
+				//this.isLoaded=true;
 				this.swfPath = swfAndModulePath[1];
 			}
 		}
@@ -169,6 +173,7 @@ public class FlashViewer implements IServerObject {
         //当flex加载完毕后传递容器变量给flex application对象
         flashContainer.addListener(new ILoadCompleteListener(){
         	public void run(){
+        	   FlashViewer.this.isLoaded=true;
         	   flexApp.asyncCall("onJavaCreate", new Object[]{FlashViewer.this,flashContainer});
         	}
         });
@@ -311,6 +316,9 @@ public class FlashViewer implements IServerObject {
 			CActionManager actionManager = (CActionManager) pool
 					.getObject(GlobalServiceId.CAction_Manager);
 			actionManager.desposeResource(appId);
+			//删除Observable中的所有监听器
+			CObservable.deleteListeners(this.getAppId());
+			
 			// 删除对象池中的对应服务类
 			if (this.flashContainer != null) {
 				this.flashContainer.dispose();
@@ -327,7 +335,7 @@ public class FlashViewer implements IServerObject {
 		this.parent = parent;
 	}
 	public void addAction(CAction cAction){
-    	if(cAction==null){
+    	/*if(cAction==null){
 			return;
 		}
 		CActionImpl actionImpl = null;
@@ -354,7 +362,7 @@ public class FlashViewer implements IServerObject {
 		 toolBarManager.update(true);
 		 menuManager.add(actionImpl);
 		 menuManager.updateAll(true);
-		}
+		}*/
     }
 	private String appId;
 
@@ -379,9 +387,9 @@ public class FlashViewer implements IServerObject {
 		if(this.parent==null){
 			return null;
 		}
-		if(this.parent instanceof FlashViewPart){
-			FlashViewPart viewPart=(FlashViewPart)this.parent;
-			return viewPart.getViewTitle();
+		if(this.parent instanceof IWorkbenchPart){
+			IWorkbenchPart workbenchPart=(IWorkbenchPart)this.parent;
+			return workbenchPart.getTitle();
 		}else 
 		if(this.parent instanceof FlashShell){
 			FlashShell shell=(FlashShell)this.parent;
@@ -402,6 +410,11 @@ public class FlashViewer implements IServerObject {
 			}
 		}
 	}
+	
+	public RemoteObject getFlexApp() {
+		return flexApp;
+	}
+
 	/**
 	 * flex调用此方法请求当前flashViewer下的flex application加载模块
 	 * @param moduleUrl

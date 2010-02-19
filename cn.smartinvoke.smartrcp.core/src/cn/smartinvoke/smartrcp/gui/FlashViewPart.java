@@ -2,54 +2,59 @@ package cn.smartinvoke.smartrcp.gui;
 
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.presentations.AbstractPresentationFactory;
-import org.eclipse.ui.presentations.IPresentablePart;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
-import cn.smartinvoke.smartrcp.gui.control.CAction;
-import cn.smartinvoke.smartrcp.gui.control.CActionImpl;
 import cn.smartinvoke.util.ImageManager;
 
-public class FlashViewPart extends ViewPart implements IServerObject{
+public class FlashViewPart extends ViewPart implements IServerObject,
+		ISaveablePart2 {
 	public static final String ID = "cn.smartinvoke.smartrcp.gui.FlashViewPart"; //$NON-NLS-1$
 	private CLayoutBasicInfo layoutInfo;
 
 	private FlashViewer flashViewer;
-    public IWorkbenchWindow window;
+	public IWorkbenchWindow window;
+	/**
+	 * viewPart的工具栏下拉菜单 管理器对象
+	 */
+    private ViewPartActionBar partActionBar;
 	@Override
 	public void createPartControl(Composite parent) {
 		try {
-			this.window=this.getViewSite().getWorkbenchWindow();
+			this.window = this.getViewSite().getWorkbenchWindow();
 			String secondId = this.getViewSite().getSecondaryId();
 			Map<Integer, CLayoutBasicInfo> layoutMap = Perspective.swfLayoutMap;
 			layoutInfo = layoutMap.get(Integer.valueOf(secondId));
 			String viewId = layoutInfo.getViewId();
 			if (viewId != null) {
-				if(layoutInfo.isModuleSwf){
-				  String[] paths = new String[] {
-						CPerspective.getRuntimeSWFPath(),
-						CPerspective.getRuntimeSwfFolder() + "/" + viewId };
-				  flashViewer = new FlashViewer(secondId, parent, paths);
-				}else{
-				  flashViewer = new FlashViewer(secondId, parent, CPerspective.getRuntimeSwfFolder() + "/" + viewId);
+				if (layoutInfo.isModuleSwf) {
+					String[] paths = new String[] {
+							CPerspective.getRuntimeSWFPath(),
+							CPerspective.getRuntimeSwfFolder() + "/" + viewId };
+					flashViewer = new FlashViewer(secondId, parent, paths);
+				} else {
+					flashViewer = new FlashViewer(secondId, parent,
+							CPerspective.getRuntimeSwfFolder() + "/" + viewId);
 				}
-				//设置父亲控件
+				// 设置父亲控件
 				this.flashViewer.setParent(this);
 				// 设置布局信息
 				this.setViewTitle(layoutInfo.getTitle());
-				
+
 				// 设置图标
 				if (layoutInfo.image != null) {
 					ImageDescriptor imageDescriptor = ImageManager
@@ -58,11 +63,13 @@ public class FlashViewPart extends ViewPart implements IServerObject{
 						this.setTitleImage(imageDescriptor.createImage());
 					}
 				}
-				//加载swf
-				if(layoutInfo.autoLoad){
+				// 加载swf
+				if (layoutInfo.autoLoad) {
 					flashViewer.loadFlash();
 				}
 			}
+			//初始化工具栏下拉菜单管理器对象
+			this.partActionBar=new ViewPartActionBar(this.getViewSite().getActionBars());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -72,33 +79,127 @@ public class FlashViewPart extends ViewPart implements IServerObject{
 	public FlashViewer getFlashViewer() {
 		return flashViewer;
 	}
-    public void setViewTitle(String title){
-    	super.setPartName(title);
-    }
-    public String getViewTitle(){
-    	return this.getPartName();
-    }
+
+	public ViewPartActionBar getPartActionBar() {
+		return partActionBar;
+	}
+
+	public void setViewTitle(String title) {
+		super.setPartName(title);
+	}
+
+	public String getViewTitle() {
+		return this.getPartName();
+	}
+
 	@Override
 	public void setFocus() {
-         
+
 	}
-    public IToolBarManager getToolBarManager(){
-    	return this.getViewSite().getActionBars().getToolBarManager();
-    }
-    public IMenuManager getMenuManager(){
-    	return this.getViewSite().getActionBars().getMenuManager();
-    }
+    
+	public IToolBarManager getToolBarManager() {
+		
+		return this.getViewSite().getActionBars().getToolBarManager();
+	}
+
+	public IMenuManager getMenuManager() {
+		return this.getViewSite().getActionBars().getMenuManager();
+	}
+
 	public void dispose() {
-		//删除透视图对象中的layout信息对象
-		try{
-		 
-		 Perspective.swfLayoutMap.remove(Integer.valueOf(this.flashViewer.getAppId()));
-		 if (this.flashViewer != null) {
-			this.flashViewer.dispose();
-		 }
-		}catch(Exception e){
+		// 删除透视图对象中的layout信息对象
+		try {
+
+			Perspective.swfLayoutMap.remove(Integer.valueOf(this.flashViewer
+					.getAppId()));
+			if (this.flashViewer != null) {
+				this.flashViewer.dispose();
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		super.dispose();
+	}
+	public String getType(){
+    	return "FlashViewPart";
+    }
+	public int promptToSaveOnClose() {
+		if(!this.flashViewer.isLoaded){
+			return ISaveablePart2.NO;
+		}
+		if(this.isDirty()){
+			  Object obj=
+				  this.flashViewer.getFlexApp().call("promptTitleAndMessage", new Object[]{});
+			  Object[] arr=null;
+			  if(obj!=null || obj.getClass().isArray()){
+				  arr=(Object[])obj;
+			  }
+			  if(arr==null || arr.length<2){
+				  arr=new Object[]{"是否保存","视图数据已经修改，是否保存"};
+			  }
+			  boolean ret=
+				  MessageDialog.openConfirm(this.getViewSite().getShell(), arr[0]+"", arr[1]+"");
+			  if(ret){
+				 return ISaveablePart2.YES;
+			  }else{
+				 return ISaveablePart2.NO;
+			  }
+		}
+		return ISaveablePart2.NO;
+	}
+
+	public void doSave(IProgressMonitor monitor) {
+		if(!this.flashViewer.isLoaded){
+			return ;
+		}
+		this.flashViewer.getFlexApp().asyncCall("doSave",
+				new Object[] { monitor });
+
+	}
+
+	public void doSaveAs() {
+		if(!this.flashViewer.isLoaded){
+			return ;
+		}
+		this.flashViewer.getFlexApp().asyncCall("doSaveAs", new Object[] {});
+	}
+
+	public boolean isDirty() {
+		if(!this.flashViewer.isLoaded){
+			return false;
+		}
+		Object retObj = this.flashViewer.getFlexApp().call("isDirty",
+				new Object[] {});
+		if (retObj != null) {
+			return (Boolean) retObj;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isSaveAsAllowed() {
+		if(!this.flashViewer.isLoaded){
+			return false;
+		}
+		Object retObj = this.flashViewer.getFlexApp().call("isSaveAsAllowed",
+				new Object[] {});
+		if (retObj != null) {
+			return (Boolean) retObj;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isSaveOnCloseNeeded() {
+		if(!this.flashViewer.isLoaded){
+			return false;
+		}
+		Object retObj = this.flashViewer.getFlexApp().call(
+				"isSaveOnCloseNeeded", new Object[] {});
+		if (retObj != null) {
+			return (Boolean) retObj;
+		} else {
+			return false;
+		}
 	}
 }

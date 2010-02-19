@@ -120,6 +120,10 @@ public class CAppToolBarManager implements IServerObject {
 	 */
 	public void insertItem(String actionId) {
 		if (actionId != null && visualableToolBars.size() > 0) {
+			if(this.curToolBar.actionIds.contains(actionId)){//如果已经添加则返回
+				return;
+			}
+			
 			IAction action = SmartRCPBuilder.actionManager.getAction(actionId);
 			if (action != null) {
 				ActionContributionItem contributionItem = new ActionContributionItem(
@@ -139,6 +143,9 @@ public class CAppToolBarManager implements IServerObject {
 
 	public void insertBefore(String beforeId, String actionId) {
 		if (beforeId != null && actionId != null) {
+			if(this.curToolBar.actionIds.contains(actionId)){
+				return;
+			}
 			IAction action = SmartRCPBuilder.actionManager.getAction(actionId);
 			if (action != null) {
 				    ActionContributionItem contributionItem = new ActionContributionItem(action);
@@ -162,6 +169,9 @@ public class CAppToolBarManager implements IServerObject {
 	}
 	public void insertAfter(String afterId, String actionId) {
 		if (afterId != null && actionId != null) {
+			if(this.curToolBar.actionIds.contains(actionId)){
+				return;
+			}
 			IAction action = SmartRCPBuilder.actionManager.getAction(actionId);
 			if (action != null) {
 				    ActionContributionItem contributionItem = new ActionContributionItem(action);

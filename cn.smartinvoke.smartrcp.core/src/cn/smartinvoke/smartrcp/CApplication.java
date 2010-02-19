@@ -83,28 +83,28 @@ public class CApplication implements IServerObject {
 	   
 	}
 	//---------------------常用对话框
-	public  boolean openConfirm(String appId,String title, String message) {
+	public  boolean openConfirm(Shell mainShell,String title, String message) {
 		//FlashViewer flashViewer=FlashViewer.getViewerByAppId(appId);
 		//flashViewer.isBreak=true;
 		
-		Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
+		//Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
 		boolean ret= MessageDialog.openConfirm(mainShell, title, message);
 		return ret;
 	}
-	public  void openError(String title, String message) {
-		Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
+	public  void openError(Shell mainShell,String title, String message) {
+		//Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
 		MessageDialog.openError(mainShell, title, message);
 	}
-	public  void openInformation(String title, String message) {
-		Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
+	public  void openInformation(Shell mainShell,String title, String message) {
+		//Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
 		MessageDialog.openInformation(mainShell, title, message);
 	}
-	public  boolean openQuestion(String title, String message) {
-		Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
+	public  boolean openQuestion(Shell mainShell,String title, String message) {
+		//Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
 		return MessageDialog.openQuestion(mainShell, title, message);
 	}
-	public  void openWarning(String title, String message) {
-		Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
+	public  void openWarning(Shell mainShell,String title, String message) {
+		//Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
 		MessageDialog.openWarning(mainShell, title, message);
 	}
 }
