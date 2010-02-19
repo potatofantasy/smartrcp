@@ -6,7 +6,8 @@ import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 
 public class CNativeActionImpl extends CActionImpl {
-	
+	//对应菜单项在菜单中的路径位置
+    public String path="";
 	public CNativeActionImpl() {
 		
 	}

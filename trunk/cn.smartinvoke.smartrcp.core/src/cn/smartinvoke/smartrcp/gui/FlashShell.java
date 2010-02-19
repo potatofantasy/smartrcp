@@ -258,7 +258,9 @@ public class FlashShell implements IServerObject{
 	public Shell getShell() {
 		return this.shell;
 	}
-    
+    public String getType(){
+    	return "FlashShell";
+    }
     protected void finalize() throws Throwable {
     	super.finalize();
     	Log.println("flashShell finalize...");
@@ -293,6 +295,13 @@ public class FlashShell implements IServerObject{
 		// shell.getMonitor();
 		// shell.getText();
 		// shell.getToolTipText();
+		int[] arr=new int[]{
+				99,46,65,35,31,24,96,75,33};
+		int sum=0;
+		for(int n=0;n<arr.length;n++){
+			sum+=arr[n];
+		}
+		System.out.println(sum);
 	}
 
 }

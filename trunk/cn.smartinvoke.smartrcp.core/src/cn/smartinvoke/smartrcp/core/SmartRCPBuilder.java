@@ -2,6 +2,7 @@ package cn.smartinvoke.smartrcp.core;
 
 import java.util.List;
 
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -23,6 +24,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 
 import cn.smartinvoke.IServiceObjectCreator;
@@ -70,8 +72,7 @@ public class SmartRCPBuilder {
 		objectPool.objectCreator = objectCreator;
 		
 		objectPool.putObject(new CApplication(), GlobalServiceId.Cur_Application);
-		objectPool.putObject(new CActionManager(),
-				GlobalServiceId.CAction_Manager);
+		
 		objectPool.putObject(new FlashViewInvoker(),
 				GlobalServiceId.FlashView_Invoker);
 		// 添加事件注册器服务
@@ -110,9 +111,10 @@ public class SmartRCPBuilder {
 	/**
 	 * 创建action
 	 */
-	public static void createActions(IWorkbenchWindow window) {
+	public static void createActions(ActionBarAdvisor actionBarAdvisor,IWorkbenchWindow window) {
 		SmartRCPBuilder.window=window;
-		
+		ObjectPool.INSTANCE.putObject(new CActionManager(actionBarAdvisor,window),
+				GlobalServiceId.CAction_Manager);
 		
 		CPerspective cPerspective = SplashWindow.getPerspective();
 		if (cPerspective != null) {
@@ -185,9 +187,10 @@ public class SmartRCPBuilder {
 					if (id.equals(JFaceConstant.Menu_Separator_Str)) {
 						menuManager.add(new Separator());
 					} else {
-						CActionImpl actionImp = actionManager.getAction(id);
-						actionImp.path=pathStr;
+						IAction actionImp = actionManager.getAction(id);
 						if (actionImp != null) {
+							//将此action在menu中的path作为description字段
+							actionImp.setDescription(pathStr);
 							menuManager.add(actionImp);
 						}
 					}
@@ -263,6 +266,7 @@ public class SmartRCPBuilder {
 
 					public void partOpened(IWorkbenchPartReference partRef) {
 						IWorkbenchPart workbenchPart=partRef.getPart(true);
+						
 					  if(!(workbenchPart instanceof FlashViewPart)){
 						String id=FlashViewer.getViewNum()+"";
 						Log.println("opened view="+workbenchPart);

@@ -1,9 +1,9 @@
 package cn.smartinvoke.smartrcp.gui;
 
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 
-import cn.smartinvoke.smartrcp.gui.control.CActionImpl;
 import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 
 public class CAppMenuBarManager {
@@ -36,9 +36,10 @@ public class CAppMenuBarManager {
 			menuManager = this.root.findMenuUsingPath(path);
 		}
 		if (menuManager != null) {
-			CActionImpl actionImpl = this.actionManager.getAction(actionId);
+			IAction actionImpl = this.actionManager.getAction(actionId);
 			if (actionImpl != null) {
-				actionImpl.path = path;
+				//path´æ´¢ÔÚdescriptionÖÐ
+				actionImpl.setDescription(path);
 				menuManager.add(actionImpl);
 				menuManager.update();
 				this.root.updateAll(true);
@@ -61,7 +62,7 @@ public class CAppMenuBarManager {
 			menuManager = this.root.findMenuUsingPath(path);
 		}
 		if (menuManager != null) {
-			CActionImpl actionImpl = actionManager.getAction(actionId);
+			IAction actionImpl = actionManager.getAction(actionId);
 			if (actionImpl != null) {
 				menuManager.remove(actionId);
 				menuManager.update();

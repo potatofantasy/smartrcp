@@ -9,10 +9,10 @@ import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 
 public class CMessageDialog implements IServerObject {
 	private MessageDialog messageDialog;
-	public CMessageDialog(String dialogTitle,
+	public CMessageDialog(Shell mainShell,String dialogTitle,
             String dialogMessage, int dialogImageType,
             Object[] dialogButtonLabels, int defaultIndex) {
-		Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
+		//Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
 		String[] labels=null;
 		if(dialogButtonLabels!=null){
 			labels=new String[dialogButtonLabels.length];
