@@ -1,5 +1,8 @@
 package cn.smartinvoke.smartrcp;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.ControlContribution;
@@ -22,10 +25,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
-import org.eclipse.ui.internal.util.StatusLineContributionItem;
 
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 /**
@@ -55,7 +58,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// file.
 		// Registering also provides automatic disposal of the actions when
 		// the window is closed.
-
+		
 		/*
 		 * exitAction = ActionFactory.QUIT.create(window); register(exitAction);
 		 * 
@@ -75,7 +78,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		 *将flex传递过来的CAction数组，初始化为对应的jface Action对象，并将该对象
      * 存储到CActionManager中，key为action的id，值为该action
 		 */
-		SmartRCPBuilder.createActions(window);
+		SmartRCPBuilder.createActions(this,window);
+		//this.register(action)
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
@@ -93,6 +97,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		  statusLine.update(true);
 //		  statusLine.add(new Separator());
 //		  statusLine.appendToGroup(StatusLineManager.BEGIN_GROUP,new MyStatusLineControl());
+	}
+	public static void main(String[] args) throws Exception{
+		
+	    
 	}
 }
 class MyStatusLineControl extends ContributionItem{
