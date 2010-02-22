@@ -6,16 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 
 import cn.smartinvoke.IServerObject;
@@ -26,7 +22,6 @@ import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.gui.FlashShell;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.control.CAction;
-import cn.smartinvoke.smartrcp.gui.control.CActionImpl;
 import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 import cn.smartinvoke.smartrcp.gui.control.EventFilter;
 import cn.smartinvoke.smartrcp.gui.control.EventRegister;
@@ -37,17 +32,32 @@ import cn.smartinvoke.util.Log;
 
 public class FlashViewer implements IServerObject {
 	private static List<FlashViewer> containers = new LinkedList<FlashViewer>();
-	// 当前打开的FlashViewer计数器
-	private static int viewer_Num = 0;
-
+	/**
+	 * 已使用的id
+	 */
+	private static List<Integer> usedAppIds=new LinkedList<Integer>();
 	// 返回当前的viewerNum值，并将计数器加一
 	public static synchronized int getViewNum() {
-		return viewer_Num++;
+		int num=-1;
+		//循环访问Id随机生成器，直到获得一个未使用的Id为止
+		while(true){
+			num=getRandomNum();
+			if(!usedAppIds.contains(num)){
+				break;
+			}
+		}
+		usedAppIds.add(num);
+		return num;
 	}
-
+    private static int getRandomNum(){
+    	double val=Math.random()*Integer.MAX_VALUE;
+    	return (int)val;
+    }
 	public static void add_Viewer(FlashViewer container) {
 		if (container != null) {
 			if (!containers.contains(container)) {
+				//将id添加到已使用集合中
+				usedAppIds.add(Integer.valueOf(container.getAppId()));
 				containers.add(container);
 			}
 		}
@@ -147,6 +157,12 @@ public class FlashViewer implements IServerObject {
 	 * 加载flash
 	 */
 	public void loadFlash() {
+		if(isLoaded){
+			return;
+		}
+		if(this.flashContainer==null){
+			return;
+		}
 		// 加载flash
 		if (this.swfPath != null) {
 			this.flashContainer.loadMovie(0, swfPath);

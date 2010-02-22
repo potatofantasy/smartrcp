@@ -19,6 +19,7 @@ import cn.smartinvoke.rcp.CStandaloneLayout;
 import cn.smartinvoke.rcp.ICFolderLayout;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
+import cn.smartinvoke.util.Log;
 public class Perspective implements IPerspectiveFactory {
 	public static final String ID="cn.smartinvoke.smartrcp.core.Perspective";
 	/*public void createInitialLayout(IPageLayout layout) {
@@ -43,6 +44,11 @@ public class Perspective implements IPerspectiveFactory {
 		if(perspective==null){
 			return;
 		}
+		//如果保存了工作台的状态就不执行下面的代码
+		/*if(perspective.saveAndRestore){
+			return;
+		}*/
+		
 		this.layout=layout;
 		
 		pageLayout=perspective.page;
