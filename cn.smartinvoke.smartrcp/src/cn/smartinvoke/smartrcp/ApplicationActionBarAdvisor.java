@@ -93,10 +93,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		  //ToolBarManager barManager=null;
 		  
 //		  statusLine.add(new GroupMarker(StatusLineManager.BEGIN_GROUP));
-		  statusLine.add(new MyStatusLineControl());
-		  statusLine.update(true);
+		  //statusLine.add(new MyStatusLineControl());
+		 // statusLine.update(true);
 //		  statusLine.add(new Separator());
 //		  statusLine.appendToGroup(StatusLineManager.BEGIN_GROUP,new MyStatusLineControl());
+		SmartRCPBuilder.initStatusLine(statusLine);
 	}
 	public static void main(String[] args) throws Exception{
 		
