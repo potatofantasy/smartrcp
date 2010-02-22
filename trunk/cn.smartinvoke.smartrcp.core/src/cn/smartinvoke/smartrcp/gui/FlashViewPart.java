@@ -3,15 +3,16 @@ package cn.smartinvoke.smartrcp.gui;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISaveablePart2;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.IServerObject;
@@ -20,6 +21,7 @@ import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.util.ImageManager;
+import cn.smartinvoke.util.Log;
 
 public class FlashViewPart extends ViewPart implements IServerObject,
 		ISaveablePart2 {
@@ -32,13 +34,25 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 	 * viewPart的工具栏下拉菜单 管理器对象
 	 */
     private ViewPartActionBar partActionBar;
+    /**
+     * 该flash是否加载
+     */
+    private boolean isLoaded=false;
 	@Override
 	public void createPartControl(Composite parent) {
 		try {
 			this.window = this.getViewSite().getWorkbenchWindow();
 			String secondId = this.getViewSite().getSecondaryId();
 			Map<Integer, CLayoutBasicInfo> layoutMap = Perspective.swfLayoutMap;
-			layoutInfo = layoutMap.get(Integer.valueOf(secondId));
+			if(layoutInfo==null){//持久化状态中没有就从map中取
+			  layoutInfo = layoutMap.get(Integer.valueOf(secondId));
+			}else{
+			  layoutMap.put(Integer.valueOf(secondId), layoutInfo);
+			}
+			//如果没有则返回
+			if(layoutInfo==null){
+				return;
+			}
 			String viewId = layoutInfo.getViewId();
 			if (viewId != null) {
 				if (layoutInfo.isModuleSwf) {
@@ -54,7 +68,8 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 				this.flashViewer.setParent(this);
 				// 设置布局信息
 				this.setViewTitle(layoutInfo.getTitle());
-
+                //debug
+				Log.println(layoutInfo.getTitle()+"  "+this.getViewSite().getPage().isPartVisible(this));
 				// 设置图标
 				if (layoutInfo.image != null) {
 					ImageDescriptor imageDescriptor = ImageManager
@@ -64,9 +79,9 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 					}
 				}
 				// 加载swf
-				if (layoutInfo.autoLoad) {
-					flashViewer.loadFlash();
-				}
+				//if (!isLoaded) {
+					//flashViewer.loadFlash();
+				//}
 			}
 			//初始化工具栏下拉菜单管理器对象
 			this.partActionBar=new ViewPartActionBar(this.getViewSite().getActionBars());
@@ -74,6 +89,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 			e.printStackTrace();
 		}
 		;
+		
 	}
 
 	public FlashViewer getFlashViewer() {
@@ -94,7 +110,8 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 
 	@Override
 	public void setFocus() {
-
+		
+       //this.saveState(memento)
 	}
     
 	public IToolBarManager getToolBarManager() {
@@ -116,7 +133,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 				this.flashViewer.dispose();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		super.dispose();
 	}
@@ -154,7 +171,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		}
 		this.flashViewer.getFlexApp().asyncCall("doSave",
 				new Object[] { monitor });
-
+        
 	}
 
 	public void doSaveAs() {
@@ -201,5 +218,16 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		} else {
 			return false;
 		}
+	}
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		CLayoutBasicInfo layoutInfo=new CLayoutBasicInfo();
+		if(layoutInfo.init(memento)){//信息已经存储到memento中
+			this.layoutInfo=layoutInfo;
+			//this.isRestorePart=true;
+		}
+	}
+	public void saveState(IMemento memento) {  
+	   this.layoutInfo.save(memento);
 	}
 }

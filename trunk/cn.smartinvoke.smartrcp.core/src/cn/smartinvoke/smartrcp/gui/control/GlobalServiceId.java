@@ -7,8 +7,8 @@ public class GlobalServiceId {
 	public static final String Splash_Win="smartrcpSplash_Win";
 	//引用程序工具栏
 	public static final String App_ToolBar_Manager="smartrcp_App_ToolBar_Manager";
-	
 	public static final String App_MenuBar_Manager="smartrcp_App_MenuBar_Manager";
+	public static final String App_StatusLine_Manager="smartrcp_App_StatusLine_Manager";
 	
     public static final String Event_Register="smartrcpEventRegister";
     public static final String Swt_Display="smartrcpDisplay";

@@ -80,6 +80,13 @@ public class ViewManager  extends CObservable implements IServerObject{
 				}
 				public void partOpened(IWorkbenchPart part) {
 					fireEvent(CPartEvent.Part_Opened, part);
+					/**
+					 *打开控制台存储的未显示的viewPart
+					 */
+					if(part instanceof FlashViewPart){
+						FlashViewPart viewPart=(FlashViewPart)part;
+						viewPart.getFlashViewer().loadFlash();
+					}
 				}
 			});
 		}
@@ -209,7 +216,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 	}
 	//--------------------FlashView的管理方法
 	/**
-	 * 将指定的viewpart最大化
+	 * 将指定的viewpart的状态，是最大化，最小化，还是保持原样
 	 */
 	public void  setState(String viewPartId,int state){
 		//FlashViewer ret=null;
@@ -223,8 +230,11 @@ public class ViewManager  extends CObservable implements IServerObject{
 				    
 					//首先获得焦点
 					page.activate(viewPart);
-					//最大化
-					page.setPartState(page.getActivePartReference(),state);
+					//设置state
+					IWorkbenchPartReference partReference=page.getActivePartReference();
+					if(page.getPartState(partReference)!=state){
+					 page.setPartState(partReference,state);
+					}
 			  }
 		  }
 		}

@@ -223,7 +223,7 @@ public class FlashContainer extends Flash implements IServerObject{
     	String moduleUrl=url[1];
     	RemoteObject app=new RemoteObject(FlashContainer.this,false);
     	app.setRemoteId("app");
-    	app.asyncCall("loadModule",new Object[]{moduleUrl});
+    	app.call("loadModule",new Object[]{moduleUrl});
         	}
         };
         this.addListener(listener);

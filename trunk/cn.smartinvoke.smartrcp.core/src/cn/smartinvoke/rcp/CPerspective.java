@@ -82,7 +82,10 @@ public class CPerspective {
 	public CPerspective() {
 		super();
 	}
-	
+	/**
+	 * 是否保存工作台状态
+	 */
+	public boolean saveAndRestore=false;
 	public Object[] actions=null;
 	public Object[] menuBars;
 	public CToolBar toolBar;

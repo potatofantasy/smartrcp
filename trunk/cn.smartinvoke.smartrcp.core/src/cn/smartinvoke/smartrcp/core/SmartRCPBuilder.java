@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -25,10 +26,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.ActionBarAdvisor;
+import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 
 import cn.smartinvoke.IServiceObjectCreator;
-import cn.smartinvoke.ProtocolBuilder;
 import cn.smartinvoke.TypeMapper;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.gui.ObjectPool;
@@ -39,10 +40,10 @@ import cn.smartinvoke.smartrcp.CApplication;
 import cn.smartinvoke.smartrcp.DebugServer;
 import cn.smartinvoke.smartrcp.gui.CAppMenuBarManager;
 import cn.smartinvoke.smartrcp.gui.CAppToolBarManager;
+import cn.smartinvoke.smartrcp.gui.CStatusLineManager;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.smartrcp.gui.control.CAction;
-import cn.smartinvoke.smartrcp.gui.control.CActionImpl;
 import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 import cn.smartinvoke.smartrcp.gui.control.EventFilter;
 import cn.smartinvoke.smartrcp.gui.control.EventRegister;
@@ -100,7 +101,21 @@ public class SmartRCPBuilder {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-
+	/**
+	 * 初始化工作台配置
+	 * @param configurer
+	 */
+	public static void initWorkbench(IWorkbenchConfigurer configurer){
+		if(SplashWindow.getPerspective().saveAndRestore){
+		  configurer.setSaveAndRestore(true);
+		}else{
+		  configurer.setSaveAndRestore(false);
+		}
+	}
+    /**
+     * 初始化图像管理器
+     * @param imageRegistry
+     */
 	public static void initImageRegistry(ImageRegistry imageRegistry) {
 		// ---------加载图像注册信息
 		ImageManager.init(imageRegistry);
@@ -199,7 +214,10 @@ public class SmartRCPBuilder {
 			menuBar.add(menuManager);
 		}
 	}
-
+    /**
+     * 初始化工具栏
+     * @param coolBar
+     */
 	public static void fillCoolBar(ICoolBarManager coolBar) {
 		CPerspective cPerspective = SplashWindow.getPerspective();
 		if (cPerspective != null && actionManager != null) {
@@ -211,7 +229,15 @@ public class SmartRCPBuilder {
 		}
 
 	}
-
+	/**
+	 * 初始化状态栏管理器
+	 * @param statusLineManager
+	 */
+    public static void initStatusLine(IStatusLineManager statusLineManager){
+    	CStatusLineManager lineManager=new CStatusLineManager(statusLineManager);
+    	ObjectPool.INSTANCE.putObject(lineManager,GlobalServiceId.App_StatusLine_Manager);
+    	
+    }
 	public static void preWindowOpen(IWorkbenchWindowConfigurer configurer) {
 		// TODO 将Display对象注册为全局服务对象，并且添加事件处理程序
 		// System.out.println();
@@ -238,6 +264,7 @@ public class SmartRCPBuilder {
 
 			public void perspectiveActivated(IWorkbenchPage page,
 					IPerspectiveDescriptor perspective) {
+				
 				page.addPartListener(new IPartListener2(){
 
 					public void partActivated(IWorkbenchPartReference partRef) {
@@ -271,6 +298,10 @@ public class SmartRCPBuilder {
 						String id=FlashViewer.getViewNum()+"";
 						Log.println("opened view="+workbenchPart);
 						ViewManager.fillViewerList(id,partRef.getId(),workbenchPart);
+					  }else{
+						 //----------
+						// FlashViewPart viewPart=(FlashViewPart)workbenchPart;
+						// viewPart.getFlashViewer().loadFlash();	
 					  }
 					}
 
