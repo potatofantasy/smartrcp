@@ -73,7 +73,7 @@
                 <node label="快捷键"/>
                 <node label="扩展事件"/>
               </node>
-              
+              <node label="保存视图状态"/>
               <node label="状态栏" module="views/AppToolBar_T.swf"/>
               <node label="视图管理">
                  <node label="视图工具栏和下拉菜单"/>
