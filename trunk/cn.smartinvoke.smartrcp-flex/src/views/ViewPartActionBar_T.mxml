@@ -12,7 +12,7 @@
 			import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 			import cn.smartinvoke.RemoteObject;
 		    var actionBar:ViewPartActionBar=null;
-			function init():void{
+			function init():void{  
 				var parent:RemoteObject=this.flashViewer.getParent();
 				//如果存载当前flash的容器时viewPart，才具有此功能
 				if(parent is FlashViewPart){

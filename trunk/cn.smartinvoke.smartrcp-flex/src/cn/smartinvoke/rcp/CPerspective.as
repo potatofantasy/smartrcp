@@ -20,7 +20,7 @@ package cn.smartinvoke.rcp
 		public function get editorArea():CPageLayout{
 			return _pageLayout;
 		}*/
-		
+		public var saveAndRestore:Boolean=false;
 		public var actions:Array=null;
 		public var menuBars:Array=null;
 		public var toolBar:CToolBar=null;

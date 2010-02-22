@@ -7,6 +7,7 @@ package cn.smartinvoke.rcp
 		
 		public static const App_ToolBar_Manager:String="smartrcp_App_ToolBar_Manager";
 		public static const App_MenuBar_Manager:String="smartrcp_App_MenuBar_Manager";
+		public static const App_StatusLine_Manager:String="smartrcp_App_StatusLine_Manager";
 		
 		public static const Event_Register:String="smartrcpEventRegister";
 		public static const  Swt_Display:String="smartrcpDisplay";

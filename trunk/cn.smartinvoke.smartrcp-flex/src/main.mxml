@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rcp:RCPApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:rcp="cn.smartinvoke.gui.*"
 	 backgroundColor="white" layout="vertical" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
+   <rcp:initialize>
+   	
+   </rcp:initialize>
    <mx:Style>
    	global{ 
    	 font-size:12px;
@@ -8,11 +11,14 @@
    </mx:Style>
    <mx:Script>
    	<![CDATA[
+   		import cn.smartinvoke.gui.RCPModule;
    		import cn.smartinvoke.smartrcp.gui.FlashViewPart;
    		import cn.smartinvoke.smartrcp.gui.FlashShell;
    		import mx.controls.Alert;
    		import cn.smartinvoke.executor.Executor;
+   		[Frame(extraClass="cn.smartinvoke.gui.RCPModule")]
    		
+   		var module:RCPModule;
    		protected override function onJavaLoaded():void{
    			//Alert.show(this.flashViewer.getParent()+"");
    			this.flashViewer.setDebugModule("views/Dialog_T.swf");

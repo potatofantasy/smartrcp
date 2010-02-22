@@ -34,7 +34,7 @@
 	 <mx:Button label="关闭" click="onClick()"/>
 	 
 	 
-	<rcp:CPerspective id="ret">
+	<rcp:CPerspective id="ret" saveAndRestore="true">
 	
 	<!--action的定义 -->
    	<rcp:actions>
@@ -114,8 +114,8 @@
 	 	<rcp:layouts>
 	 	  <mx:ArrayCollection>
 	 	     
-	 	       <rcp:CStandaloneLayout id="layoutNav" title="功能列表" closeable="false"
-	 	        viewId="views/TreeViewPart.swf" relationship="{CPageLayout.LEFT}" ratio="0.25" refLayout="{this.page}" showTitle="false">
+	 	       <rcp:CStandaloneLayout id="layoutNav" title="功能列表" closeable="false" image="/icons/nav.gif"
+	 	        viewId="views/TreeViewPart.swf" relationship="{CPageLayout.LEFT}" ratio="0.25" refLayout="{this.page}" showTitle="true">
 	           </rcp:CStandaloneLayout>
 	 	       <rcp:CFolderLayout id="layoutContent" viewId="views/ViewManager_T.swf" title="开始界面"
 	 	  		placeholderViewId="cn.smartinvoke.smartrcp.gui.FlashViewPart"
