@@ -35,7 +35,23 @@ package cn.smartinvoke
 		  var tagetObj:Object=new ClassFactory(clss).newInstance();
 		  tagetObj["remoteId"]=objId;
 		  return tagetObj;
-        } 
+        }
+        /**
+        *异步调用
+        */
+        public function asyncCall( methodName:String,pars:Array=null):void{
+          if(pars==null){
+          	pars=new Array();
+          }
+          var avk:Array=[this.remoteId,methodName,pars];
+          var avkPack:String=ProtocolBuilder.getProtocolStr(avk);
+          fscommand("cmd_async_call",avkPack);
+          //var retPack:String=RemoteObject.externalInterfaceCall('call',avkPack) as String;
+          
+        }
+        /**
+        *同步调用
+        */
         public function call(methodName:String,pars:Array=null):Object{
           if(pars==null){
           	pars=new Array();

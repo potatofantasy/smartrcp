@@ -2,6 +2,8 @@ package cn.smartinvoke.smartrcp.gui
 {
 	import cn.smartinvoke.RemoteObject;
 	import cn.smartinvoke.gui.RCPApplication;
+	import cn.smartinvoke.smartrcp.gui.module.CEventBean;
+	import cn.smartinvoke.smartrcp.util.HelpMethod;
 	
 	import org.eclipse.swt.widgets.Shell;
 	[Bindable]
@@ -40,8 +42,11 @@ package cn.smartinvoke.smartrcp.gui
 		    dialogButtonLabels,defaultIndex]);
 		    
 	}
-	public function open():int{
-		return this.call('open',arguments) as int;
+	public function open(listener:Function,thisObject:Object):void{
+		var bean:CEventBean=HelpMethod.createEventBean(listener,thisObject);
+		if(bean!=null){
+			this.asyncCall('open',[bean]);	
+		}
 	}
 	public function close():Boolean{
 		return this.call('close',arguments) as Boolean;

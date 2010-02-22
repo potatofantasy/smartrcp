@@ -54,26 +54,21 @@ package cn.smartinvoke.smartrcp
 			 this.call("removeData",arguments);
 			}
 		}
+		//--颜色对话框
+		
+		
 		//-----------------常用对话框
-		public function openConfirm(title:String,message:String):Boolean{
-			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
-			return this.call("openConfirm",[shell,title,message]) as Boolean;
-		}
-		public function openQuestion(title:String,message:String):Boolean{
-			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
-			return this.call("openQuestion",[shell,title,message]) as Boolean;
-		}
 		public function openError(title:String,message:String):void{
 			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
-			 this.call("openError",[shell,title,message]);
+			 this.asyncCall("openError",[shell,title,message]);
 		}
 		public function openInformation(title:String,message:String):void{
 			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
-			 this.call("openInformation",[shell,title,message]);
+			 this.asyncCall("openInformation",[shell,title,message]);
 		}
 		public function openWarning(title:String,message:String):void{
 			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
-			 this.call("openWarning",[shell,title,message]);
+			 this.asyncCall("openWarning",[shell,title,message]);
 		}
 		
 	}
