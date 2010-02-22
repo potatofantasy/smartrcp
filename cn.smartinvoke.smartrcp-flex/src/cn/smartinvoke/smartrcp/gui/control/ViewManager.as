@@ -1,16 +1,14 @@
 package cn.smartinvoke.smartrcp.gui.control
 {
-	import cn.smartinvoke.RemoteObject;
 	import cn.smartinvoke.rcp.CLayoutBasicInfo;
 	import cn.smartinvoke.rcp.GlobalServiceId;
 	import cn.smartinvoke.smartrcp.gui.FlashViewer;
-	import cn.smartinvoke.smartrcp.gui.module.CEventBean;
-	import cn.smartinvoke.smartrcp.util.HelpMethod;
+	import cn.smartinvoke.smartrcp.gui.module.CObservable;
 	
 	import mx.collections.ArrayCollection;
 	[Bindable]
 	[RemoteClass(alias="cn.smartinvoke.smartrcp.gui.control.ViewManager")]
-	public class ViewManager extends RemoteObject
+	public class ViewManager extends CObservable
 	{
 	    public static const VIEW_ACTIVATE:int=1;	
 	    public static const VIEW_VISIBLE:int=2;
@@ -24,23 +22,7 @@ package cn.smartinvoke.smartrcp.gui.control
 		{
 			this.remoteId=GlobalServiceId.View_Manager;
 		}
-		//----------------------监听器
-        public function addListener(listener:Function,thisObject:Object):void{
-			if(listener==null){
-				return;
-			}
-			var bean:CEventBean=HelpMethod.createEventBean(listener,thisObject);
-			if(bean!=null){
-			 this.call("addListener",[bean]);
-			}
-	   }
-	   public function removeListener(
-		   listener:Function,thisObject:Object):void{
-		   var bean:CEventBean=HelpMethod.removeListener(listener,thisObject);
-		   if(bean!=null){
-		   	  this.call('removeListener',[bean]);
-		   }
-	   }
+		
 	   //--------------
         public function openViewPart( basicInfo:CLayoutBasicInfo,isMultiple:Boolean,state:int):FlashViewer{
         	return this.call("openViewPart",arguments) as FlashViewer;

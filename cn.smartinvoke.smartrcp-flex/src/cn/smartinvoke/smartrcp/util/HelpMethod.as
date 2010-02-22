@@ -14,6 +14,9 @@ package cn.smartinvoke.smartrcp.util
 		}
         public static function createEventBean(listener:Function,thisObject:Object):CEventBean{
         	//-------构造事件信息的UID
+        	if(listener==null){
+        		return null;
+        	}
 			var thisObjId:String="app";
 			if(thisObject!=null){
 				thisObjId=UIDUtil.getUID(thisObject);

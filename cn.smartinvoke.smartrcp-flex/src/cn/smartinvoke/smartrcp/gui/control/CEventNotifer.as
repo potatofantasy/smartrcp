@@ -3,8 +3,6 @@ package cn.smartinvoke.smartrcp.gui.control
 	import cn.smartinvoke.IServerObject;
 	import cn.smartinvoke.pool.ObjectPool;
 	import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
-	
-	import mx.controls.Alert;
 
 	public class CEventNotifer implements IServerObject
 	{
@@ -16,7 +14,7 @@ package cn.smartinvoke.smartrcp.gui.control
 		/**
 		 *java调用此方法唤醒指定事件
 		 */
-        public function fireEvent(tagetId:String,funId:String,evt:Object):Object{
+        public function fireEvent(tagetId:String,funId:String,evt:Object,isDelListener:Boolean=false):Object{
         	var ret:Object=null;
         	if(tagetId!=null && funId!=null){
         		//Alert.show(tagetId+"  "+funId+"  "+evt);
@@ -31,6 +29,10 @@ package cn.smartinvoke.smartrcp.gui.control
         				var listener:Function=fun as Function;
         				ret=listener.apply(taget,[evt]);
         			}
+        		}
+        		//删除监听器，表示该监听器只需使用一次
+        		if(isDelListener){
+        			this.removeListener(tagetId,funId);
         		}
         	}
         	return ret;

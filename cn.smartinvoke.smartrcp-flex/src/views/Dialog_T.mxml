@@ -1,44 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
-	layout="vertical" horizontalAlign="center" verticalAlign="middle">
+	layout="absolute" horizontalAlign="center" verticalAlign="middle">
 	<mx:Script>  
 		<![CDATA[
+			import org.eclipse.swt.SWT;
+			import cn.smartinvoke.smartrcp.gui.module.CommonDialogs;
+			import cn.smartinvoke.smartrcp.gui.module.CRGB;
 			import cn.smartinvoke.smartrcp.CApplication;
 			import mx.controls.Alert;
 			import cn.smartinvoke.smartrcp.gui.CMessageDialog;
 			function openMessageDialog():void{
 				var dialog:CMessageDialog=new  CMessageDialog("标题","消息",CMessageDialog.INFORMATION,["button1","button2"],0);
 				
-				var type:int=dialog.open();
-				Alert.show(type+"");
+				dialog.open(this.onDialogRet,this);
+				//Alert.show(type+"");
+			}
+			function onDialogRet(ret:int):void{
+				this.labelInfo.text="MessageDialog 返回"+ret;
 			}
 			function openAppDialog():void{
 				var app:CApplication=CApplication.Instance;
+			   if(this.listType.selectedItem!=null){
 				var fun:Function=app[this.listType.selectedItem.data];
-				if(fun!=null){
-				  var ret:Object=fun.apply(app,["标题","消息"]);
-				  Alert.show("返回 "+ret);
-				}
+				fun.apply(app,["标题","消息"]);
+			   }else{
+			     Alert.show("请选择对话框类型");
+			   }
+			}
+			/**
+			 *打开颜色对话框
+			 */
+			function openColorDialog():void{
+			   CommonDialogs.Instance.openColorDialog(this.onColorDialogRet,this);	
+			}
+			function onColorDialogRet(ret:CRGB):void{
+			    if(ret!=null){
+				this.labelInfo.text="返回颜色R="+ret.red+" G="+ret.green+" B="+ret.blue;
+			   } 
+			}
+			function openDirectoryDialog():void{
+				CommonDialogs.Instance.openDirectoryDialog(function (path:String):void{
+					this.labelInfo.text="您所选目录为"+path;
+				},this,"目录选择框","请选择目录",CApplication.Instance.getBaseFolder(),SWT.NONE);
 			}
 		]]>
 	</mx:Script>
-	<mx:Panel title="CApplication中的对话框"  paddingLeft="100" paddingRight="0"
-            styleName="opaquePanel" width="60%" height="50%">
+	<mx:Panel title="各种对话框"  paddingLeft="100" paddingRight="0" cornerRadius="0"
+            styleName="opaquePanel" width="100%" height="100%">
 	     <mx:Button label="打开MessageDialog" click="openMessageDialog()"/>
-	</mx:Panel>
-	
-	<mx:Panel title="CApplication中的对话框"  paddingLeft="100" paddingRight="0"
-            styleName="opaquePanel" width="60%" height="50%" layout="horizontal">
-           <mx:List id="listType">
-           	 <mx:Array>
-           	 	<mx:Object label="Confirm对话框" data="openConfirm"/>
-           	 	<mx:Object label="Question对话框" data="openQuestion"/>
+	     
+	     <mx:List id="listType">
+	       <mx:dataProvider>
+	       	 <mx:Array>
            	 	<mx:Object label="Error对话框" data="openError"/>
            	 	<mx:Object label="Information对话框" data="openInformation"/>
            	 	<mx:Object label="Warning对话框" data="openWarning"/>
            	 </mx:Array>
-           </mx:List>
-		   <mx:Button label="打开ApplicationDialog" click="openAppDialog()"/>
+	       </mx:dataProvider>
+           	
+         </mx:List>
+		 <mx:Button label="打开ApplicationDialog" click="openAppDialog()"/>
+		 <mx:Button label="打开颜色对话框" click="openColorDialog()"/>
+		 <mx:Button label="打开目录对话框" click="openDirectoryDialog()"/>
+		 <mx:ControlBar horizontalAlign="right">
+		     <mx:Label id="labelInfo"/>
+		 </mx:ControlBar>
 	</mx:Panel>
+	
 	
 </gui:RCPModule>
