@@ -3,6 +3,10 @@
 	layout="vertical" creationComplete="init()" horizontalAlign="center" verticalAlign="middle">
 	<mx:Script>
 		<![CDATA[
+			import cn.smartinvoke.smartrcp.gui.FlashViewer;
+			import cn.smartinvoke.smartrcp.gui.control.ViewManager;
+			import org.eclipse.swt.widgets.Display;
+			import cn.smartinvoke.smartrcp.gui.CMessageDialog;
 			import org.eclipse.swt.SWT;
 			import cn.smartinvoke.smartrcp.gui.module.CShellEvent;
 			import cn.smartinvoke.smartrcp.gui.FlashShell;
@@ -29,37 +33,56 @@
 			   	}
 				//
 			}
-			var flashShell:FlashShell=null;
-			function onClick():void{
-				this.onCloseClick();//关闭以前的
-				if(this.flashShell==null){
-				 flashShell=new FlashShell(SWT.DIALOG_TRIM);
-				 flashShell.setSize(400,400);
+			function onOpenClick():void{
+				 var flashShell:FlashShell=new FlashShell(SWT.SHELL_TRIM);
+				 flashShell.setSize(800,600);
 				 var swfPath:String=this.swfList.selectedItem.data;
 				 flashShell.setText(swfPath);
 				 flashShell.setImage("/icons/alphab_sort_co.gif");
 				 flashShell.createFlashContainer(swfPath);
-				 flashShell.addListener(CShellEvent.Event_Closed,this.onShellClose,this);
-				 flashShell.open();
-				}else{
-				 flashShell.setVisible(true);
-				}
+				 
+				 flashShell.addListener(CShellEvent.Event_Closed,function (evt:CShellEvent):Boolean{
+					//打开信息提示框，提示用户是否退出程序
+					var dialog:CMessageDialog=new  CMessageDialog
+					    ("信息","是否退出程序？",CMessageDialog.INFORMATION,["关闭","取消"],1);
+					//打开对话框
+				    dialog.open(function (ret:int):void{
+				    	   if(ret==0){//如果用户选择了关闭按钮
+				    	     //关闭打开的窗口
+				        	 var flashViews:ArrayCollection=
+				        	    ViewManager.Instance.findFlashViewers(this.swfList.selectedItem.data);
+				        	 if(flashViews!=null){
+				        	 	var flashViewer:FlashViewer=flashViews.getItemAt(0) as FlashViewer;
+				        	 	var parent:RemoteObject=flashViewer.getParent();
+				        	 	if(parent!=null && parent is FlashShell){
+				        	 		 (FlashShell(parent)).close();
+				        	 	}
+				        	 }
+				           }
+				    },this);
+				    
+					return false;
+				},this);
+				
+				
+				flashShell.open();
+				
 			}
-			function onCloseClick():void{
-				if(flashShell!=null){
-					flashShell.setVisible(false);
-				}
+			
+			function onMainShellSetting():void{
+				var mainShell:FlashShell=FlashShell.MainShell;
+				mainShell.setText("这是主窗体"+new Date().valueOf());
+				mainShell.getShell().asyncCall("setMaximized",[true]);
 			}
-			function onShellClose(evt:CShellEvent):Boolean{
-				//Alert.show("in onShellClose");
-				flashShell.setVisible(false);
-				return false;
-			}
+			
 		]]>
 	</mx:Script>
+<mx:Panel title="SmartRCP对多窗口的支持" cornerRadius="0" paddingLeft="0" paddingRight="0"
+            styleName="opaquePanel" width="100%" height="100%">
 	<mx:Label text="窗口列表"/>
 	<mx:List id="swfList" width="300" color="blue"
             dataProvider="{listData}"/>
-	<mx:Button label="打开flash窗口" click="onClick()"/>
-	<mx:Button label="关闭flash窗口" click="onCloseClick()"/>
+	<mx:Button label="打开窗口" click="onOpenClick()"/>
+	<mx:Button label="最大化主窗体" click="onMainShellSetting()"/>
+</mx:Panel>
 </gui:RCPModule> 

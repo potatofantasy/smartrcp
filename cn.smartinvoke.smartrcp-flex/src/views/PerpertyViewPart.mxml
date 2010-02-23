@@ -4,7 +4,6 @@
 	layout="vertical" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[ 
-			import cn.smartinvoke.smartrcp.gui.MainShell;
 			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
 			import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 			import cn.smartinvoke.smartrcp.gui.control.CNativeMenuBuilder;

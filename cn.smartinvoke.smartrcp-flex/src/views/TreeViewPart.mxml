@@ -3,6 +3,8 @@
 	layout="vertical" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import cn.smartinvoke.smartrcp.gui.FlashViewer;
+			import mx.collections.ArrayCollection;
 			import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
 			import mx.events.DragEvent;
 			import mx.controls.Alert;
@@ -39,6 +41,13 @@
 				//Alert.show(selItem+"");
 				if(selItem!=null){
 					var modulePath:String=selItem.@module;
+					var opened:ArrayCollection=ViewManager.Instance.findFlashViewers(modulePath);
+					if(opened!=null && opened.length>0){
+						this.labelStatus.text="已经打开";
+						var flashViewer:FlashViewer=opened[0] as FlashViewer;
+						ViewManager.Instance.showViewPart(flashViewer.appId,ViewManager.VIEW_ACTIVATE);
+						return;
+					}
 				   if(modulePath!=null && modulePath!=""){
 					var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
 					basicInfo.isModuleSwf=true;
@@ -48,11 +57,10 @@
 				   }
 				}
 			}
-			
-			private function onDragEnter(evt:DragEvent):void {
-				Alert.show(evt+"");
-				
+			public function setStatusText(text:String):void{
+				this.labelStatus.text=text;
 			}
+			
 			private function setMin():void{
 				ViewManager.Instance.setState(this.flashViewer.appId,ViewManager.STATE_MINIMIZED);
 			}
@@ -75,12 +83,13 @@
               </node>
               <node label="保存视图状态"/>
               <node label="状态栏" module="views/AppToolBar_T.swf"/>
-              <node label="视图管理">
-                 <node label="视图工具栏和下拉菜单"/>
-                 <node label="视图调用" module="views/ViewManager_T.swf"/>
+              <node label="视图部分">
+                 <node label="视图管理" module="views/ViewManager_T.swf"/>
+                 <node label="视图调用" module="views/ModuleInvoke_T.swf"/>
                  <node label="工具栏和下拉菜单" module="views/ViewPartActionBar_T.swf"/>
                  <node label="数据传递"/>
               </node>
+              <node label="窗口管理" module="views/FlashShell_T.swf"/>
               <node label="对话框" module="views/Dialog_T.swf"/>
             </node>
             <node label="扩展API">

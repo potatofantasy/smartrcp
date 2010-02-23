@@ -5,6 +5,7 @@ package cn.smartinvoke.smartrcp
 	import cn.smartinvoke.rcp.GlobalServiceId;
 	import cn.smartinvoke.smartrcp.gui.FlashShell;
 	import cn.smartinvoke.smartrcp.gui.FlashViewPart;
+	import cn.smartinvoke.smartrcp.gui.FlashViewer;
 	
 	import org.eclipse.swt.widgets.Shell;
 
@@ -21,6 +22,12 @@ package cn.smartinvoke.smartrcp
 		{
 			this.remoteId=GlobalServiceId.Cur_Application;
 		} 
+		/**
+		 *返回当前获得焦点的FlashViewer对象
+		 */
+		public function getActiveFlashViewer():FlashViewer{
+			return this.call("getActiveFlashViewer",arguments) as FlashViewer;
+		}
 		public function getBaseFolder():String{
 			return this.call("getBaseFolder",arguments) as String;
 		}

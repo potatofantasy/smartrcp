@@ -21,7 +21,8 @@
    		var module:RCPModule;
    		protected override function onJavaLoaded():void{
    			//Alert.show(this.flashViewer.getParent()+"");
-   			this.flashViewer.setDebugModule("views/Dialog_T.swf");
+   			//this.labelInfo.text=Executor.applicationId;
+   			this.flashViewer.setDebugModule("views/FlashShell_T.swf");
    		} 
    	]]>
    </mx:Script>

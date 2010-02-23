@@ -1,20 +1,26 @@
 package cn.smartinvoke.smartrcp.gui
 {
 	import cn.smartinvoke.RemoteObject;
-	import cn.smartinvoke.rcp.CAction;
 	import cn.smartinvoke.rcp.GlobalServiceId;
+	import cn.smartinvoke.smartrcp.CApplication;
 	
 	import org.eclipse.swt.widgets.Shell;
     [Bindable]
 	[RemoteClass(alias="cn.smartinvoke.gui.FlashViewer")]
 	public class FlashViewer extends RemoteObject
 	{
-		
+		/**
+		 *返回当前获得焦点的FlashViewer对象
+		 */
+		public static function  getActiveFlashViewer():FlashViewer{
+			return CApplication.Instance.getActiveFlashViewer();
+		}
 		public function FlashViewer()
 		{
 			super();
 			this.remoteId=GlobalServiceId.FlashViewer;
 		}
+		
 		public function getFlexAppId():String{
 			return this.call("getFlexAppId",arguments) as String;
 		}
@@ -48,6 +54,7 @@ package cn.smartinvoke.smartrcp.gui
 			}
 			return ret;
 		}
+		
 		//debug调用此方法
 		public function setDebugModule(url:String):void{
 			this.call("setDebugModule",arguments);
