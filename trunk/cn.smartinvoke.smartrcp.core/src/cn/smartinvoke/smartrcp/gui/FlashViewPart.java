@@ -110,7 +110,8 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 
 	@Override
 	public void setFocus() {
-		
+		//设置当前获得焦点的FlashViewer
+		FlashViewer.curFlashViewer=this.flashViewer;
        //this.saveState(memento)
 	}
     

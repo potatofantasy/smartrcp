@@ -28,6 +28,7 @@ public class FlashContainer extends Flash implements IServerObject{
 	final static int EVENT_FSCOMMAND = 0x00000096;
 
 	final static String CMD_FINISH = "cmd_finish";
+	final static String CMD_ASYNC_CALL = "cmd_async_call";
 	final static String CMD_DISPOSE = "cmd_dispose", CMD_BOUNDS = "3";
 	
 //	private static List<FlashContainer>  containers=new LinkedList<FlashContainer>();
@@ -93,6 +94,12 @@ public class FlashContainer extends Flash implements IServerObject{
 							// FlexAppWin.instance.setBounds(Float.valueOf(bounds[0]),Float.valueOf(bounds[1]),
 							// Float.valueOf(bounds[2]),
 							// Float.valueOf(bounds[3]));
+						}else if(cmd.equals(CMD_ASYNC_CALL)){
+							try{
+								executor.call(val);
+							}catch(Exception e){
+							    e.printStackTrace();
+							}
 						}
 					}
 				}
