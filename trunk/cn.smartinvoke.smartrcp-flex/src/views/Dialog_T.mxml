@@ -3,6 +3,7 @@
 	layout="absolute" horizontalAlign="center" verticalAlign="middle">
 	<mx:Script>  
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import org.eclipse.swt.SWT;
 			import cn.smartinvoke.smartrcp.gui.module.CommonDialogs;
 			import cn.smartinvoke.smartrcp.gui.module.CRGB;
@@ -33,15 +34,33 @@
 			function openColorDialog():void{
 			   CommonDialogs.Instance.openColorDialog(this.onColorDialogRet,this);	
 			}
+			
 			function onColorDialogRet(ret:CRGB):void{
 			    if(ret!=null){
 				this.labelInfo.text="返回颜色R="+ret.red+" G="+ret.green+" B="+ret.blue;
 			   } 
 			}
+			//打开目录选择对话框
 			function openDirectoryDialog():void{
 				CommonDialogs.Instance.openDirectoryDialog(function (path:String):void{
 					this.labelInfo.text="您所选目录为"+path;
 				},this,"目录选择框","请选择目录",CApplication.Instance.getBaseFolder(),SWT.NONE);
+			}
+			//打开文件选择对话框
+			function openFileSelDialog():void{
+				CommonDialogs.Instance.openFileSelDialog(function (paths:ArrayCollection):void{
+				  	var str:String="";
+				  	for each(var path:String in paths){
+				  		str+=path+"|";
+				  	}
+				  	this.labelInfo.text=str;
+				},this,true,["*.doc","*.mp3"]);
+			}
+			//打开文件保存对话框
+			function openFileSaveDialog():void{
+			     	CommonDialogs.Instance.openFileSaveDialog(function (path:String):void{
+			     		this.labelInfo.text=path;
+			     	},this,CApplication.Instance.getBaseFolder());
 			}
 		]]>
 	</mx:Script>
@@ -62,6 +81,9 @@
 		 <mx:Button label="打开ApplicationDialog" click="openAppDialog()"/>
 		 <mx:Button label="打开颜色对话框" click="openColorDialog()"/>
 		 <mx:Button label="打开目录对话框" click="openDirectoryDialog()"/>
+		 
+		 <mx:Button label="打开文件选择对话框" click="openFileSelDialog()"/>
+		 <mx:Button label="打开文件保存对话框" click="openFileSaveDialog()"/>
 		 <mx:ControlBar horizontalAlign="right">
 		     <mx:Label id="labelInfo"/>
 		 </mx:ControlBar>

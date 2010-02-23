@@ -41,7 +41,21 @@ package cn.smartinvoke.smartrcp.gui.module
 		 */
 		public function openFileSelDialog(listener:Function,thisObject:Object,
 		             isMulti:Boolean=false,filterExtensions:Array=null):void{
-		                  	
+		  var bean:CEventBean=HelpMethod.createEventBean(listener,thisObject);
+		  var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+		  if(bean!=null){
+		  	 this.asyncCall("openFileSelDialog",[shell,bean,isMulti,filterExtensions]);
+		  }              	
 	    }
+	    /**
+		 *打开文件保存对话框
+		 */
+		public function openFileSaveDialog(listener:Function,thisObject:Object,filterPath:String=null):void{
+	      var bean:CEventBean=HelpMethod.createEventBean(listener,thisObject);
+		  var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+		  if(bean!=null){
+		     this.asyncCall("openFileSaveDialog",[shell,bean,filterPath]);
+		  }
+		}
 	}
 }

@@ -5,6 +5,7 @@ package cn.smartinvoke.smartrcp.gui
 {
  import cn.smartinvoke.IServerObject;
  import cn.smartinvoke.RemoteObject;
+ import cn.smartinvoke.rcp.GlobalServiceId;
  import cn.smartinvoke.smartrcp.CApplication;
  import cn.smartinvoke.smartrcp.gui.module.CEventBean;
  import cn.smartinvoke.smartrcp.util.HelpMethod;
@@ -13,6 +14,16 @@ package cn.smartinvoke.smartrcp.gui
  [Bindable]
  [RemoteClass(alias="cn.smartinvoke.smartrcp.gui.FlashShell")]
  public class FlashShell extends RemoteObject {
+ 	private static var _mainShell:FlashShell=null;
+ 	public static function get MainShell():FlashShell{
+ 		if(_mainShell==null){
+ 			var mainShell:Shell=new Shell();
+ 			mainShell.remoteId=GlobalServiceId.Swt_Main_Win;
+ 			_mainShell=new FlashShell(0,mainShell);
+ 			
+ 		}
+ 		return _mainShell;
+ 	}
  public function FlashShell(style:int=0,parent:Shell=null){
 	 super();                         
 	 var param:Array=[];
@@ -52,7 +63,7 @@ package cn.smartinvoke.smartrcp.gui
 	 var retObj:Object=this.call("setMinimumSize",arguments);
   }
    public function close():void{
-	 var retObj:Object=this.call("close",[this.remoteId]);
+	 var retObj:Object=this.call("close",arguments);
    }
    public function addListener(type:int,listener:Function,thisObject:Object):void{
    	if(listener==null || thisObject==null){

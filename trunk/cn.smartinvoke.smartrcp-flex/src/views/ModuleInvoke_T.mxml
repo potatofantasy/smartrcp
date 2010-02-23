@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" horizontalAlign="center" verticalAlign="middle">
+	<mx:Script>
+		<![CDATA[
+			import cn.smartinvoke.smartrcp.gui.FlashViewer;
+			import mx.collections.ArrayCollection;
+			import cn.smartinvoke.smartrcp.gui.control.ViewManager;
+			function onSend():void{
+				//获得视图管理器
+				var viewManager:ViewManager=ViewManager.Instance;
+				//获得功能列表的FlashViewer
+				var flashViewers:ArrayCollection=viewManager.findFlashViewers("views/TreeViewPart.swf");
+				if(flashViewers!=null && flashViewers.length>0){
+					var flashViewer:FlashViewer=flashViewers[0] as FlashViewer;
+					flashViewer.invoke("setStatusText",[this.infoText.text]);
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Panel title="视图调用部分，调用功能列表模块中的方法" cornerRadius="0" paddingLeft="0" paddingRight="0"
+            styleName="opaquePanel" width="100%" height="100%">
+	<mx:Label text="输入信息"/>
+	<mx:TextArea width="50%" height="300" id="infoText">
+		
+	</mx:TextArea>
+	<mx:Button label="发送" click="onSend()"/>
+	</mx:Panel>
+</gui:RCPModule>
