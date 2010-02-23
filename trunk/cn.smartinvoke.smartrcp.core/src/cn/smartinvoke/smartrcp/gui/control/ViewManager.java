@@ -169,12 +169,18 @@ public class ViewManager  extends CObservable implements IServerObject{
 		 if(flashViewer!=null){
 		  Object parent=flashViewer.getParent();
 		  if(parent instanceof IViewPart){
-			//IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
-			if(state==IWorkbenchPage.VIEW_ACTIVATE){
-				page.activate((IViewPart)parent);
-			}else{
-				page.bringToTop((IViewPart)parent);
-			}
+			  IViewPart part=(IViewPart)parent;
+			  //part.showViewPart(state);
+			  //page.bringToTop(part);
+			  this.page.activate(part);
+			  
+//			IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
+//			
+//			if(state==IWorkbenchPage.VIEW_ACTIVATE){
+//				page.activate((IViewPart)parent);
+//			}else{
+//				page.bringToTop((IViewPart)parent);
+//			}
 		  }
 		 }
 		}
