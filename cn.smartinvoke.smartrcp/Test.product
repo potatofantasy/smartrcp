@@ -21,7 +21,9 @@
    <launcher>
       <solaris/>
       <win useIco="false">
-         <bmp/>
+         <bmp
+            winMediumHigh="/cn.smartinvoke.smartrcp/32.bmp"
+            winLargeHigh="/cn.smartinvoke.smartrcp/48.bmp"/>
       </win>
    </launcher>
 

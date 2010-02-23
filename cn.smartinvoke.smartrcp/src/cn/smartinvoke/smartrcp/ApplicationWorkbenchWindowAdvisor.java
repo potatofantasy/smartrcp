@@ -1,4 +1,5 @@
 package cn.smartinvoke.smartrcp;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -21,7 +22,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     	SmartRCPBuilder.preWindowOpen(this.getWindowConfigurer());
     }
     public void postWindowOpen() {
+    	final Shell shell=this.getWindowConfigurer().getWindow().getShell();
+    	//shell.setMaximized(maximized)
     	//System.out.println(">>>>>>>>>>>>>>>>>>postWindowOpen");
-    	SmartRCPBuilder.postWindowOpen(this.getWindowConfigurer().getWindow().getShell());
+    	SmartRCPBuilder.postWindowOpen(shell);
     }
 }
