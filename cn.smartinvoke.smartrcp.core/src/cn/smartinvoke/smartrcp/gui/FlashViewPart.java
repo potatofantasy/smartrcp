@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
@@ -91,7 +92,18 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		;
 		
 	}
-
+	/**
+	 * 显示当前的ViewPart
+	 * @param state
+	 */
+    public void showViewPart(int state){
+    	try{
+    	this.getViewSite().getPage().showView(FlashViewPart.ID,
+    			this.getViewSite().getSecondaryId(), state);
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    }
 	public FlashViewer getFlashViewer() {
 		return flashViewer;
 	}
@@ -99,8 +111,9 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 	public ViewPartActionBar getPartActionBar() {
 		return partActionBar;
 	}
-
+    
 	public void setViewTitle(String title) {
+		
 		super.setPartName(title);
 	}
 
@@ -170,22 +183,26 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		if(!this.flashViewer.isLoaded){
 			return ;
 		}
+		try{
 		this.flashViewer.getFlexApp().asyncCall("doSave",
 				new Object[] { monitor });
-        
+	}catch(Exception e){e.printStackTrace();};
 	}
 
 	public void doSaveAs() {
 		if(!this.flashViewer.isLoaded){
 			return ;
 		}
+		try{
 		this.flashViewer.getFlexApp().asyncCall("doSaveAs", new Object[] {});
+	}catch(Exception e){e.printStackTrace();};
 	}
 
 	public boolean isDirty() {
 		if(!this.flashViewer.isLoaded){
 			return false;
 		}
+		try{
 		Object retObj = this.flashViewer.getFlexApp().call("isDirty",
 				new Object[] {});
 		if (retObj != null) {
@@ -193,12 +210,15 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		} else {
 			return false;
 		}
+	}catch(Exception e){e.printStackTrace();};
+	return false;
 	}
 
 	public boolean isSaveAsAllowed() {
 		if(!this.flashViewer.isLoaded){
 			return false;
 		}
+		try{
 		Object retObj = this.flashViewer.getFlexApp().call("isSaveAsAllowed",
 				new Object[] {});
 		if (retObj != null) {
@@ -206,12 +226,15 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		} else {
 			return false;
 		}
+	}catch(Exception e){e.printStackTrace();};
+	return false;
 	}
 
 	public boolean isSaveOnCloseNeeded() {
 		if(!this.flashViewer.isLoaded){
 			return false;
 		}
+		try{
 		Object retObj = this.flashViewer.getFlexApp().call(
 				"isSaveOnCloseNeeded", new Object[] {});
 		if (retObj != null) {
@@ -219,6 +242,8 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		} else {
 			return false;
 		}
+		}catch(Exception e){e.printStackTrace();};
+		return false;
 	}
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);

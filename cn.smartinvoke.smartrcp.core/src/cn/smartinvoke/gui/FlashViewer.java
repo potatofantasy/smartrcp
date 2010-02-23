@@ -354,6 +354,7 @@ public class FlashViewer implements IServerObject {
 	public void setParent(Object parent) {
 		this.parent = parent;
 	}
+	
 	public void addAction(CAction cAction){
     	/*if(cAction==null){
 			return;
