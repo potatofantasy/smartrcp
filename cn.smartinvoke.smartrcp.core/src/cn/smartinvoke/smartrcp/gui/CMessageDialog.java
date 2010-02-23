@@ -1,18 +1,18 @@
 package cn.smartinvoke.smartrcp.gui;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import cn.smartinvoke.IServerObject;
-import cn.smartinvoke.gui.ObjectPool;
-import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
+import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 
-public class CMessageDialog implements IServerObject {
+public class CMessageDialog  implements IServerObject {
 	private MessageDialog messageDialog;
 	public CMessageDialog(Shell mainShell,String dialogTitle,
             String dialogMessage, int dialogImageType,
             Object[] dialogButtonLabels, int defaultIndex) {
-		//Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
+		mainShell=Display.getCurrent().getActiveShell();
 		String[] labels=null;
 		if(dialogButtonLabels!=null){
 			labels=new String[dialogButtonLabels.length];
@@ -24,8 +24,11 @@ public class CMessageDialog implements IServerObject {
 			new MessageDialog(mainShell,dialogTitle,null,dialogMessage,dialogImageType,labels,defaultIndex);
 		
 	}
-	public int open(){
-		return this.messageDialog.open();
+	public void open(CEventBean bean){
+	  if(bean!=null){
+		 int ret=this.messageDialog.open();
+		 bean.fireOnetimeEvent(ret);
+	  }
 	}
 	public boolean close(){
 		return this.messageDialog.close();

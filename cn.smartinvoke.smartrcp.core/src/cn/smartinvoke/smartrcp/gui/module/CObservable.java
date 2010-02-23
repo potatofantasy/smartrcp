@@ -38,6 +38,7 @@ public abstract class CObservable implements IServerObject{
     		this.listeners.get(l).fireEvent(param);
     	}
     }
+    
     public void delListeners(String appId){
     	if(appId!=null){
     		for(int n=0;n<listeners.size();n++){

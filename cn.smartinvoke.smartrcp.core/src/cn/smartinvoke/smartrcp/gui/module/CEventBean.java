@@ -1,5 +1,7 @@
 package cn.smartinvoke.smartrcp.gui.module;
 
+import java.util.List;
+
 import org.eclipse.swt.widgets.Event;
 
 import cn.smartinvoke.RemoteObject;
@@ -78,6 +80,10 @@ public class CEventBean {
 		}
 		return ret;
 	}
+    /**
+     * 调用flex监听器
+     * @param param
+     */
 	public void fireEvent(Object param) {
 		try {
 			this.init();
@@ -90,7 +96,22 @@ public class CEventBean {
 			e.printStackTrace();
 		}
 	}
-    
+	/**
+	 * 触发flex oneTime监听器，该类型监听器只触发一次然后就删除
+	 * @param param
+	 */
+	public void fireOnetimeEvent(Object param) {
+		try {
+			this.init();
+
+			if (this.flexEventNotifer != null) {
+				this.flexEventNotifer.asyncCall("fireEvent", new Object[] {
+						this.tagetId, this.funId, param,true});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public void fireEvent(Event evt) {
 		try {
 			this.init();
@@ -134,6 +155,7 @@ public class CEventBean {
 		// this.flashView=flashView;
 		if (this.flexEventNotifer == null && this.appId != null) {
 			// 获得FlashViewer
+			List<FlashViewer> flashViewers=FlashViewer.getViewers();
 			FlashViewer flashViewer = FlashViewer.getViewerByAppId(this.appId);
 			if (flashViewer != null) {
 				// 因为是全局服务对象，所以不要自动回收

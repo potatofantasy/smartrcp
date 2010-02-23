@@ -36,6 +36,10 @@ public class FlashViewer implements IServerObject {
 	 * 已使用的id
 	 */
 	private static List<Integer> usedAppIds=new LinkedList<Integer>();
+	/**
+	 * 当前获得焦点的FlashViewer
+	 */
+	public static FlashViewer curFlashViewer=null;
 	// 返回当前的viewerNum值，并将计数器加一
 	public static synchronized int getViewNum() {
 		int num=-1;

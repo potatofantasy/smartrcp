@@ -1,3 +1,4 @@
+
 package cn.smartinvoke.smartrcp.gui;
 
 import java.io.File;
@@ -5,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ShellEvent;
@@ -12,6 +14,9 @@ import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import cn.smartinvoke.IServerObject;
@@ -20,6 +25,7 @@ import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 import cn.smartinvoke.smartrcp.gui.module.CShellEvent;
+import cn.smartinvoke.smartrcp.gui.module.FlashShellListener;
 import cn.smartinvoke.util.ImageManager;
 import cn.smartinvoke.util.Log;
 
@@ -54,6 +60,9 @@ public class FlashShell implements IServerObject{
 	   if(appPath!=null){
 		this.createFlashContainer(appPath, null);
 	   }
+	}
+	public FlashViewer getFlashViewer(){
+		return this.flashViewer;
 	}
 	/**
 	 * 创建flash容器
@@ -104,47 +113,15 @@ public class FlashShell implements IServerObject{
 			   }
 			}
 		});
-		this.shell.addShellListener(new ShellListener() {
-
-			public void shellActivated(ShellEvent e) {
-			   	e.doit=this.fireEvent(CShellEvent.Event_Activated,e);	
-			}
-			public void shellClosed(ShellEvent e) {
-			   	e.doit=this.fireEvent(CShellEvent.Event_Closed,e);	
-			   	if(e.doit){
-			   		if(flashViewer!=null){
-			   		 flashViewer.dispose();
-			   		}
-			   		shell.dispose();	
-			   	}
-			}
-			public void shellDeactivated(ShellEvent e) {
-				e.doit=this.fireEvent(CShellEvent.Event_Deactivated,e);	
-			}
-			public void shellDeiconified(ShellEvent e) {
-				e.doit=this.fireEvent(CShellEvent.Event_Deiconified,e);	
-			}
-			public void shellIconified(ShellEvent e) {
-			    e.doit=this.fireEvent(CShellEvent.Event_Iconified,e);	
-			}
-            private boolean fireEvent(int type,ShellEvent e){
-            	List<CEventBean> typeListeners=listeners[type];
-            	for(int n=0;n<typeListeners.size();n++){
-            		CEventBean eventBean=typeListeners.get(n);
-            		CShellEvent evt=new CShellEvent();
-            		evt.time=e.time;
-            		Object ret=eventBean.fireResEvent(evt);
-            		if(ret!=null && ret instanceof Boolean){
-            			return (Boolean)ret;
-            		}
-            	}
-            	return true;
-            }
-		});
+        FlashShellListener flashShellListener=new FlashShellListener(this);
+        
+		this.shell.addShellListener(flashShellListener);
+		
+		
 	}
 	//---------------------事件监听器
 	
-	private List<CEventBean>[] listeners=new List[5];
+	public List<CEventBean>[] listeners=new List[5];
 	public void addShellListener(int type,CEventBean listener) {
 		try{
 		   if(listener!=null){
@@ -167,6 +144,9 @@ public class FlashShell implements IServerObject{
 	}
 	//----------------------------
 	public void dispose() {
+		 if(this.flashViewer!=null){
+		  this.flashViewer.dispose();
+		 }
 		 this.shell.dispose();
 		//Log.println("in flashShell dispose");
 		//this.flashViewer.dispose();
@@ -187,17 +167,26 @@ public class FlashShell implements IServerObject{
 		return this.shell.isEnabled();
 	}
 
-	public void close(String objId) {
+	public void close() {
+	   this.clearListeners();//清空所有监听器
 	   try{
 		if(flashViewer!=null){
 		 flashViewer.dispose();
 		}
 		this.shell.close();
 		this.shell.dispose();
-		ObjectPool.INSTANCE.removeObject(this.flashViewer.getAppId(), objId);
+		//ObjectPool.INSTANCE.removeObject(this.flashViewer.getAppId(), objId);
 	   }catch(Throwable e){
 		   e.printStackTrace();
 	   }
+	}
+	/**
+	 * 清空所有监听器
+	 */
+	private void clearListeners(){
+		for(int n=0;n<this.listeners.length;n++){
+			this.listeners[n].clear();
+		}
 	}
 	public Object getLocation() {
 		Point point = this.shell.getLocation();
