@@ -25,11 +25,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
         return new ApplicationWorkbenchWindowAdvisor(configurer);
     }
     public IStatus restoreState(IMemento memento) {
-    	System.out.println("»Ö¸´ Workbench state");
+    	SmartRCPBuilder.restoreWorkbenchState(memento);
 		return Status.OK_STATUS;
 	}
     public IStatus saveState(IMemento memento) {
-    	System.out.println("±£´æ Workbench state");
+    	SmartRCPBuilder.saveWorkbenchState(memento);
 		return Status.OK_STATUS;
 	}
     public void initialize(IWorkbenchConfigurer configurer) {
