@@ -41,11 +41,12 @@
 				//Alert.show(selItem+"");
 				if(selItem!=null){
 					var modulePath:String=selItem.@module;
-					var opened:ArrayCollection=ViewManager.Instance.findFlashViewers(modulePath);
+					this.labelStatus.text="打开"+modulePath;
+					var opened:ArrayCollection=ViewManager.Instance.findAppIds(modulePath);
 					if(opened!=null && opened.length>0){
 						this.labelStatus.text="已经打开";
-						var flashViewer:FlashViewer=opened[0] as FlashViewer;
-						ViewManager.Instance.showViewPart(flashViewer.appId,ViewManager.VIEW_ACTIVATE);
+						var appId:String=opened[0] as String;
+						ViewManager.Instance.showViewPart(appId);
 						return;
 					}
 				   if(modulePath!=null && modulePath!=""){
@@ -68,6 +69,7 @@
 	</mx:Script>
 	<mx:XMLList id="treeData">
          <node>
+            <node label="项目主页" module="cn.smartinvoke.smartrcp.WebBrowser"/>
             <node label="界面">
               <node label="全局Action及应用">
                 <node label="工具栏" module="views/AppToolBar_T.swf"/>
@@ -99,6 +101,7 @@
                <node label="调用eclipse插件视图"/>
             </node>
             <node label="应用程序管理"/>
+            
         </node>
     </mx:XMLList>
     <mx:Panel title="功能列表" cornerRadius="0" paddingLeft="0" paddingRight="0"

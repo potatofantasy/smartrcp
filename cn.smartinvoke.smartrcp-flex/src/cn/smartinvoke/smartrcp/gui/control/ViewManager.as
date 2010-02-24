@@ -31,9 +31,9 @@ package cn.smartinvoke.smartrcp.gui.control
         public function closeViewPart(appId:String):void{
 	        this.call("closeViewPart",arguments);
         }
-        public function showViewPart(appId:String,state:int=1):void{
-	        this.call("showViewPart",[appId,state]);
-        }
+        public function showViewPart(appId:String):void{
+	        this.call("showViewPart",[appId]);
+        }  
         public function setState(appId:String,state:int):void{
 	        this.call("setState",arguments);
         }
