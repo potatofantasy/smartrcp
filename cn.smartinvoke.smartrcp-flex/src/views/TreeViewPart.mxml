@@ -3,6 +3,8 @@
 	layout="vertical" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import cn.smartinvoke.RemoteObject;
+			import cn.smartinvoke.smartrcp.CApplication;
 			import cn.smartinvoke.smartrcp.gui.FlashViewer;
 			import mx.collections.ArrayCollection;
 			import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
@@ -16,7 +18,8 @@
 			import cn.smartinvoke.smartrcp.gui.module.CEvent;
 			import org.eclipse.swt.CEventType;
 			import org.eclipse.swt.widgets.Display;
-			function init():void{				
+			function init():void{
+				this.labelStatus.text=CApplication.Instance.getBaseFolder();				
 			    Display.getCurrent().addListener(CEventType.KeyDown,this.onKeyEvent,this);
 				Display.getCurrent().addListener(CEventType.KeyUp,this.onKeyEvent,this);
 				ViewManager.Instance.addListener(this.onViewModify,this);
@@ -41,29 +44,83 @@
 				//Alert.show(selItem+"");
 				if(selItem!=null){
 					var modulePath:String=selItem.@module;
-					this.labelStatus.text="打开"+modulePath;
-					var opened:ArrayCollection=ViewManager.Instance.findAppIds(modulePath);
-					if(opened!=null && opened.length>0){
+					if(modulePath==null || modulePath==""){
+					   return;
+				    }
+					//打开视图
+					this.openViewPart(modulePath,selItem.@label);
+					//显示源代码
+					this.showSourceCode(modulePath);
+				}
+			}
+			/**
+			 *打开指定视图，如果已经打开则显示
+			 */
+			private function openViewPart(modulePath:String,title:String):void{
+				if(modulePath==null || modulePath==""){
+					return;
+				}
+				var opened:ArrayCollection=ViewManager.Instance.findAppIds(modulePath);
+				if(opened!=null && opened.length>0){
 						this.labelStatus.text="已经打开";
 						var appId:String=opened[0] as String;
 						ViewManager.Instance.showViewPart(appId);
-						return;
-					}
-				   if(modulePath!=null && modulePath!=""){
+				}else{
 					var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
 					basicInfo.isModuleSwf=true;
-					basicInfo.title=selItem.@label;
+					basicInfo.title=title;//selItem.@label;
 					basicInfo.viewId=modulePath;
 					ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);
-				   }
 				}
 			}
+			
 			public function setStatusText(text:String):void{
 				this.labelStatus.text=text;
 			}
 			
 			private function setMin():void{
 				ViewManager.Instance.setState(this.flashViewer.appId,ViewManager.STATE_MINIMIZED);
+			}
+			
+			/**
+			 *显示指定模块的源代码
+			 */
+			private function showSourceCode(modulePath:String):void{
+				//获得modulePath模块对应的源代码
+				//创建FileReader对象
+				var fileReader:RemoteObject=new RemoteObject();
+				var path:String=CApplication.Instance.getBaseFolder()+"/"+modulePath;
+				path=path.substr(0,path.length-4)+".mxml";
+				fileReader.create("java.io.FileReader",[path]);
+				//根据fileReader对象创建BufferedReader对象
+				var reader:RemoteObject=new RemoteObject();
+				reader.create("java.io.BufferedReader",[fileReader]);
+			    //读取文件内容
+			    var content:String=this.htmlHeader;
+			    while(true){
+			    	var line:String=reader.call("readLine") as String;
+			    	if(line!=null){
+			    		content+=line+"\n";
+			    	}else{
+			    		break;
+			    	}
+			    }
+			    content+="</textarea></body></html>";
+			    //释放资源
+			    reader.asyncCall("close");
+			    //释放java中的对应服务对象
+			    reader.gc();
+			    fileReader.gc();
+			    
+			    //显示文件
+			    var browserId:String="cn.smartinvoke.smartrcp.WebBrowser";
+			    this.openViewPart(browserId,"源代码");
+			    //获得浏览器视图对象并调用其setHtml方法设置其源代码
+			    var viewers:ArrayCollection=ViewManager.Instance.findFlashViewers(browserId);
+			    if(viewers!=null && viewers.length>0){
+			    	var viewer:FlashViewer=viewers[0] as FlashViewer;
+			    	viewer.invoke("setHtml",[content]);
+			    }
 			}
 		]]>
 	</mx:Script>
@@ -104,6 +161,7 @@
             
         </node>
     </mx:XMLList>
+    
     <mx:Panel title="功能列表" cornerRadius="0" paddingLeft="0" paddingRight="0"
             styleName="opaquePanel" width="100%" height="100%">
 	 <mx:Tree width="100%" height="100%" dataProvider="{this.treeData}"  itemDoubleClick="this.onItemDbClick(event)"
@@ -112,8 +170,27 @@
 	 <mx:ControlBar horizontalAlign="right">
             <mx:Image id="image"
                     source="@Embed('info.png')"/>
-                    <mx:Label id="labelStatus" width="100%"/>
+                    <mx:Text id="labelStatus" width="100%"/>
             <mx:Button label="最小化" click="setMin()"/>
      </mx:ControlBar>
 	</mx:Panel>
+	<mx:Script>
+		<![CDATA[
+			 var htmlHeader:String=
+			"<html><head><title></title>"+
+"  <script type=text/javascript src=syntax/shCore.js></script>"+
+"  <script type=text/javascript src=syntax/shBrushJava.js></script>"+
+"  <script type=text/javascript src=syntax/shBrushCSharp.js></script>"+
+"  <script type=text/javascript src=syntax/shBrushXml.js></script>"+
+"  <link rel=stylesheet type=text/css href=syntax/SyntaxHighlighter.css>"+
+"  <script type=text/javascript>"+
+"  window.onload = function () {"+
+"dp.SyntaxHighlighter.ClipboardSwf = 'syntax/clipboard.swf';"+
+"dp.SyntaxHighlighter.HighlightAll('code');"+
+"} "+
+"</script></head>"+
+"<body style=padding-top: 0px;padding-left: 0px;margin-top: 0px;>"+
+"<textarea name=code class=java rows=15 cols=100>";
+		]]>
+	</mx:Script>
 </gui:RCPModule> 

@@ -38,7 +38,7 @@
 	 <mx:Button label="打开" click="onClick()"/>
 	 <mx:Button label="取消" click="onExitClick()"/>
 	 
-	<rcp:CPerspective id="ret" saveAndRestore="false">
+	<rcp:CPerspective id="ret" saveAndRestore="true">
 	
 	<!--action的定义 -->
    	<rcp:actions>
@@ -125,7 +125,7 @@
 	 	  		placeholderViewId="cn.smartinvoke.smartrcp.gui.FlashViewPart"
 	 	  		 relationship="{CPageLayout.TOP}" ratio="0.5" refLayout="{page}" moveable="true"
 	 	  		/>
-	           <rcp:CFolderLayout placeholderViewId="cn.smartinvoke.smartrcp.WebBrowser"
+	           <rcp:CFolderLayout viewId="cn.smartinvoke.smartrcp.WebBrowser"
 	            relationship="{CPageLayout.BOTTOM}" ratio="0.5" refLayout="{this.layoutContent}"/>
 	 	    
 	 	  </mx:ArrayCollection>
