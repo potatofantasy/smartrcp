@@ -247,6 +247,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 	}
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
+		Log.println("FlashViewPart secondId="+this.getViewSite().getSecondaryId());
 		CLayoutBasicInfo layoutInfo=new CLayoutBasicInfo();
 		if(layoutInfo.init(memento)){//信息已经存储到memento中
 			this.layoutInfo=layoutInfo;

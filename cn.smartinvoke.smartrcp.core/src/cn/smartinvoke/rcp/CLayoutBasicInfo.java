@@ -3,7 +3,7 @@ package cn.smartinvoke.rcp;
 import org.eclipse.ui.IMemento;
 
 public class CLayoutBasicInfo {
-	private static String key_layoutBasicInfo="key_layoutBasicInfo";
+	private static String key_layoutBasicInfo="smartrcp_key_layoutBasicInfo";
 	//当前layout的viewId所对应的swf是否是模块swf
 	public boolean isModuleSwf=true;
 	//是否在FlashViewer打开的时候自动加载swf
