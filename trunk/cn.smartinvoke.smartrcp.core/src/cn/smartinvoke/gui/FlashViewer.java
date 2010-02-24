@@ -12,6 +12,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 import cn.smartinvoke.IServerObject;
@@ -95,7 +96,21 @@ public class FlashViewer implements IServerObject {
 		}
 		return ret;
 	}
-
+    public static FlashViewer getViewerByParent(IViewPart part){
+    	FlashViewer ret = null;
+		if (part != null) {
+			for (int i = 0; i < containers.size(); i++) {
+				FlashViewer temp = containers.get(i);
+				if (temp != null) {
+					if(temp.getParent().equals(part)){
+					  ret=temp;
+					  break;
+					}
+				}
+			}
+		}
+		return ret;
+    }
 	public static FlashViewer getViewerByAppId(String appId) {
 		FlashViewer ret = null;
 		if (appId != null) {

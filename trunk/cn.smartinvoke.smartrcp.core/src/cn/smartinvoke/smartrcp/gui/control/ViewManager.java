@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -23,6 +24,7 @@ import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
+import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.smartrcp.gui.module.CObservable;
 import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
 import cn.smartinvoke.util.Log;
@@ -35,6 +37,13 @@ import cn.smartinvoke.util.Log;
  */
 public class ViewManager  extends CObservable implements IServerObject{
     private IWorkbenchPage page;
+    /**
+     * 为非FlashViewPart视图创建FlashViewer对象，并添加到FlashViewer集合，以便ViewManager统一管理
+     * @param num
+     * @param viewId
+     * @param workbenchPart
+     * @return
+     */
     public static FlashViewer fillViewerList(String num,String viewId,IWorkbenchPart workbenchPart){
     	//创建与java ViewPart对应的FlashViewer
 		 FlashViewer flashViewer=new FlashViewer(num+"");
@@ -67,6 +76,10 @@ public class ViewManager  extends CObservable implements IServerObject{
 					for(int n=0;n<curViews.size();n++){
 						FlashViewer viewer=curViews.get(n);
 						if(viewer.getParent().equals(part)){//
+							//从PageLayout的appId模块对应表中删除该part的信息
+							SplashWindow.getPerspective().
+							page.removeViewPartInfo(viewer.getSwfPath(), viewer.getAppId());
+							//触发flex监听器
 							fireFlashViewer(CPartEvent.Part_Closed,viewer);
 							curViews.remove(n);
 							break;
@@ -79,7 +92,16 @@ public class ViewManager  extends CObservable implements IServerObject{
 					fireEvent(CPartEvent.Part_Deactivated, part);
 				}
 				public void partOpened(IWorkbenchPart part) {
-					fireEvent(CPartEvent.Part_Opened, part);
+					if(part instanceof IViewPart){
+					 FlashViewer flashViewer=FlashViewer.getViewerByParent((IViewPart)part);
+					 if(flashViewer!=null){
+						 //将当前打开的viewPart的信息添加进模块对应表中
+						 SplashWindow.getPerspective().
+							page.addViewPartInfo(flashViewer.getSwfPath(), flashViewer.getAppId());
+					 }
+					 
+					 fireEvent(CPartEvent.Part_Opened, part);
+					}
 					/**
 					 *打开控制台存储的未显示的viewPart
 					 */
@@ -163,25 +185,35 @@ public class ViewManager  extends CObservable implements IServerObject{
 			}
 		}
 	}
-	public void showViewPart(String appId,int state){
+	public void showViewPart(String appId){
 		if(appId!=null){
 		 FlashViewer flashViewer=this.findFlashViewer(appId);
-		 if(flashViewer!=null){
+		 if(flashViewer!=null){//如果appId对应的视图已经初始化
 		  Object parent=flashViewer.getParent();
 		  if(parent instanceof IViewPart){
 			  IViewPart part=(IViewPart)parent;
-			  //part.showViewPart(state);
-			  //page.bringToTop(part);
 			  this.page.activate(part);
-			  
-//			IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
-//			
-//			if(state==IWorkbenchPage.VIEW_ACTIVATE){
-//				page.activate((IViewPart)parent);
-//			}else{
-//				page.bringToTop((IViewPart)parent);
-//			}
 		  }
+		 }else{//还没初始化或不存在
+		    IViewReference[] refs=this.page.getViewReferences();
+		    if(refs!=null){
+		    	String moduleStr=
+		    		SplashWindow.getPerspective().page.getModuleStr(appId);
+		    	for(int n=0;n<refs.length;n++){
+		    		IViewReference ref=refs[n];
+		    		if(ref.getId().equals(FlashViewPart.ID)){//flash容器视图
+		    			if(ref.getSecondaryId().equals(appId)){
+		    				this.page.activate(ref.getPart(true));
+		    				break;
+		    			}
+		    		}else{//java容器视图
+		    			if(ref.getId().equals(moduleStr)){
+		    				this.page.activate(ref.getPart(true));
+		    				break;
+		    			}
+		    		}
+		    	}
+		    }
 		 }
 		}
 	}
@@ -273,18 +305,22 @@ public class ViewManager  extends CObservable implements IServerObject{
 		return ret;
 	}
 	public List<String> findAppIds(String modulePath){
-		List<String> ret=new LinkedList<String>();
+		
+		/**List<String> ret=new LinkedList<String>();
+		//检查
+		IViewReference[] refs=SmartRCPBuilder.window.getActivePage().getViewReferences();
+		if(refs!=null){
+			for(int n=0;n<refs.length;n++){
+				IViewReference ref=refs[n];
+				
+			}
+		}*/
+		List<String> ret=null;
 		if(modulePath!=null){
 			if(modulePath.endsWith(".swf")){
 			 modulePath=CPerspective.getRuntimeSwfFolder() + "/"+modulePath;
 			}
-			List<FlashViewer> curViews=FlashViewer.getViewers();//当前的所有FlashViewer
-			for(int n=0;n<curViews.size();n++){
-				FlashViewer viewer=curViews.get(n);
-				if(viewer.getSwfPath().equals(modulePath)){
-					ret.add(viewer.getAppId());
-				}
-			}
+			ret=SplashWindow.getPerspective().page.getModuleIdAppIdMap().get(modulePath);
 		}
 		return ret;
 	}

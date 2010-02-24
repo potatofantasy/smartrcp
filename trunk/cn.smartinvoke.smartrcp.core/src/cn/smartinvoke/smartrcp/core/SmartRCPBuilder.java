@@ -1,6 +1,9 @@
 package cn.smartinvoke.smartrcp.core;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ICoolBarManager;
@@ -17,10 +20,13 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveListener;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -28,12 +34,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
+import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.IServiceObjectCreator;
 import cn.smartinvoke.TypeMapper;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.gui.ObjectPool;
+import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CMenuRelation;
+import cn.smartinvoke.rcp.CPageLayout;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.rcp.CWindowConfigurer;
 import cn.smartinvoke.smartrcp.CApplication;
@@ -110,6 +119,55 @@ public class SmartRCPBuilder {
 		  configurer.setSaveAndRestore(true);
 		}else{
 		  configurer.setSaveAndRestore(false);
+		}
+	}
+	private static String key_workbench_state="smartrcp_key_workbench_state";
+	/**
+	 * 保存工作台设置信息
+	 * @param memento
+	 */
+	public static void saveWorkbenchState(IMemento memento){
+		IViewReference[] refs=window.getActivePage().getViewReferences();
+		StringBuilder viewPartInfo=new StringBuilder();
+		if(refs!=null){
+		 for(int n=0;n<refs.length;n++){
+			 IViewReference ref=refs[n];
+			 IWorkbenchPart part=ref.getPart(true);
+			 if(part  instanceof ViewPart){
+				 ViewPart viewPart=(ViewPart)part;
+				 List<FlashViewer> flashViewers=FlashViewer.getViewers();
+				 for(int i=0;i<flashViewers.size();i++){
+					 FlashViewer flashViewer=flashViewers.get(i);
+					 if(flashViewer.getParent().equals(viewPart)){
+						 viewPartInfo.append(flashViewer.getAppId()).append("=")
+						 .append(flashViewer.getSwfPath()).append("\n");
+						 break;
+					 }
+				 }
+			 }
+		 }
+		}
+		
+		memento.putString(key_workbench_state, viewPartInfo.toString());
+	}
+	/**
+	 * 恢复工作台设置信息
+	 * @param memento
+	 */
+	public static void restoreWorkbenchState(IMemento memento){
+		String val=memento.getString(key_workbench_state);
+		if(val!=null){
+			CPageLayout pageLayout=SplashWindow.getPerspective().page;
+			String[] items=val.split("\n");
+			if(items!=null){
+				for(int n=0;n<items.length;n++){
+					String item=items[n];
+					int spl=item.indexOf("=");
+					String appId=item.substring(0,spl);
+					String modulePath=item.substring(spl+1);
+					pageLayout.addViewPartInfo(modulePath, appId);
+				}
+			}
 		}
 	}
     /**
@@ -264,6 +322,7 @@ public class SmartRCPBuilder {
 
 			public void perspectiveActivated(IWorkbenchPage page,
 					IPerspectiveDescriptor perspective) {
+				IViewReference[] refs=page.getViewReferences();
 				
 				page.addPartListener(new IPartListener2(){
 
@@ -297,11 +356,13 @@ public class SmartRCPBuilder {
 					  if(!(workbenchPart instanceof FlashViewPart)){
 						String id=FlashViewer.getViewNum()+"";
 						Log.println("opened view="+workbenchPart);
-						ViewManager.fillViewerList(id,partRef.getId(),workbenchPart);
+						if(workbenchPart instanceof IViewPart){
+							IViewPart viewPart=(IViewPart)workbenchPart;
+							
+							ViewManager.fillViewerList(id,partRef.getId(),workbenchPart);
+						}
 					  }else{
-						 //----------
-						// FlashViewPart viewPart=(FlashViewPart)workbenchPart;
-						// viewPart.getFlashViewer().loadFlash();	
+						
 					  }
 					}
 
