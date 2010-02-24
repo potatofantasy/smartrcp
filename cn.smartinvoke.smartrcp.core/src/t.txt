@@ -1,0 +1,14 @@
+"<html><head><title></title>"+
+"  <script type=text/javascript src=syntax/shCore.js></script>"+
+"  <script type=text/javascript src=syntax/shBrushJava.js></script>"+
+"  <script type=text/javascript src=syntax/shBrushCSharp.js></script>"+
+"  <script type=text/javascript src=syntax/shBrushXml.js></script>"+
+"  <link rel=stylesheet type=text/css href=syntax/SyntaxHighlighter.css>"+
+"  <script type=text/javascript>"+
+"  window.onload = function () {"+
+"dp.SyntaxHighlighter.ClipboardSwf = 'syntax/clipboard.swf';"+
+"dp.SyntaxHighlighter.HighlightAll('code');"+
+"} "+
+"</script></head>"+
+"<body style=padding-top: 0px;padding-left: 0px;margin-top: 0px;>"+
+"<textarea name=code class=java rows=15 cols=100>";
