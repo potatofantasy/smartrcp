@@ -10,6 +10,7 @@
 	 </mx:Style>
 	 <mx:Script>
 	 	<![CDATA[
+	 		import cn.smartinvoke.smartrcp.CApplication;
 	 		import cn.smartinvoke.smartrcp.util.CWorkbenchActions;
 	 		import cn.smartinvoke.rcp.CPageLayout;
 	 		import cn.smartinvoke.rcp.CStandaloneLayout;
@@ -27,14 +28,17 @@
    		    private function onClick():void{
    			 this.closeWin();
    		    }
+   		    private function onExitClick():void{
+   		    	CApplication.Instance.exit();
+   		    }
    		//--------
    		public var firstText:String="&测试 \t CTRL+S";
 	 	]]>
 	 </mx:Script>
-	 <mx:Button label="关闭" click="onClick()"/>
+	 <mx:Button label="打开" click="onClick()"/>
+	 <mx:Button label="取消" click="onExitClick()"/>
 	 
-	 
-	<rcp:CPerspective id="ret" saveAndRestore="true">
+	<rcp:CPerspective id="ret" saveAndRestore="false">
 	
 	<!--action的定义 -->
    	<rcp:actions>

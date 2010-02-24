@@ -26,4 +26,5 @@
    		} 
    	]]>
    </mx:Script>
+  <!-- <mx:Label id="labelInfo"/>-->
 </rcp:RCPApplication>

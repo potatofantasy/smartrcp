@@ -43,7 +43,7 @@
 				if(openedView!=null && openedView.length>0){
 				  var flashView:FlashViewer=openedView[0] as FlashViewer;
 				  //Alert.show(flashView.getTitle());
-				  this.infoLabel.text=flashView.getTitle();
+				  this.infoLabel.text=flashView.getFlexAppId();
 				  flashView.invoke("openUrl",["http://www.javaeye.com"]);
 				} 
 				
