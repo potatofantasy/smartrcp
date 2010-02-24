@@ -31,6 +31,15 @@ public class WebBrowser extends ViewPart {
 	public void openUrl(String url){
 		this.browser.setUrl(url);
 	}
+	public void setHtml(String html){
+		try{
+		 html=new String(html.getBytes("gbk"),"utf-8");
+		 this.browser.setText(html);
+		 
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	public void setViewTitle(String title){
 		this.setPartName(title);
 	}
