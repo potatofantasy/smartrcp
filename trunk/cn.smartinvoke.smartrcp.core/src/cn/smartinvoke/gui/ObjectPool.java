@@ -23,6 +23,7 @@ import cn.smartinvoke.TypeMapper;
 import cn.smartinvoke.exception.InvokeException;
 import cn.smartinvoke.exception.Messages;
 import cn.smartinvoke.util.HelpMethods;
+import cn.smartinvoke.util.Log;
 
 /**
  * 对象池，管理着平台中的所有远程调用的响应对象
@@ -188,7 +189,7 @@ public class ObjectPool {
 	public synchronized void removeObject(String appId, String objId) {
 		PoolEntity poolEntity = this.getPoolEntity(appId);
 		if (poolEntity != null) {
-			//System.out.println("ObjectPool :dispose size="+poolEntity.objMap.size()+" id="+objId);
+			Log.println("ObjectPool :dispose size="+poolEntity.objMap.size()+" id="+objId);
 			Object obj=poolEntity.objMap.remove(objId);
 			if(obj!=null && obj instanceof IServerObject){
 				((IServerObject)obj).dispose();
