@@ -63,5 +63,5 @@
             <mx:Label id="labelInfo" width="100%"/>
             <mx:Button label="添加工具栏和下拉菜单" click="addToolAndMenu()"/>
             <mx:Button label="清空工具栏和下拉菜单" click="clearAll()"/>
-    </mx:Panel> 
+    </mx:Panel>  
 </gui:RCPModule>

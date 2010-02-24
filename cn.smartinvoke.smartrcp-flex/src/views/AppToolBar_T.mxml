@@ -10,7 +10,7 @@
 					this.statusError=false;
 				}else{
 					statusError=true;
-				}
+				} 
 				//设置图片
 				var statusManager:CStatusLineManager=CStatusLineManager.Instance;
 				statusManager.setErrorImg(this.imgType.selectedItem.value);
