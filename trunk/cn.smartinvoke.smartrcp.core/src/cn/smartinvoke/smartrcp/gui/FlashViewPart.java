@@ -125,7 +125,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 	public void setFocus() {
 		//设置当前获得焦点的FlashViewer
 		FlashViewer.curFlashViewer=this.flashViewer;
-       //this.saveState(memento)
+        
 	}
     
 	public IToolBarManager getToolBarManager() {
@@ -147,7 +147,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 				this.flashViewer.dispose();
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		super.dispose();
 	}
@@ -158,7 +158,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		if(!this.flashViewer.isLoaded){
 			return ISaveablePart2.NO;
 		}
-		if(this.isDirty()){
+		if(this.isDirty()&&this.isSaveAsAllowed()){
 			  Object obj=
 				  this.flashViewer.getFlexApp().call("promptTitleAndMessage", new Object[]{});
 			  Object[] arr=null;
@@ -176,6 +176,9 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 				 return ISaveablePart2.NO;
 			  }
 		}
+		if(this.isDirty()&&this.isSaveOnCloseNeeded()){
+			return ISaveablePart2.YES;
+		}
 		return ISaveablePart2.NO;
 	}
 
@@ -185,7 +188,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		}
 		try{
 		this.flashViewer.getFlexApp().asyncCall("doSave",
-				new Object[] { monitor });
+				null);
 	}catch(Exception e){e.printStackTrace();};
 	}
 

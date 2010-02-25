@@ -140,7 +140,7 @@ public class SmartRCPBuilder {
 					 FlashViewer flashViewer=flashViewers.get(i);
 					 if(flashViewer.getParent().equals(viewPart)){
 						 viewPartInfo.append(flashViewer.getAppId()).append("=")
-						 .append(flashViewer.getSwfPath()).append("\n");
+						 .append(flashViewer.getModulePath()).append("\n");
 						 break;
 					 }
 				 }
@@ -352,18 +352,24 @@ public class SmartRCPBuilder {
 
 					public void partOpened(IWorkbenchPartReference partRef) {
 						IWorkbenchPart workbenchPart=partRef.getPart(true);
-						
-					  if(!(workbenchPart instanceof FlashViewPart)){
-						String id=FlashViewer.getViewNum()+"";
-						Log.println("opened view="+workbenchPart);
-						if(workbenchPart instanceof IViewPart){
-							IViewPart viewPart=(IViewPart)workbenchPart;
-							
-							ViewManager.fillViewerList(id,partRef.getId(),workbenchPart);
+						//只对IViewPart进行管理
+						if(!(workbenchPart instanceof IViewPart)){
+						  return;
 						}
-					  }else{
-						
-					  }
+						//非FlashViewPart视图，需要手动创建FlashViewer对象
+					    if(!(workbenchPart instanceof FlashViewPart)){
+							//IViewPart viewPart=(IViewPart)workbenchPart;
+							String id=FlashViewer.getViewNum()+"";
+							ViewManager.fillViewerList(id,partRef.getId(),workbenchPart);
+						}else{
+							 IViewPart viewPart=(IViewPart)workbenchPart;
+							 //将当前打开的viewPart的信息添加进模块对应表中	
+							 FlashViewer flashViewer=FlashViewer.getViewerByParent(viewPart);//视图对应的FlashViewer对象
+							 if(flashViewer!=null){
+								 SplashWindow.getPerspective().
+								 page.addViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
+							 }
+					    }
 					}
 
 					public void partVisible(IWorkbenchPartReference partRef) {

@@ -47,11 +47,15 @@ public class ViewManager  extends CObservable implements IServerObject{
     public static FlashViewer fillViewerList(String num,String viewId,IWorkbenchPart workbenchPart){
     	//创建与java ViewPart对应的FlashViewer
 		 FlashViewer flashViewer=new FlashViewer(num+"");
-		 flashViewer.setSwfPath(viewId);
+		 flashViewer.setModulePath(viewId);
 		 flashViewer.setParent(workbenchPart);
 		   //添加到flashViewer集合
 		   //这里的flashViewer代表的并不是Flash容器，而是将swt的ViewPart 当做FlashViewer来对待
 		 FlashViewer.add_Viewer(flashViewer);
+		//将当前打开的viewPart的信息添加进模块对应表中
+		 SplashWindow.getPerspective().
+			page.addViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
+		 
 		 return flashViewer;
     }
 	public ViewManager() {
@@ -78,7 +82,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 						if(viewer.getParent().equals(part)){//
 							//从PageLayout的appId模块对应表中删除该part的信息
 							SplashWindow.getPerspective().
-							page.removeViewPartInfo(viewer.getSwfPath(), viewer.getAppId());
+							page.removeViewPartInfo(viewer.getModulePath(), viewer.getAppId());
 							//触发flex监听器
 							fireFlashViewer(CPartEvent.Part_Closed,viewer);
 							curViews.remove(n);
@@ -97,9 +101,8 @@ public class ViewManager  extends CObservable implements IServerObject{
 					 if(flashViewer!=null){
 						 //将当前打开的viewPart的信息添加进模块对应表中
 						 SplashWindow.getPerspective().
-							page.addViewPartInfo(flashViewer.getSwfPath(), flashViewer.getAppId());
+							page.addViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
 					 }
-					 
 					 fireEvent(CPartEvent.Part_Opened, part);
 					}
 					/**
@@ -199,6 +202,9 @@ public class ViewManager  extends CObservable implements IServerObject{
 		    if(refs!=null){
 		    	String moduleStr=
 		    		SplashWindow.getPerspective().page.getModuleStr(appId);
+		    	if(moduleStr==null){
+		    		throw new RuntimeException("appId为"+appId+"的视图不存在所以无法打开");
+		    	}
 		    	for(int n=0;n<refs.length;n++){
 		    		IViewReference ref=refs[n];
 		    		if(ref.getId().equals(FlashViewPart.ID)){//flash容器视图
@@ -333,7 +339,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 			List<FlashViewer> curViews=FlashViewer.getViewers();//当前的所有FlashViewer
 			for(int n=0;n<curViews.size();n++){
 				FlashViewer viewer=curViews.get(n);
-				if(viewer.getSwfPath().equals(modulePath)){
+				if(viewer.getModulePath().equals(modulePath)){
 					ret.add(viewer);
 				}
 			}

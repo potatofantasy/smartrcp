@@ -89,6 +89,10 @@ public class FlashShell implements IServerObject{
 		   flashViewer=new FlashViewer(appId+"",this.shell,fullPath); 
 		 }
 		 flashViewer.setParent(this);
+		 //将当前打开的窗口的信息添加进模块对应表中	
+		 SplashWindow.getPerspective().
+		 page.addViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
+		 
 		 flashViewer.debugModule=this.isDebug;//是否为debug模式
 		}else{
 			throw new RuntimeException("swfPath can not be null");
@@ -109,6 +113,9 @@ public class FlashShell implements IServerObject{
 		    
 			public void widgetDisposed(DisposeEvent e) {
 			   if(flashViewer!=null){
+				 //从PageLayout的appId模块对应表中删除该part的信息
+					SplashWindow.getPerspective().
+					page.removeViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
 				 flashViewer.dispose();
 			   }
 			}

@@ -22,6 +22,7 @@ import cn.smartinvoke.exception.Messages;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.gui.FlashShell;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
+import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.smartrcp.gui.control.CAction;
 import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 import cn.smartinvoke.smartrcp.gui.control.EventFilter;
@@ -60,6 +61,7 @@ public class FlashViewer implements IServerObject {
     }
 	public static void add_Viewer(FlashViewer container) {
 		if (container != null) {
+			
 			if (!containers.contains(container)) {
 				//将id添加到已使用集合中
 				usedAppIds.add(Integer.valueOf(container.getAppId()));
@@ -86,7 +88,7 @@ public class FlashViewer implements IServerObject {
 			for (int i = 0; i < containers.size(); i++) {
 				FlashViewer temp = containers.get(i);
 				if (temp != null) {
-					String path = temp.getSwfPath();
+					String path = temp.getModulePath();
 					if (path != null && path.equals(swfPath)) {
 						ret = temp;
 						break;
@@ -161,14 +163,18 @@ public class FlashViewer implements IServerObject {
 	}
 
 	private String[] swfAndModulePath;
-
+    private String modulePath=null;
 	private void createView(Composite parent, String swfPath) {
 		this.createFlashContainer(parent);
 		this.swfPath = swfPath;
+		this.modulePath=swfPath;
 	}
 
 	private void createView(Composite parent, String[] swfPath) {
 		this.createFlashContainer(parent);
+		if(swfPath!=null && swfPath.length==2){
+		 this.modulePath=swfPath[1];
+		}
 		swfAndModulePath = swfPath;
 	}
     public boolean isLoaded=false;
@@ -265,7 +271,7 @@ public class FlashViewer implements IServerObject {
 
 		});
 	}
-
+    
 	/**
 	 * 创建并派发鼠标事件
 	 * 
@@ -294,8 +300,15 @@ public class FlashViewer implements IServerObject {
 	public void setFlashContainer(FlashContainer flashContainer) {
 		this.flashContainer = flashContainer;
 	}
-	public String getSwfPath() {
+	public String getSwfPath1() {
 		return swfPath;
+	}
+	
+	public String getModulePath() {
+		return modulePath;
+	}
+	public void setModulePath(String modulePath){
+		this.modulePath=modulePath;
 	}
 	public void setSwfPath(String path){
 		this.swfPath=path;
@@ -331,7 +344,22 @@ public class FlashViewer implements IServerObject {
  		}
  		//return ret;
  	}
+ 	/**
+ 	 * 在flashViewer退出之前调用flex app的onExist函数
+ 	 */
+ 	public void flexAppExist(){
+ 		try{this.flexApp.call("onExist",null);}catch(Exception e){};
+ 	}
+ 	private boolean isDispose=false;//确保dispose方法只调用一次
 	public void dispose() {
+		if(isDispose){
+			return;
+		}
+		if(!isDispose){
+		//在flashViewer退出之前调用flex app的onExist函数
+		//try{this.flexApp.call("onExist",null);}catch(Exception e){};
+		
+		//清空数据区
         this.dataMap.clear();
 		// 从全局容器集合中删除
 		if (containers.contains(this)) {
@@ -358,6 +386,8 @@ public class FlashViewer implements IServerObject {
 			if (this.flashContainer != null) {
 				this.flashContainer.dispose();
 			}
+		}
+		isDispose=true;
 		}
 	}
 
@@ -488,12 +518,21 @@ public class FlashViewer implements IServerObject {
 			   try{
                   retObj=ivkMethod.invoke(callObj, pars);
 			   }catch(Exception e){
-				 InvokeException invokException=
-					new InvokeException(InvokeException.TYPE_INVOK_METHOD_EXCEPTION,
-							Messages.INSTANCE.getMsg(Messages.IVK_METHOD_EXCEPTION,
-							new String[]{cls.getName(),methodName,e.getMessage()}));
-				
-				 throw invokException;
+//				 InvokeException invokException=
+//					new InvokeException(InvokeException.TYPE_INVOK_METHOD_EXCEPTION,
+//							Messages.INSTANCE.getMsg(Messages.IVK_METHOD_EXCEPTION,
+//							new String[]{cls.getName(),methodName,e.getMessage()}));
+//				 
+				 Throwable cause=e;
+				 while(true){
+					 Throwable tempCause=null;
+					 if((tempCause=cause.getCause())==null){
+						 break;
+					 }else{
+						 cause=tempCause;
+					 }
+				 }
+				 throw  new RuntimeException(cause.getMessage());
 			   }
 		   }
         }else{//被调用对象为空，抛出异常
