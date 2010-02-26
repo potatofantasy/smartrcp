@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import cn.smartinvoke.IServerObject;
@@ -40,7 +41,30 @@ public class CApplication implements IServerObject {
 	 * ÍË³ö³ÌÐò
 	 */
 	public void exit(){
-		PlatformUI.getWorkbench().close();
+		try{
+		 IWorkbench workbench=PlatformUI.getWorkbench();
+		 if(workbench!=null){
+			workbench.close();
+		 }else{
+			 Display display=Display.getCurrent();
+			 if(display!=null){
+				 Shell activeShell=display.getActiveShell();
+				 if(activeShell!=null){
+					 activeShell.close();
+				 }
+				 display.close();
+				 display.dispose();
+			 }
+		 }
+		}catch(Exception e){
+			Display display=Display.getCurrent();
+			if(display!=null){
+			 display.close();
+			 display.dispose();
+			}
+		}finally{
+			Runtime.getRuntime().exit(0);
+		}
 	}
 	public void restart(){
 		PlatformUI.getWorkbench().restart();

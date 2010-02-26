@@ -23,6 +23,7 @@ import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
+import cn.smartinvoke.smartrcp.core.SmartRCPViewPart;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.smartrcp.gui.module.CObservable;
@@ -43,7 +44,7 @@ public class ViewManager  extends CObservable implements IServerObject{
      * @param viewId
      * @param workbenchPart
      * @return
-     */
+     
     public static FlashViewer fillViewerList(String num,String viewId,IWorkbenchPart workbenchPart){
     	//创建与java ViewPart对应的FlashViewer
 		 FlashViewer flashViewer=new FlashViewer(num+"");
@@ -57,7 +58,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 			page.addViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
 		 
 		 return flashViewer;
-    }
+    }*/
 	public ViewManager() {
         
 	}
@@ -173,8 +174,9 @@ public class ViewManager  extends CObservable implements IServerObject{
 					  if(showView==null){
 					    showView=page.showView(viewId);
 					  }
-					  if(showView!=null){
-					   ret=fillViewerList(num+"", viewId, showView);
+					  if(showView!=null && (showView instanceof SmartRCPViewPart)){
+						  SmartRCPViewPart smartRCPViewPart=(SmartRCPViewPart)showView;
+						  ret=smartRCPViewPart.getFlashViewer();
 					  }
 				   }
 				}
@@ -223,6 +225,28 @@ public class ViewManager  extends CObservable implements IServerObject{
 		 }
 		}
 	}
+	/**
+	 * 删除viewPart在FlashViewer集合以及模块对应表中的所有信息
+	 * @param part
+	 */
+	private void deletePartInfo(IWorkbenchPart part){
+		if(part==null || !(part instanceof IViewPart)){
+			return;
+		}
+		//从FlashViewer集合中删除掉当前关闭的ViewPart
+		List<FlashViewer> curViews=FlashViewer.getViewers();//当前的所有FlashViewer
+		for(int n=0;n<curViews.size();n++){
+			FlashViewer viewer=curViews.get(n);
+			if(viewer.getParent().equals(part)){//
+				//从PageLayout的appId模块对应表中删除该part的信息
+				SplashWindow.getPerspective().
+				page.removeViewPartInfo(viewer.getModulePath(), viewer.getAppId());
+				
+				curViews.remove(n);
+				break;
+			}
+		}
+	}
 	
 	/**
 	 * 关闭加载了modulePath模块的所有视图
@@ -253,6 +277,8 @@ public class ViewManager  extends CObservable implements IServerObject{
 	private void closeViewPart(Object parent){
 		if(parent!=null && parent instanceof ViewPart){
 			ViewPart viewPart=(ViewPart)parent;
+			//删除该viewPart的所有信息
+			deletePartInfo(viewPart);
 			
 			page.hideView(viewPart);
 			viewPart.dispose();

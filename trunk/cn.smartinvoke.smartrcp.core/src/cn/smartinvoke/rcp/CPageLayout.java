@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
  public class CPageLayout  implements ICFolderLayout{
 	/**
 	 *以视图模块id为key以appId集合为值的map 

@@ -42,7 +42,10 @@ public class FlashViewer implements IServerObject {
 	 * 当前获得焦点的FlashViewer
 	 */
 	public static FlashViewer curFlashViewer=null;
-	// 返回当前的viewerNum值，并将计数器加一
+	/** 返回一随机的并且唯一的appId
+	 * 
+	 * @return
+	 */
 	public static synchronized int getViewNum() {
 		int num=-1;
 		//循环访问Id随机生成器，直到获得一个未使用的Id为止
@@ -61,21 +64,31 @@ public class FlashViewer implements IServerObject {
     }
 	public static void add_Viewer(FlashViewer container) {
 		if (container != null) {
-			
+			Log.println(">>>>FlashViewer add beg size="+containers.size());
 			if (!containers.contains(container)) {
+				Log.println(">>>>FlashViewer add_viewer="+container.getAppId());
 				//将id添加到已使用集合中
 				usedAppIds.add(Integer.valueOf(container.getAppId()));
 				containers.add(container);
 			}
+			Log.println(">>>>FlashViewer add end size="+containers.size());
+			Log.println(">>>>Map="+SplashWindow.getPerspective().page.getModuleIdAppIdMap());
+			Log.println("=========================");
 		}
 	}
 
 	public static void remove_Viewer(FlashViewer container) {
+		Log.println(">>>>FlashViewer remove beg size="+containers.size());
 		if (container != null) {
-			if (containers.contains(container)) {
-				containers.remove(container);
-			}
+			//if (containers.contains(container)) {
+				Log.println(">>>>FlashViewer remove_Viewer="
+						+container.getAppId()+" ret="+containers.remove(container));
+				
+			//}
 		}
+		Log.println(">>>>FlashViewer remove end size="+containers.size());
+		Log.println(">>>>Map="+SplashWindow.getPerspective().page.getModuleIdAppIdMap());
+		Log.println("=========================");
 	}
 
 	public static List<FlashViewer> getViewers() {
@@ -314,14 +327,14 @@ public class FlashViewer implements IServerObject {
 		this.swfPath=path;
 	}
 	//--------------
-    public boolean equals(Object obj){
+   /* public boolean equals(Object obj){
     	boolean ret=false;
     	if(obj!=null && obj instanceof FlashViewer){
     		FlashViewer other=(FlashViewer)obj;
     		return this.appId.equals(other.appId);
     	}
     	return ret;
-    }
+    }*/
     public int hashCode(){
     	return this.appId.hashCode();
     }
@@ -476,7 +489,17 @@ public class FlashViewer implements IServerObject {
 			}
 		}
 	}
-	
+	public String toString(){
+		if(this.modulePath!=null){
+			int spl=this.modulePath.lastIndexOf('/');
+			if(spl!=-1){
+				return this.modulePath.substring(spl+1)+this.getAppId();
+			}else{
+				return this.modulePath+this.getAppId();
+			}
+		}
+		return null;
+	}
 	public RemoteObject getFlexApp() {
 		return flexApp;
 	}
@@ -544,4 +567,5 @@ public class FlashViewer implements IServerObject {
         }
         return retObj;
 	}
+	
 }

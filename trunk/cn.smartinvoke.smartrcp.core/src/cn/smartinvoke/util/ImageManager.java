@@ -34,7 +34,7 @@ public class ImageManager {
 				for (int i = 0; i < subFiles.size(); i++) {
 					String filePath = subFiles.get(i);
 					String key = filePath.substring(plugInFolder.length());
-					Log.println("image key=" + key);
+					//Log.println("image key=" + key);
 					URL url = new URL("file:/" + filePath);
 					ImageDescriptor descriptor = ImageDescriptor
 							.createFromURL(url);

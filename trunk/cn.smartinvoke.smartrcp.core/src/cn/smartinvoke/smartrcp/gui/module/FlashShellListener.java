@@ -52,6 +52,8 @@ public class FlashShellListener implements ShellListener ,Listener{
 		List<CEventBean> typeListeners=flashViewer.listeners[CShellEvent.Event_Closed];
 		//flex没有添加监听器，就执行默认操作
 		if(typeListeners.size()==0){
+		  //调用对应flex程序回收资源
+		  this.flashViewer.getFlashViewer().flexAppExist();
 	   	  e.doit=true; 
 		}else{//等待flex的异步调用
 		  e.doit=false;
