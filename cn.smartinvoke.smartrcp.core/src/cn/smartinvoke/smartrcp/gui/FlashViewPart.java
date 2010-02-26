@@ -70,7 +70,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 				// 设置布局信息
 				this.setViewTitle(layoutInfo.getTitle());
                 //debug
-				Log.println(layoutInfo.getTitle()+"  "+this.getViewSite().getPage().isPartVisible(this));
+				//this.setPartName(flashViewer.getAppId());
 				// 设置图标
 				if (layoutInfo.image != null) {
 					ImageDescriptor imageDescriptor = ImageManager

@@ -323,7 +323,7 @@ public class SmartRCPBuilder {
 			public void perspectiveActivated(IWorkbenchPage page,
 					IPerspectiveDescriptor perspective) {
 				IViewReference[] refs=page.getViewReferences();
-				
+			   
 				page.addPartListener(new IPartListener2(){
 
 					public void partActivated(IWorkbenchPartReference partRef) {
@@ -358,9 +358,7 @@ public class SmartRCPBuilder {
 						}
 						//非FlashViewPart视图，需要手动创建FlashViewer对象
 					    if(!(workbenchPart instanceof FlashViewPart)){
-							//IViewPart viewPart=(IViewPart)workbenchPart;
-							String id=FlashViewer.getViewNum()+"";
-							ViewManager.fillViewerList(id,partRef.getId(),workbenchPart);
+							
 						}else{
 							 IViewPart viewPart=(IViewPart)workbenchPart;
 							 //将当前打开的viewPart的信息添加进模块对应表中	

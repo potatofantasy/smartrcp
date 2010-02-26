@@ -109,10 +109,12 @@ public class FlashShell implements IServerObject{
 		for(int i=0;i<listeners.length;i++){
 			listeners[i]=new LinkedList<CEventBean>();
 		}
+		
         this.shell.addDisposeListener(new DisposeListener() {
 		    
 			public void widgetDisposed(DisposeEvent e) {
 			   if(flashViewer!=null){
+				 
 				 //从PageLayout的appId模块对应表中删除该part的信息
 					SplashWindow.getPerspective().
 					page.removeViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
@@ -176,6 +178,8 @@ public class FlashShell implements IServerObject{
 
 	public void close() {
 	   this.clearListeners();//清空所有监听器
+	   //调用对应flex程序回收资源
+	   flashViewer.flexAppExist();
 	   try{
 		if(flashViewer!=null){
 		 flashViewer.dispose();
