@@ -43,6 +43,7 @@
       <view
             allowMultiple="true"
             class="cn.smartinvoke.smartrcp.WebBrowser"
+            icon="icons/browser.gif"
             id="cn.smartinvoke.smartrcp.WebBrowser"
             name="浏览器">
       </view>

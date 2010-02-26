@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" creationComplete="addMenu()">
+	<mx:Script>
+		<![CDATA[
+			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
+			import cn.smartinvoke.rcp.CAction;
+			import org.eclipse.swt.CEventType;
+			import org.eclipse.swt.widgets.Display;
+			import cn.smartinvoke.smartrcp.gui.module.CEvent;
+			import cn.smartinvoke.smartrcp.gui.control.CNativeMenuBuilder;
+			var nativeMenu:CNativeMenuBuilder=null;
+			function addMenu():void{ 
+			   if(this.nativeMenu!=null){
+			   	  this.nativeMenu.removeListener(this.onMenuClick,this);
+			   }
+			   nativeMenu=new CNativeMenuBuilder(this.flashContainer);
+			   nativeMenu.initAction(this.cActions1);
+			   nativeMenu.initMenu(this.menuRelation);
+			   nativeMenu.addListener(this.onMenuClick,this);
+			   this.contextMenuManager.addNativeMenu(this.vbox1,nativeMenu);
+			}
+			var num:int=0;
+			function onAddClick():void{
+				var action:CAction=new CAction();
+				action.actionId="add"+num;
+				action.text="添加的菜单项"+num;
+				num++;
+				
+				this.nativeMenu.addAction(action);
+				this.nativeMenu.addMenuItem(action.actionId,"子菜单/子菜单1");
+			}
+			function onMenuClick(evt:CActionEvent):void{
+				this.infoLabel.text="你点击了"+evt.actionId+" path="+evt.path;
+				nativeMenu.removeMenuItem(evt.actionId,evt.path);
+			}
+			function onDelClick():void{
+				this.contextMenuManager.removeMenu(this.vbox1);
+			}
+		]]>
+	</mx:Script>
+	<rcp:CMenuRelation  id="menuRelation">
+   		 <rcp:actions>
+   		 	<mx:String>a1</mx:String>
+   		 	<mx:String>-</mx:String>
+   		 	<mx:String>a2</mx:String>
+   		 	<mx:String>-</mx:String>
+   		 	<rcp:CMenuRelation label="子菜单">
+   		 	  <rcp:actions>
+   		 		<mx:String>a3</mx:String>
+   		 		<mx:String>a4</mx:String>
+   		 		<rcp:CMenuRelation label="子菜单1">
+   		 		  <rcp:actions>
+   		 			<mx:String>a5</mx:String>
+   		 		  </rcp:actions>
+   		 		</rcp:CMenuRelation>
+   		 	  </rcp:actions>
+   		 	</rcp:CMenuRelation>
+   		 </rcp:actions>
+   	</rcp:CMenuRelation>
+	<mx:Array id="cActions1">
+    	<rcp:CAction  actionId="a1" type="{CAction.AS_RADIO_BUTTON}" text="测试2" toolTip="toolTipTest1..."/>
+   		<rcp:CAction  actionId="a2" type="{CAction.AS_RADIO_BUTTON}" text="测试3" toolTip="toolTipTest2..."/>
+   		<rcp:CAction  actionId="a3" type="{CAction.AS_RADIO_BUTTON}" text="测试4" toolTip="toolTipTest3..."/>
+   		<rcp:CAction  actionId="a4" type="{CAction.AS_RADIO_BUTTON}" text="a4" toolTip="toolTipTest3..."/>
+   		<rcp:CAction  actionId="a5" type="{CAction.AS_RADIO_BUTTON}" text="a5" toolTip="toolTipTest3..."/>
+    </mx:Array>
+    
+    <mx:VBox width="100%" height="100%" id="vbox1" backgroundColor="#778899">
+    	<mx:Button label="添加菜单" click="addMenu()"/>
+    	<mx:Button label="删除菜单" click="onDelClick()"/>
+    	<mx:Button label="添加菜单项" click="onAddClick()"/>
+    </mx:VBox>
+    <mx:VBox width="100%" height="100%" id="vbox2" backgroundColor="#ffffff">
+    	<mx:Label id="infoLabel" width="100%"/>
+    </mx:VBox>
+</gui:RCPModule> 
