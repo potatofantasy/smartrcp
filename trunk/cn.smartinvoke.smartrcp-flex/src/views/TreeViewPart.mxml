@@ -3,6 +3,8 @@
 	layout="vertical" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
+			import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 			import cn.smartinvoke.RemoteObject;
 			import cn.smartinvoke.smartrcp.CApplication;
 			import cn.smartinvoke.smartrcp.gui.FlashViewer;
@@ -19,10 +21,16 @@
 			import org.eclipse.swt.CEventType;
 			import org.eclipse.swt.widgets.Display;
 			function init():void{
-				this.labelStatus.text=CApplication.Instance.getBaseFolder();				
+				//添加键盘事件监听			
 			    Display.getCurrent().addListener(CEventType.KeyDown,this.onKeyEvent,this);
 				Display.getCurrent().addListener(CEventType.KeyUp,this.onKeyEvent,this);
+				//添加viewPart监听器
 				ViewManager.Instance.addListener(this.onViewModify,this);
+				
+				//添加全局action监听，并且该action定义了快捷键
+				CActionManager.Instance.addListener("test",function (evt:CActionEvent):void{
+					Alert.show(evt.actionId+"的事件触发了");
+				},this);
 			}
 			private function onViewModify(evt:CPartEvent):void{
 				var str:String=evt.taget.getTitle();
@@ -30,8 +38,15 @@
 					str+=" closed";
 				}else if(evt.type==CPartEvent.Part_Opened){
 					str+=" opened";
+					
 				}else if(evt.type==CPartEvent.Part_Activated){
 					str+=" actived";
+					var modulePath:String=evt.taget.getModulePath();
+					if(modulePath.indexOf(".swf")!=-1){//是flash窗口
+					    var path:String=modulePath;
+					    path=path.substr(0,path.length-4)+".mxml";
+						this.showModuleContent(path);
+					}
 				}
 				this.labelStatus.text=str;
 			}
@@ -87,10 +102,19 @@
 			 */
 			private function showSourceCode(modulePath:String):void{
 				//获得modulePath模块对应的源代码
-				//创建FileReader对象
-				var fileReader:RemoteObject=new RemoteObject();
+				//如果是项目主页则打开项目网站
+				if(modulePath=="cn.smartinvoke.smartrcp.WebBrowser"){
+				  //获得浏览器视图对象并调用其setHtml方法设置其源代码
+			      var viewers:ArrayCollection=ViewManager.Instance.findFlashViewers(modulePath);
+			      if(viewers!=null && viewers.length>0){
+			    	 var viewer:FlashViewer=viewers[0] as FlashViewer;
+			    	 viewer.invoke("openUrl",["http://code.google.com/p/smartrcp/"]);
+			      }
+				  return;	
+				}
 				var path:String=CApplication.Instance.getBaseFolder()+"/"+modulePath;
 				path=path.substr(0,path.length-4)+".mxml";
+				/**var fileReader:RemoteObject=new RemoteObject();
 				fileReader.create("java.io.FileReader",[path]);
 				//根据fileReader对象创建BufferedReader对象
 				var reader:RemoteObject=new RemoteObject();
@@ -111,15 +135,19 @@
 			    //释放java中的对应服务对象
 			    reader.gc();
 			    fileReader.gc();
-			    
+			    */
 			    //显示文件
-			    var browserId:String="cn.smartinvoke.smartrcp.WebBrowser";
+			    this.showModuleContent(path);
+			}
+			private function showModuleContent(path:String):void{
+				var browserId:String="cn.smartinvoke.smartrcp.WebBrowser";
+			    
 			    this.openViewPart(browserId,"源代码");
 			    //获得浏览器视图对象并调用其setHtml方法设置其源代码
 			    var viewers:ArrayCollection=ViewManager.Instance.findFlashViewers(browserId);
 			    if(viewers!=null && viewers.length>0){
 			    	var viewer:FlashViewer=viewers[0] as FlashViewer;
-			    	viewer.invoke("setHtml",[content]);
+			    	viewer.invoke("showSourceCode",[path]);
 			    }
 			}
 		]]>
@@ -133,31 +161,23 @@
                 <node label="菜单栏" module="views/AppMenuBar_T.swf"/>
               </node>
               <node label="右键菜单" module="views/ContextMenu_T.swf"/>
-              <node label="事件">
-                <node label="全局事件"/>
-                <node label="键盘事件"/>
-                <node label="鼠标事件"/>
-                <node label="快捷键"/>
-                <node label="扩展事件"/>
-              </node>
-              <node label="保存视图状态"/>
-              <node label="状态栏" module="views/AppToolBar_T.swf"/>
+              <node label="键盘鼠标事件" module="views/MouseAndKeyBordEvt.swf"></node>
+              <node label="状态栏" module="views/StatusLine_T.swf"/>
               <node label="视图部分">
                  <node label="视图管理" module="views/ViewManager_T.swf"/>
                  <node label="视图调用" module="views/ModuleInvoke_T.swf"/>
                  <node label="工具栏和下拉菜单" module="views/ViewPartActionBar_T.swf"/>
-                 <node label="数据传递"/>
               </node>
               <node label="窗口管理" module="views/FlashShell_T.swf"/>
               <node label="对话框" module="views/Dialog_T.swf"/>
             </node>
-            <node label="扩展API">
+           <!-- <node label="扩展API">
                <node label="调用J2SE库"/>
                <node label="扩展库"/>
                <node label="Java事件通知"/>
                <node label="调用eclipse插件视图"/>
             </node>
-            <node label="应用程序管理"/>
+            <node label="应用程序管理"/>-->
             
         </node>
     </mx:XMLList>

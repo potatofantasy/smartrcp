@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import org.eclipse.swt.CEventType;
+			import cn.smartinvoke.smartrcp.gui.module.CEvent;
+			import org.eclipse.swt.SWT;
+			import org.eclipse.swt.widgets.Display;
+			function init():void{
+				Display.getCurrent().addListener(CEventType.KeyDown,this.onKeyDownEvent,this);
+				Display.getCurrent().addListener(SWT.MouseDown,this.onMouseDownEvent,this);
+			}
+			function onKeyDownEvent(evt:CEvent):void{
+				if(evt.stateMask==(SWT.CTRL | SWT.ALT)&& evt.keyCode==SWT.F1){
+				   	this.info.text="ctrl + alt + F1 pressed";
+				}else{
+					this.info.text=evt.keyCode+" down...";
+				}
+			}
+			function onMouseDownEvent(evt:CEvent):void{
+				this.info.text="鼠标的第"+evt.button+"个按钮按下了";
+			}
+		]]>
+	</mx:Script>
+	<mx:Panel title="键盘鼠标事件的监听" cornerRadius="0" horizontalAlign="center" verticalAlign="middle"
+            styleName="opaquePanel" width="100%" height="100%">
+          <mx:Label id="info"/>
+    </mx:Panel>
+</gui:RCPModule>

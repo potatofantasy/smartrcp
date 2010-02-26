@@ -54,11 +54,15 @@ package cn.smartinvoke.smartrcp.gui
 			}
 			return ret;
 		}
-		
+		//返回模块路径
+		public function getModulePath():String{
+			return this.call('getModulePath',arguments) as String;
+		}
 		//debug调用此方法
 		public function setDebugModule(url:String):void{
 			this.call("setDebugModule",arguments);
 		}
+		//
 		public override function gc():void{
 			
 		}
@@ -79,5 +83,6 @@ package cn.smartinvoke.smartrcp.gui
 			 this.call("removeData",arguments);
 			}
 		}
+		
 	}
 }

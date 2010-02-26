@@ -28,7 +28,7 @@ package cn.smartinvoke.smartrcp.gui.control
 			this.call("fireAction",arguments);
 		   }
 		}
-		public function addListener(actionId:String,listener:Function,thisObject:Object=null):void{
+		public function addListener(actionId:String,listener:Function,thisObject:Object):void{
 			if(actionId==null || listener==null){
 				return;
 			}
@@ -51,7 +51,7 @@ package cn.smartinvoke.smartrcp.gui.control
 			this.call("addListener",[actionId,bean]);
 		}
 		public function removeListener(actionId:String,
-		   listener:Function,thisObject:Object=null):void{
+		   listener:Function,thisObject:Object):void{
 		   if(actionId!=null && listener!=null){
 		   	 //删除池引用
 		   	 var listenerId:String=UIDUtil.getUID(listener);

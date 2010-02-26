@@ -17,6 +17,7 @@
 			import cn.smartinvoke.smartrcp.gui.module.CEvent;
 			[Bindable]
 			public var listData:ArrayCollection=new ArrayCollection();
+			public var swfPath:String="views/TreeViewPart.swf";
 			function init():void{
 			   	var baseUrl:String=CApplication.Instance.getBaseFolder();
 			   	var moduleFolder:String=baseUrl+"/views";
@@ -27,16 +28,17 @@
 			   	
 			   	var subFiles:Array=folder.call("list") as Array;
 			   	if(subFiles!=null){
-			   		for each(var fileName in subFiles){
-			   			listData.addItem({label:"views/"+fileName,data:"views/"+fileName});
+			   		for each(var fileName:String in subFiles){
+			   			if(fileName.indexOf(".swf")!=-1){
+			   			 listData.addItem({label:"views/"+fileName,data:"views/"+fileName});
+			   			}
 			   		}
-			   	}
-				//
+			   	}				//
 			}
 			function onOpenClick():void{
 				 var flashShell:FlashShell=new FlashShell(SWT.SHELL_TRIM);
 				 flashShell.setSize(800,600);
-				 var swfPath:String=this.swfList.selectedItem.data;
+				 var swfPath:String=swfPath;//this.swfList.selectedItem.data;
 				 flashShell.setText(swfPath);
 				 flashShell.setImage("/icons/alphab_sort_co.gif");
 				 flashShell.createFlashContainer(swfPath);
@@ -49,13 +51,19 @@
 				    dialog.open(function (ret:int):void{
 				    	   if(ret==0){//如果用户选择了关闭按钮
 				    	     //关闭打开的窗口
-				        	 var flashViews:ArrayCollection=
-				        	    ViewManager.Instance.findFlashViewers(this.swfList.selectedItem.data);
-				        	 if(flashViews!=null){
-				        	 	var flashViewer:FlashViewer=flashViews.getItemAt(0) as FlashViewer;
-				        	 	var parent:RemoteObject=flashViewer.getParent();
-				        	 	if(parent!=null && parent is FlashShell){
+				    	     //获取模块对应的appId
+				        	 var appIds:ArrayCollection=
+				        	    ViewManager.Instance.findAppIds(swfPath);
+				        	 if(appIds!=null && appIds.length>1){
+				        	 	var appId:String=appIds[1] as String;
+				        	 	//根据appId返回对应的FlashViewer对象
+				        	 	var flashViewer:FlashViewer=ViewManager.Instance.findFlashViewer(appId);
+				        	 	//获得FlashViwer的父容器FlashShell并关闭
+				        	 	if(flashViewer!=null){
+				        	 	 var parent:RemoteObject=flashViewer.getParent();
+				        	 	 if(parent!=null && parent is FlashShell){
 				        	 		 (FlashShell(parent)).close();
+				        	 	 }
 				        	 	}
 				        	 }
 				           }
@@ -78,10 +86,8 @@
 		]]>
 	</mx:Script>
 <mx:Panel title="SmartRCP对多窗口的支持" cornerRadius="0" paddingLeft="0" paddingRight="0"
-            styleName="opaquePanel" width="100%" height="100%">
-	<mx:Label text="窗口列表"/>
-	<mx:List id="swfList" width="300" color="blue"
-            dataProvider="{listData}"/>
+            styleName="opaquePanel" width="100%" height="100%" layout="horizontal">
+	
 	<mx:Button label="打开窗口" click="onOpenClick()"/>
 	<mx:Button label="最大化主窗体" click="onMainShellSetting()"/>
 </mx:Panel>

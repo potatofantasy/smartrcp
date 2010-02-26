@@ -1,6 +1,5 @@
 package cn.smartinvoke.gui
 {
-	import cn.smartinvoke.RemoteObject;
 	import cn.smartinvoke.pool.ObjectPool;
 	import cn.smartinvoke.rcp.CAction;
 	import cn.smartinvoke.rcp.CToolBar;
@@ -45,7 +44,7 @@ package cn.smartinvoke.gui
 		   return ["是否保存","视图数据已经修改，是否保存"];
 	    }
 
-	    public function doSave(monitor:RemoteObject):void{
+	    public function doSave():void{
 	       
 	    }
 	    public function doSaveAs():void {
@@ -59,9 +58,19 @@ package cn.smartinvoke.gui
  	    public function isSaveAsAllowed():Boolean {
 		   return false;
 	    }
-
+        private var isInvoked:Boolean=false;//是否已经调用过了
 	    public function isSaveOnCloseNeeded():Boolean {
+	    	if(!isInvoked){
+	    		this.onExist();
+	    		isInvoked=true;
+	    	}
 	    	return false;
+	    }
+	    /**
+	    *当程序要退出时平台会调用此方法
+	    */
+	    public function onExist():void{
+	    	
 	    }
 	}
 }

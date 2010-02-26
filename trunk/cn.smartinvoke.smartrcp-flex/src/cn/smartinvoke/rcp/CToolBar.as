@@ -8,8 +8,8 @@ package cn.smartinvoke.rcp
 	[RemoteClass(alias="cn.smartinvoke.rcp.CToolBar")]
 	public class CToolBar
 	{
-		public static const Image_Text_Horizontal:int=0;
-		public static const Image_Text_Vertical:int=1;
+		public static const Image_Text_Horizontal:int=1;
+		public static const Image_Text_Vertical:int=0;
 		public static const Image:int=2;
 		public var type:int=CToolBar.Image_Text_Horizontal;
 		public var toolBarId:String;
