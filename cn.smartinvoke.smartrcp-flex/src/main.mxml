@@ -11,6 +11,8 @@
    </mx:Style>
    <mx:Script>
    	<![CDATA[
+   		import cn.smartinvoke.smartrcp.util.Log;
+   		import mx.events.FlexEvent;
    		import cn.smartinvoke.gui.RCPModule;
    		import cn.smartinvoke.smartrcp.gui.FlashViewPart;
    		import cn.smartinvoke.smartrcp.gui.FlashShell;
@@ -23,8 +25,11 @@
    			//Alert.show(this.flashViewer.getParent()+"");
    			//this.labelInfo.text=Executor.applicationId;
    			this.flashViewer.setDebugModule("views/FlashShell_T.swf");
+   			this.addEventListener(FlexEvent.EXIT_STATE,function (evt:FlexEvent):void{
+   				Log.Instance.println(Executor.applicationId+"退出");
+   			});
    		} 
    	]]>
    </mx:Script>
-  <!-- <mx:Label id="labelInfo"/>-->
+ <!--<mx:Label id="labelInfo"/>-->
 </rcp:RCPApplication>

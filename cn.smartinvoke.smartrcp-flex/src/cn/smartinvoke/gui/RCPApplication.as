@@ -119,5 +119,39 @@ package cn.smartinvoke.gui
               	 Alert.show(e.message);
               }
         }
+        //--------------------------
+        
+		public function promptTitleAndMessage():Array{
+		   return ["是否保存","视图数据已经修改，是否保存"];
+	    }
+
+	    public function doSave():void{
+	       
+	    }
+	    public function doSaveAs():void {
+		   
+	    }
+
+	    public function isDirty():Boolean {
+		  return false;
+	    }
+
+ 	    public function isSaveAsAllowed():Boolean {
+		   return false;
+	    }
+        private var isInvoked:Boolean=false;//是否已经调用过了
+	    public function isSaveOnCloseNeeded():Boolean {
+	    	if(!isInvoked){
+	    		this.onExist();
+	    		isInvoked=true;
+	    	}
+	    	return false;
+	    }
+        /**
+	    *当程序要退出时平台会调用此方法
+	    */
+	    public function onExist():void{
+	       	
+	    }
 	}
 }

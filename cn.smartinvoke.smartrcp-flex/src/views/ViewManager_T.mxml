@@ -24,66 +24,50 @@
 				basicInfo.title="右键菜单";
 				basicInfo.image="/icons/allteamstrms_rep.gif";
 			    var openedView:FlashViewer=ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);
-			    openedView.invoke("openUrl",["http://www.google.com"]);
 			    
+			    openedView.invoke("openUrl",["http://code.google.com/p/smartrcp"]);
 			}
 			function closeView():void{
-				ViewManager.Instance.closeViewParts(this.path);
+				ViewManager.Instance.closeViewPart(this.getView());
 			}
-			function getView():void{
+			function getView():String{
 				var str:String="";
-				/*var arr:ArrayCollection=
-				   ViewManager.Instance.findAppIds(this.path);
-				for each(var item:String in arr){
-					
-						str+=item+" ";
-				}*/
-				var viewManager:ViewManager=ViewManager.Instance;
-				var openedView:ArrayCollection=viewManager.findFlashViewers(this.path);
-				if(openedView!=null && openedView.length>0){
-				  var flashView:FlashViewer=openedView[0] as FlashViewer;
-				  //Alert.show(flashView.getTitle());
-				  this.infoLabel.text=flashView.getFlexAppId();
-				  flashView.invoke("openUrl",["http://www.javaeye.com"]);
-				} 
-				
+				var viewIds:ArrayCollection=ViewManager.Instance.findAppIds(this.path);
+				if(viewIds!=null && viewIds.length>1){
+					return viewIds[1] as String;
+				}
+				return null;
 			}
 			function showView():void{
-				var appId:String=this.inputID.text;
+				var appId:String=this.getView();
 				ViewManager.Instance.showViewPart(appId);
 			}
 			function maxView():void{
-				var appId:String=this.inputID.text;
+				var appId:String=this.getView();
 				ViewManager.Instance.setState(appId,ViewManager.STATE_MAXIMIZED);
 			}
 			function minView():void{
-				var appId:String=this.inputID.text;
+				var appId:String=this.getView();
 				ViewManager.Instance.setState(appId,ViewManager.STATE_MINIMIZED);
 			}
 			function restoreView():void{
-				var appId:String=this.inputID.text;
+				var appId:String=this.getView();
 				ViewManager.Instance.setState(appId,ViewManager.STATE_RESTORED);
-			}
+			} 
 		]]>
 	</mx:Script>
-	<rcp:CAction  id="actionFirst" actionId="first" type="{CAction.AS_CHECK_BOX}" checked="true" 
-   			text="helloMenu" toolTip="toolTipTest..."
-   			imageUrl="/icons/call_hierarchy.gif"/>
-   			<rcp:CAction  id="actionSec" actionId="sec" text="navTest" toolTip="toolTipTest..."
-   			imageUrl="/icons/nav.gif"/>
-   			<mx:Button label="获得父亲容器" click="init()"/>
-	<mx:Label id="infoLabel" width="100%"/>
+	<mx:Panel title="rcp ViewPart管理器，包括ViewPart的打开，关闭，最大化，最小化等" cornerRadius="0" horizontalAlign="center" verticalAlign="middle"
+            styleName="opaquePanel" width="100%" height="100%">
 	<mx:HBox width="100%">
 	 <mx:Button label="打开视图" click="openView()"/> 
 	 <mx:Button label="关闭视图" click="closeView()"/>
-	 <mx:Button label="获得视图" click="getView()"/>
 	</mx:HBox>
 	<mx:HBox width="100%">
 		 <mx:Button label="最大化视图" click="maxView()"/>
 		 <mx:Button label="最小化视图" click="minView()"/>
 		 <mx:Button label="恢复视图" click="restoreView()"/>
 	</mx:HBox>
-	<mx:HBox width="100%">
-		<mx:Label text="视图appId"/><mx:TextInput id="inputID"/><mx:Button label="显示视图" click="showView()"/>
-	</mx:HBox>
+	<mx:Button label="显示视图" click="showView()"/>
+		
+	</mx:Panel>
 </gui:RCPModule>
