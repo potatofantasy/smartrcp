@@ -16,6 +16,7 @@ public class ConfigerLoader {
     public static final String key_splash_size="splash-size";
     public static final String key_runtime="runtime";
     public static final String key_debug_port="debug-port";
+    public static final String key_debug="debug";
     public static final String key_export_package="Export-Package";
 	private ConfigerLoader() {
 	   

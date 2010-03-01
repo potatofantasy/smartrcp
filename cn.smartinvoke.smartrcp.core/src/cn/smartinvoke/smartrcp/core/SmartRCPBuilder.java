@@ -421,13 +421,11 @@ public class SmartRCPBuilder {
 	 * 打开debug服务，接收flexBuilder的请求
 	 */
     private static void openDebugServer(){
-      String[] args=org.eclipse.equinox.internal.app.CommandLineArgs.getAllArgs();	
-      if(args!=null){
-    	  for(int i=0;i<args.length;i++){
-    		  String arg=args[i];
-    		  if(arg.equals("-dbm")){
+      String debugStr=ConfigerLoader.getProperty(ConfigerLoader.key_debug);
+      if(debugStr!=null){
+    	  debugStr=debugStr.trim();
+    	  if(debugStr.equals("true")){
     			  DebugServer.start();
-    		  }
     	  }
       }
     }

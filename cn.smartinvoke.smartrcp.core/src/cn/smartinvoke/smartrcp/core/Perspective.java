@@ -34,6 +34,7 @@ public class Perspective implements IPerspectiveFactory {
 		
 	}*/
 	//private int viewNum=0;
+    
 	private String viewId=FlashViewPart.ID;
 	private IPageLayout layout;
 	//²¼¾Ö¿é±í
