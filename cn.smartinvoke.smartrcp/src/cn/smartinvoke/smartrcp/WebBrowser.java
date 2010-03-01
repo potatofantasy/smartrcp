@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.SmartRCPViewPart;
+import cn.smartinvoke.util.Log;
 
 public class WebBrowser extends SmartRCPViewPart {
 
@@ -45,36 +46,30 @@ public class WebBrowser extends SmartRCPViewPart {
 	}
 	private String dispUrl=null;
 	public void showSourceCode(String modulePath){
-		FileInputStream in=null;
-		java.io.FileOutputStream writerStream =null;
+		
 		try{
-		 String savePath=CPerspective.getRuntimeSwfFolder()+"/syn.xml";
-		 if(dispUrl!=null && savePath.equals(dispUrl)){//已经显示
+		 if(modulePath==null){
 			 return;
 		 }
-		 String name=modulePath.substring(modulePath.lastIndexOf('/')+1);
-		 super.setPartName(name+"源代码");
-		 String codePath=modulePath;
-		 in=new FileInputStream(codePath);
-		 byte[] bts=new byte[in.available()];
-		 in.read(bts);
-		 String code=new String(bts,"utf-8");
-		 writerStream = new java.io.FileOutputStream(savePath);   
-		 BufferedWriter writer = new BufferedWriter(new java.io.OutputStreamWriter(writerStream, "UTF-8"));
-		 writer.write(code);
-		 writer.flush();
-		 writer.close();
-		 this.browser.setUrl(savePath);
+		 int spl=modulePath.lastIndexOf('/');
+		 if(spl==-1){
+			 return;
+		 }
+		 String moduleName=modulePath.substring(spl);
+		 super.setPartName(moduleName+"源代码");
+		 String url=CPerspective.getRuntimeSwfFolder()+
+		   "/srcview/source/views"+moduleName+".html";
+		 if(dispUrl!=null && dispUrl.equals(url)){
+			 return;
+		 }
+		 this.browser.setUrl(url);
+		 dispUrl=url;
+		 //Log.println(url);
 		}catch(Exception e){
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
 		}finally{
-			if(in!=null){
-				try{in.close();}catch (Exception e) {}
-			}
-			if(writerStream!=null){
-				try{writerStream.close();}catch (Exception e) {}
-			}
+			
 		}
 	}
 	public void setViewTitle(String title){

@@ -18,7 +18,8 @@
 
    <windowImages i16="icons/sample2.gif"/>
 
-   <launcher>
+
+   <launcher name="SmartRCP">
       <solaris/>
       <win useIco="false">
          <bmp
