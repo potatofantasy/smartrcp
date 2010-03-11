@@ -107,7 +107,7 @@ public class CApplication implements IServerObject {
 	   	
 	}
 	public void dispose() {
-	   
+		dataMap.clear();
 	}
 	//--ÑÕÉ«¶Ô»°¿ò
 	

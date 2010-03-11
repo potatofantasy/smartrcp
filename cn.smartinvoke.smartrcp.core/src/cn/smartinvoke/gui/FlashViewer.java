@@ -37,7 +37,7 @@ public class FlashViewer implements IServerObject {
 	/**
 	 * 已使用的id
 	 */
-	private static List<Integer> usedAppIds=new LinkedList<Integer>();
+	public static List<Integer> usedAppIds=new LinkedList<Integer>();
 	/**
 	 * 当前获得焦点的FlashViewer
 	 */

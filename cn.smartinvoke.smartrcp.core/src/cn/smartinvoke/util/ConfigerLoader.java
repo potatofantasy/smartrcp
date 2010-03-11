@@ -23,12 +23,22 @@ public class ConfigerLoader {
 	}
 	private static Properties properties=null;
 	public static String configPath=null;
+	private static FileInputStream fileInputStream;
 	public static void init() throws FileNotFoundException, IOException{
-	  if(properties==null){
+	  init(HelpMethods.getPluginFolder()+"/start.ini");
+	}
+	public static void init(String path)throws FileNotFoundException, IOException{
+		if(properties!=null){
+			properties.clear();	
+		}
+		if(fileInputStream!=null){
+			try{fileInputStream.close();}catch(Exception e){};
+		}
 		properties=new Properties();
-		configPath=HelpMethods.getPluginFolder()+"/start.ini";
-		properties.load(new FileInputStream(configPath));
-	  }
+		configPath=path;
+		fileInputStream=new FileInputStream(configPath);
+		properties.load(fileInputStream);
+		
 	}
 	public static String getProperty(String key){
 		return properties.getProperty(key);

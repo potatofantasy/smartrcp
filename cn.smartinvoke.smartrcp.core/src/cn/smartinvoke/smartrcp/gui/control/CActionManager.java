@@ -132,7 +132,8 @@ public class CActionManager extends ActionBarBase implements IServerObject {
     	}
     }
 	public void dispose() {
-
+        this.actionMap.clear();
+        this.actionBarAdvisor.dispose();
 	}
 	public static void main(String[] args) {
 		List<String> lst=new LinkedList<String>();

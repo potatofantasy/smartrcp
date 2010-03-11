@@ -10,11 +10,9 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import cn.smartinvoke.gui.FlashContainer;
 import cn.smartinvoke.gui.Msg;
-import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.gui.OleHookInterceptor;
 import cn.smartinvoke.gui.Win32Constant;
 import cn.smartinvoke.rcp.CPerspective;
-import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 
 public class SplashWindow {
 	public static SplashWindow INSTANCE=new SplashWindow();
@@ -82,11 +80,12 @@ public class SplashWindow {
    }
    public void setPerspective(CPerspective perspective){
 	   SplashWindow.perspective=perspective;
+	   this.close();
    }
    public void close(){
 	  //从池中删除对splash窗口的引用 
-	  ObjectPool.INSTANCE.removeObject(GlobalServiceId.Splash_Win);
-	  container.loadMovie(0, "");
+	 // ObjectPool.INSTANCE.removeObject(GlobalServiceId.Splash_Win);
+	  //container.loadMovie(0, "");
       if(shell!=null){
     	container.dispose();
     	shell.close();

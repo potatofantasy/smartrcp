@@ -14,6 +14,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import cn.smartinvoke.gui.FlashViewer;
+import cn.smartinvoke.gui.ObjectPool;
+import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
+import cn.smartinvoke.smartrcp.gui.control.ViewManager;
  public class CPageLayout  implements ICFolderLayout{
 	/**
 	 *以视图模块id为key以appId集合为值的map 
@@ -87,5 +92,29 @@ import java.util.Map;
 	}
 	public Map<String, List<String>> getModuleIdAppIdMap() {
 		return moduleIdAppIdMap;
+	}
+	/**
+	 * 关闭并清空所有视图资源
+	 */
+	public void close(){
+		Iterator<String> keys=this.moduleIdAppIdMap.keySet().iterator();
+		//视图管理器
+		ViewManager viewManager=(ViewManager)ObjectPool.INSTANCE.getObject(GlobalServiceId.View_Manager);
+		//关闭所有视图
+		while(keys.hasNext()){
+			String key=keys.next();
+			List<String> appIds=this.moduleIdAppIdMap.get(key);
+			if(appIds!=null){
+				for(int i=0;i<appIds.size();i++){
+					String appId=appIds.get(i);
+					viewManager.closeViewPart(appId);
+				}
+			}
+		}
+		//清空id资源集合
+		FlashViewer.usedAppIds.clear();
+		
+		//关闭eclipse workbench page
+		viewManager.close();
 	}
  }
