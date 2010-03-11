@@ -15,7 +15,6 @@ public class CPerspective {
 	private static int[] splashSize;
 	//private static String installFolder;
 	public static void init()throws Exception{
-		ConfigerLoader.init();
 		
 		String installFolder=HelpMethods.getPluginFolder();//°²×°Ä¿Â¼
 		//

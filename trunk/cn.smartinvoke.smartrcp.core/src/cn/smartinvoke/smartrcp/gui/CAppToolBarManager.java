@@ -204,7 +204,7 @@ public class CAppToolBarManager implements IServerObject {
 	}
 
 	public void dispose() {
-
+       this.coolBar.removeAll();
 	}
 
 }

@@ -4,9 +4,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 
+import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.smartrcp.gui.control.CActionManager;
 
-public class CAppMenuBarManager {
+public class CAppMenuBarManager implements IServerObject{
 	private IMenuManager root = null;
 	private CActionManager actionManager;
 
@@ -70,6 +71,7 @@ public class CAppMenuBarManager {
 				// actionManager.removeAction(actionId);
 			}
 		}
+		//TODO 2.0 new
 	}
 
 	/**
@@ -77,6 +79,11 @@ public class CAppMenuBarManager {
 	 */
 	public static void main(String[] args) {
 
+	}
+	public void dispose() {
+		//Çå¿ÕËùÓÐ
+		root.removeAll();
+		root.updateAll(true);
 	}
 
 }
