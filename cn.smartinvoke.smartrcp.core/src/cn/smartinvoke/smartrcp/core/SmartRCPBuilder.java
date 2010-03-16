@@ -1,6 +1,7 @@
 package cn.smartinvoke.smartrcp.core;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -57,21 +59,31 @@ import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 import cn.smartinvoke.smartrcp.gui.control.ViewManager;
 import cn.smartinvoke.smartrcp.util.JFaceConstant;
 import cn.smartinvoke.util.ConfigerLoader;
+import cn.smartinvoke.util.HelpMethods;
 import cn.smartinvoke.util.ImageManager;
 import cn.smartinvoke.util.Log;
 
 public class SmartRCPBuilder {
 	private static SplashWindow splash_win = SplashWindow.INSTANCE;
-
+    private static SmartRCPWindowAdvisor window_Advisor=new SmartRCPWindowAdvisor();
 	private SmartRCPBuilder() {
         
 	}
-
+	
+	public static void createWindowContents(Shell shell,IWorkbenchWindowConfigurer configurer) {
+		window_Advisor.createWindowContents(shell, configurer);
+	}
+	
+	public static void setShowToolbar(boolean visible) {
+		window_Advisor.setShowToolbar(visible);
+	}
 	/**
 	 * 初始化SmartRCP获得初始化信息
 	 */
 	public static void init(final BundleContext context){//IServiceObjectCreator objectCreator) {
+		//----------------------
 		
+		//----------------------
 		//加载配置信息
 		try{ConfigerLoader.init();}catch(Exception e){throw new RuntimeException();};
 		//加载库
@@ -565,7 +577,24 @@ public class SmartRCPBuilder {
      * @param configPath
      */
     public static void reStart(String configPath){
-    	if(configPath!=null){
+    	/*if(configPath!=null){
+    	 String loadAppConfig=HelpMethods.getPluginFolder()+"/loadApp.ini";
+    	 FileWriter fileWriter=null;
+    	 try{
+    	   //写配置文件
+    	   fileWriter=new FileWriter(loadAppConfig);
+    	   fileWriter.write(configPath);
+    	   fileWriter.flush();
+    	   fileWriter.close();
+    	   //重新启动系统
+    	   PlatformUI.getWorkbench().restart();
+    	 }catch(Exception e){
+    	   throw new RuntimeException(e.getMessage()); 
+    	 }finally{
+    	    if(fileWriter!=null){
+    	    	try{fileWriter.close();}catch(Exception e){};
+    	    }
+    	 }*/
     	 File configFile=new File(configPath);
     	 if(configFile.exists()){
     		
@@ -595,7 +624,6 @@ public class SmartRCPBuilder {
     			 Shell mainShell=Display.getCurrent().getActiveShell();
     			 MessageDialog.openError(mainShell, "错误", "程序启动错误，信息如下：\n"+e.getMessage());
     		 }
-    	 }
     	}
     }
 	/**
