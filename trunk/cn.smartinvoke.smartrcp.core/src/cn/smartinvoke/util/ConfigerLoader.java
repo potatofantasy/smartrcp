@@ -1,8 +1,10 @@
 package cn.smartinvoke.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -38,7 +40,29 @@ public class ConfigerLoader {
 		configPath=path;
 		fileInputStream=new FileInputStream(configPath);
 		properties.load(fileInputStream);
-		
+	}
+	/**
+	 * 从配置文件加载start.ini文件路径
+	 */
+	private static String getConfigPath(){
+		String ret=null;
+		File pathSaveFile=new File(HelpMethods.getPluginFolder()+"/loadApp.ini");
+		if(pathSaveFile.exists()){
+			BufferedReader reader=null;
+			try {
+				reader=new BufferedReader(new FileReader(pathSaveFile));
+				ret=reader.readLine();
+			} catch (Exception e) {
+				throw new RuntimeException(e.getMessage());
+			}finally{
+				if(reader!=null){
+					try{reader.close();}catch(Exception e){};
+				}
+			}
+		}else{
+			ret=HelpMethods.getPluginFolder()+"/start.ini";
+		}
+		return ret;
 	}
 	public static String getProperty(String key){
 		return properties.getProperty(key);

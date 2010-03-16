@@ -22,6 +22,7 @@ public class ImageManager {
 
 	public static void init(ImageRegistry imageRegistry) {
 		try {
+			
 			ImageManager.imageRegistry = imageRegistry;// new ImageRegistry();
 			String plugInFolder = HelpMethods.getPluginFolder();
 			String imgFolder = plugInFolder + "/icons";
