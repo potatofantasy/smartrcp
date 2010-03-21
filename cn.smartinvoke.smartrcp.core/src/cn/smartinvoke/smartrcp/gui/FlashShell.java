@@ -184,6 +184,7 @@ public class FlashShell implements IServerObject{
 		if(flashViewer!=null){
 		 flashViewer.dispose();
 		}
+		this.shell.setMinimized(true);//将窗口设到最小化回收内存
 		this.shell.close();
 		this.shell.dispose();
 		//ObjectPool.INSTANCE.removeObject(this.flashViewer.getAppId(), objId);

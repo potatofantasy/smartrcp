@@ -77,17 +77,20 @@ public class SmartRCPBuilder {
 	public static void setShowToolbar(boolean visible) {
 		window_Advisor.setShowToolbar(visible);
 	}
+	private static BundleContext context=null;
 	/**
 	 * 初始化SmartRCP获得初始化信息
 	 */
 	public static void init(final BundleContext context){//IServiceObjectCreator objectCreator) {
 		//----------------------
-		
+		SmartRCPBuilder.context=context;
 		//----------------------
 		//加载配置信息
-		try{ConfigerLoader.init();}catch(Exception e){throw new RuntimeException();};
-		//加载库
-		startBundles(context);
+		try{ConfigerLoader.init();}catch(Exception e){
+			throw new RuntimeException();
+			
+		};
+		
 		
 		// TODO 程序的初始化
 		ObjectPool objectPool = ObjectPool.INSTANCE;
@@ -530,6 +533,9 @@ public class SmartRCPBuilder {
 			flashViewer.loadFlash();
 		}
 		openDebugServer();
+		
+		//加载库
+		startBundles(context);
 	}
 	
 	/**

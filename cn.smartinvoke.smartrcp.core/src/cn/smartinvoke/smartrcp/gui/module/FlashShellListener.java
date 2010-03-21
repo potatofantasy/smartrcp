@@ -54,6 +54,8 @@ public class FlashShellListener implements ShellListener ,Listener{
 		if(typeListeners.size()==0){
 		  //调用对应flex程序回收资源
 		  this.flashViewer.getFlashViewer().flexAppExist();
+		  //将窗口设到最小化回收内存
+		  flashViewer.getShell().setMinimized(true);
 	   	  e.doit=true; 
 		}else{//等待flex的异步调用
 		  e.doit=false;

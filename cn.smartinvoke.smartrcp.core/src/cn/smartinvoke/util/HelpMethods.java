@@ -28,7 +28,7 @@ public class HelpMethods {
 	   if(installFolder==null){
 		String ret=null;
 		try {
-			ret = Path.getPathFromClass(Path.class);
+			ret = Path.getPathFromClass(ConfigerLoader.class);
 			int sp=ret.lastIndexOf(File.separatorChar);
 			if(sp!=-1){
 			 ret=ret.substring(0,sp);
