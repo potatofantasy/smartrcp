@@ -204,7 +204,15 @@ public class FlashContainer extends Flash implements IServerObject{
 		ret.dispose();
 	}
     public void superDispose(){
-    	super.dispose();
+    	if(this.getOleObject()!=null){
+    		this.getOleObject().dispose();
+    	}
+    	if(this.getOleControlSite()!=null){
+    		this.getOleControlSite().dispose();
+    	}
+    	if(this.getOleFrame()!=null){
+    		this.getOleFrame().dispose();
+    	}
     }
     private String appId;
     public String getAppId(){
@@ -248,7 +256,7 @@ public class FlashContainer extends Flash implements IServerObject{
 			}
 		 });
 	   }else{
-		   super.dispose();
+		   this.superDispose();
 		   ObjectPool.INSTANCE.clearAppPool(this.getAppId());
 	   }
 	}
@@ -294,7 +302,8 @@ public class FlashContainer extends Flash implements IServerObject{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//OS.MessageBoxW(0, "ÄãºÃ£¡\0".toCharArray(), "hello\0".toCharArray(), 0);
+	    FlashContainer container=null;
+	    
 	}
 
 }
