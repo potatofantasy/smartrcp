@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: smartrcpPlugIn
+Bundle-SymbolicName: smartrcp.plugin; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: smartrcp.plugin.Activator
+Bundle-Vendor: smartinvoke
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ cn.smartinvoke.smartrcp.core;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: cn.smartinvoke.jar,
+ flex-messaging-common.jar,
+ flex-messaging-core.jar,
+ .
