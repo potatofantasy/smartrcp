@@ -41,6 +41,7 @@
 					
 				}else if(evt.type==CPartEvent.Part_Activated){
 					str+=" actived";
+					
 					var modulePath:String=evt.taget.getModulePath();
 					if(modulePath.indexOf(".swf")!=-1){//是flash窗口
 					    var path:String=modulePath;
@@ -112,8 +113,8 @@
 			      }
 				  return;	
 				}
-				var path:String=CApplication.Instance.getBaseFolder()+"/"+modulePath;
-				path=path.substr(0,path.length-4)+".mxml";
+				var path:String=CApplication.Instance.getBaseFolder()+"/srcview/source/"+modulePath;
+				path=path.substr(0,path.length-4)+".mxml.html";
 				/**var fileReader:RemoteObject=new RemoteObject();
 				fileReader.create("java.io.FileReader",[path]);
 				//根据fileReader对象创建BufferedReader对象
@@ -136,6 +137,7 @@
 			    reader.gc();
 			    fileReader.gc();
 			    */
+			    Alert.show(path);
 			    //显示文件
 			    this.showModuleContent(path);
 			}
@@ -147,7 +149,7 @@
 			    var viewers:ArrayCollection=ViewManager.Instance.findFlashViewers(browserId);
 			    if(viewers!=null && viewers.length>0){
 			    	var viewer:FlashViewer=viewers[0] as FlashViewer;
-			    	viewer.invoke("showSourceCode",[path]);
+			    	viewer.invoke("setHtml",[path]);
 			    }
 			}
 		]]>

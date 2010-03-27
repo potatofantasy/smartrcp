@@ -22,6 +22,7 @@
 			  	CActionManager.Instance.addAction(action);
 			  	CActionManager.Instance.addListener(action.actionId,this.onMenuClick,this);
 			  	appMenuBar.addMenuItem(action.actionId,"测试");
+			  	
 			}
 			function onMenuClick(evt:CActionEvent):void{
 				infoLabel.text=evt.actionId+" "+evt.path;

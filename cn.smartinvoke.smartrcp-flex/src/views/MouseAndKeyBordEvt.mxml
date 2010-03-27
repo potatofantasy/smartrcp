@@ -8,16 +8,32 @@
 			import org.eclipse.swt.SWT;
 			import org.eclipse.swt.widgets.Display;
 			function init():void{
-				Display.getCurrent().addListener(CEventType.KeyDown,this.onKeyDownEvent,this);
-				Display.getCurrent().addListener(SWT.MouseDown,this.onMouseDownEvent,this);
+				//Display类型对象为单例对象，整个SmartRCP程序共享同一个Display对象，该对象
+				//为eclipse rcp 程序中的org.eclipse.swt.widgets.Display类型对象对应。
+				var display:Display=Display.getCurrent();
+				/**
+				 *添加键盘监听器，此处为键盘按下事件
+				 */
+				display.addListener(CEventType.KeyDown,this.onKeyDownEvent,this);
+				/**
+				 *添加鼠标按下事件
+				 */
+				display.addListener(SWT.MouseDown,this.onMouseDownEvent,this);
 			}
+			/**
+			 *键盘按下事件的响应函数
+			 */
 			function onKeyDownEvent(evt:CEvent):void{
+				//键盘ctrl + alt + F1组合键
 				if(evt.stateMask==(SWT.CTRL | SWT.ALT)&& evt.keyCode==SWT.F1){
 				   	this.info.text="ctrl + alt + F1 pressed";
 				}else{
 					this.info.text=evt.keyCode+" down...";
 				}
 			}
+			/**
+			 *鼠标按下事件的响应函数
+			 */
 			function onMouseDownEvent(evt:CEvent):void{
 				this.info.text="鼠标的第"+evt.button+"个按钮按下了";
 			}

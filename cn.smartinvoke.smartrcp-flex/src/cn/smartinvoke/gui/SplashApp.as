@@ -16,7 +16,7 @@ package cn.smartinvoke.gui
 		 *是否自动关闭
 		 */
 		protected var isAutomatic:Boolean=true;
-		protected var waitTime:Number=2000;//等待时间
+		public static var waitTime:Number=2000;//等待时间
 		public function SplashApp()
 		{ 
 			super();
@@ -26,7 +26,7 @@ package cn.smartinvoke.gui
 			//初始化smartinvoke
    			Executor.init();
    			//Alert.show("finish");
-   			setTimeout(this.close,waitTime);
+   			setTimeout(this.close,SplashApp.waitTime);
 		}
 		protected function close():void{
 			//Alert.show(" in close "+this.getAutomatic());
@@ -38,8 +38,8 @@ package cn.smartinvoke.gui
 			try{
 				var win:RemoteObject=new RemoteObject();
 				win.remoteId=GlobalServiceId.Splash_Win;
-				win.call("setPerspective",[this.getPerspective()]);
-				win.call("close",null);
+				win.asyncCall("setPerspective",[this.getPerspective()]);
+				//win.call("close",null);
 				}catch(e:Error){
 					Alert.show(e.message);
 				}

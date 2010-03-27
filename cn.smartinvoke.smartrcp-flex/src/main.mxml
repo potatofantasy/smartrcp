@@ -5,7 +5,7 @@
    	
    </rcp:initialize>
    <mx:Style>
-   	global{ 
+   	global{  
    	 font-size:12px;
    	}
    </mx:Style>
@@ -31,5 +31,4 @@
    		} 
    	]]>
    </mx:Script>
- <!--<mx:Label id="labelInfo"/>-->
 </rcp:RCPApplication>

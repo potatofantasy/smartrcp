@@ -3,6 +3,7 @@
 	  xmlns:rcp="cn.smartinvoke.rcp.*"
 	   paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
 	 layout="vertical" horizontalAlign="center" verticalAlign="middle">
+	 
 	 <mx:Style>
 	 	global{
 	 	font-size:12px;
@@ -19,6 +20,7 @@
 	 		import cn.smartinvoke.rcp.CFolderLayout;
 	 		
 	 		public override function getAutomatic():Boolean{
+	 		   
 			   return true;
 		    }
 	 		public override function getPerspective():CPerspective{
@@ -89,6 +91,7 @@
    			</rcp:actionIds>
    		</rcp:CToolBar>
    	</rcp:toolBar>
+   	<!--窗口-->
    	<rcp:windowConfigurer>
    		<rcp:CWindowConfigurer shellWidth="1000" shellHeight="800" 
    			showPerspectiveBar="false" showStatusLine="true" shellImage="/icons/types.gif"
@@ -110,7 +113,7 @@
 	 	  		/>
 	           <rcp:CFolderLayout viewId="cn.smartinvoke.smartrcp.WebBrowser"
 	            relationship="{CPageLayout.BOTTOM}" ratio="0.5" refLayout="{this.layoutContent}"/>
-	 	    
+	 	       
 	 	  </mx:ArrayCollection>
 	 	</rcp:layouts>
 	  </rcp:CPageLayout>
@@ -122,6 +125,7 @@
         <mx:Label x="138" y="49" text="SmartRCP" width="172" height="54" fontSize="30"/>
         <mx:Label x="65" y="111" text="用Flex写Eclipse RCP程序" fontSize="12"/>
         <mx:ControlBar horizontalAlign="right" x="0" y="296">
+          <mx:Button label="进入" click="onClick()"/><mx:Button label="退出" click="onExitClick()"/>
         </mx:ControlBar>
 </mx:Panel>
 </spl:SplashApp>

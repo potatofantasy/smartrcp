@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" verticalGap="2">
+<mx:Style>
+Application {
+   backgroundImage: Embed(source="assets/bg.swf");
+}
+	global{  
+   	 font-size:12px;
+   	}
+   	Panel {
+   borderStyle: solid;
+   borderAlpha: 0.2;
+   roundedBottomCorners: true;
+   cornerRadius: 3;
+   backgroundAlpha: 0.39;
+   backgroundColor: #666666;
+   shadowDirection: center;
+}
+</mx:Style>
+<mx:Script>
+	<![CDATA[
+		
+	]]>
+</mx:Script>
+<mx:Panel width="50%" height="100%" title="已安装软件">
+	<mx:DataGrid  backgroundAlpha=".2"  width="100%" height="100%">
+            <mx:columns>
+                <mx:DataGridColumn dataField="name" headerText="名称"/>
+                <mx:DataGridColumn dataField="describe" headerText="描述"/>
+                <mx:DataGridColumn dataField="describe" headerText="启动"/>
+                <mx:DataGridColumn dataField="describe" headerText="拆卸"/>
+                <mx:DataGridColumn dataField="updateUrl" headerText="更新"/>
+            </mx:columns>
+     </mx:DataGrid>
+</mx:Panel>
+<mx:Panel width="50%" height="100%" title="未安装软件">
+	<mx:DataGrid  backgroundAlpha=".2"  width="100%" height="100%">
+            <mx:columns>
+                <mx:DataGridColumn dataField="name" headerText="名称"/>
+                <mx:DataGridColumn dataField="describe" headerText="描述"/>
+                <mx:DataGridColumn dataField="describe" headerText="安装"/>
+                <mx:DataGridColumn dataField="describe" headerText="删除"/>
+            </mx:columns>
+     </mx:DataGrid>
+</mx:Panel>
+	<mx:LinkButton  label="hello"/>
+</mx:Application>
