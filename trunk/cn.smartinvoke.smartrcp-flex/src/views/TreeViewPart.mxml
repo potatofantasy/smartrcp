@@ -172,6 +172,7 @@
               </node>
               <node label="窗口管理" module="views/FlashShell_T.swf"/>
               <node label="对话框" module="views/Dialog_T.swf"/>
+              <node label="数据库操作" module="views/DbInvoke.swf"/>
             </node>
            <!-- <node label="扩展API">
                <node label="调用J2SE库"/>

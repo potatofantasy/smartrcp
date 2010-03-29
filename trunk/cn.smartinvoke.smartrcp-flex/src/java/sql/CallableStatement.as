@@ -65,10 +65,10 @@ package java.sql
 	 super();
   }
 
-   public function setFloat(parameterName:String,x:Number):void{
+  /*  public  function setFloat(parameterName:String,x:Number):void{
 	 var retObj:Object=this.call("setFloat",arguments);
 
-   }
+   } */
    public function getSQLXML(parameterIndex:int):SQLXML{
 	 var retObj:Object=this.call("getSQLXML",arguments);
 	 return retObj as SQLXML;
@@ -94,7 +94,7 @@ package java.sql
 	 return retObj as Boolean;
 
    }
-   public function setBoolean(parameterName:String,x:Boolean):void{
+   /* public function setBoolean(parameterName:String,x:Boolean):void{
 	 var retObj:Object=this.call("setBoolean",arguments);
 
    }
@@ -109,7 +109,7 @@ package java.sql
    public function setBinaryStream2(parameterName:String,x:InputStream):void{
 	 var retObj:Object=this.call("setBinaryStream",arguments);
 
-   }
+   } */
    public function getClob(parameterIndex:int):Clob{
 	 var retObj:Object=this.call("getClob",arguments);
 	 return retObj as Clob;
@@ -120,10 +120,10 @@ package java.sql
 	 return retObj as Clob;
 
    }
-   public function setDouble(parameterName:String,x:Number):void{
+   /* public function setDouble(parameterName:String,x:Number):void{
 	 var retObj:Object=this.call("setDouble",arguments);
 
-   }
+   } */
    public function getNCharacterStream(parameterIndex:int):Reader{
 	 var retObj:Object=this.call("getNCharacterStream",arguments);
 	 return retObj as Reader;
@@ -134,7 +134,7 @@ package java.sql
 	 return retObj as Reader;
 
    }
-   public function setBigDecimal(parameterName:String,x:BigDecimal):void{
+   /* public function setBigDecimal(parameterName:String,x:BigDecimal):void{
 	 var retObj:Object=this.call("setBigDecimal",arguments);
 
    }
@@ -145,7 +145,7 @@ package java.sql
    public function setLong(parameterName:String,x:Number):void{
 	 var retObj:Object=this.call("setLong",arguments);
 
-   }
+   } */
    public function getObject(parameterIndex:int):Object{
 	 var retObj:Object=this.call("getObject",arguments);
 	 return retObj;
@@ -197,14 +197,14 @@ package java.sql
 	 return Number(retObj);
 
    }
-   public function setTimestamp(parameterName:String,x:Timestamp):void{
+   /* public function setTimestamp(parameterName:String,x:Timestamp):void{
 	 var retObj:Object=this.call("setTimestamp",arguments);
 
    }
    public function setTimestamp1(parameterName:String,x:Timestamp,cal:Calendar):void{
 	 var retObj:Object=this.call("setTimestamp",arguments);
 
-   }
+   } */
    public function getArray(parameterIndex:int):Array{
 	 var retObj:Object=this.call("getArray",arguments);
 	 return retObj as Array;
@@ -215,7 +215,7 @@ package java.sql
 	 return retObj as Array;
 
    }
-   public function getDate(parameterIndex:int):Date{
+   /* public function getDate(parameterIndex:int):Date{
 	 var retObj:Object=this.call("getDate",arguments);
 	 return retObj as Date;
 
@@ -234,8 +234,8 @@ package java.sql
 	 var retObj:Object=this.call("getDate",arguments);
 	 return retObj as Date;
 
-   }
-   public function setCharacterStream(parameterName:String,reader:Reader,length:int):void{
+   } */
+   /* public function setCharacterStream(parameterName:String,reader:Reader,length:int):void{
 	 var retObj:Object=this.call("setCharacterStream",arguments);
 
    }
@@ -250,7 +250,7 @@ package java.sql
    public function setByte(parameterName:String,x:int):void{
 	 var retObj:Object=this.call("setByte",arguments);
 
-   }
+   } */
    public function getBlob(parameterIndex:int):Blob{
 	 var retObj:Object=this.call("getBlob",arguments);
 	 return retObj as Blob;
@@ -261,10 +261,10 @@ package java.sql
 	 return retObj as Blob;
 
    }
-   public function setRowId(parameterName:String,x:RowId):void{
+  /*  public function setRowId(parameterName:String,x:RowId):void{
 	 var retObj:Object=this.call("setRowId",arguments);
 
-   }
+   } */
    public function getNString(parameterIndex:int):String{
 	 var retObj:Object=this.call("getNString",arguments);
 	 return retObj as String;
@@ -285,7 +285,7 @@ package java.sql
 	 return retObj as URL;
 
    }
-   public function setAsciiStream(parameterName:String,x:InputStream,length:int):void{
+   /* public function setAsciiStream(parameterName:String,x:InputStream,length:int):void{
 	 var retObj:Object=this.call("setAsciiStream",arguments);
 
    }
@@ -296,7 +296,7 @@ package java.sql
    public function setAsciiStream2(parameterName:String,x:InputStream):void{
 	 var retObj:Object=this.call("setAsciiStream",arguments);
 
-   }
+   } */
    public function getString(parameterIndex:int):String{
 	 var retObj:Object=this.call("getString",arguments);
 	 return retObj as String;
@@ -327,11 +327,11 @@ package java.sql
 	 return Number(retObj);
 
    }
-   public function setBytes(parameterName:String,x[]:int):void{
+  /*  public function setBytes(parameterName:String,x[]:int):void{
 	 var retObj:Object=this.call("setBytes",arguments);
 
-   }
-   public function setString(parameterName:String,x:String):void{
+   } */
+   /* public function setString(parameterName:String,x:String):void{
 	 var retObj:Object=this.call("setString",arguments);
 
    }
@@ -366,7 +366,7 @@ package java.sql
    public function setNClob2(parameterName:String,reader:Reader):void{
 	 var retObj:Object=this.call("setNClob",arguments);
 
-   }
+   } */
    public function registerOutParameter(parameterIndex:int,sqlType:int):void{
 	 var retObj:Object=this.call("registerOutParameter",arguments);
 
@@ -421,10 +421,10 @@ package java.sql
 	 return retObj as Timestamp;
 
    }
-   public function setShort(parameterName:String,x:int):void{
+   /* public function setShort(parameterName:String,x:int):void{
 	 var retObj:Object=this.call("setShort",arguments);
 
-   }
+   } */
    public function getRowId(parameterIndex:int):RowId{
 	 var retObj:Object=this.call("getRowId",arguments);
 	 return retObj as RowId;
@@ -435,7 +435,7 @@ package java.sql
 	 return retObj as RowId;
 
    }
-   public function setObject(parameterName:String,x:Object,targetSqlType:int,scale:int):void{
+   /* public function setObject(parameterName:String,x:Object,targetSqlType:int,scale:int):void{
 	 var retObj:Object=this.call("setObject",arguments);
 
    }
@@ -450,7 +450,7 @@ package java.sql
    public function setInt(parameterName:String,x:int):void{
 	 var retObj:Object=this.call("setInt",arguments);
 
-   }
+   } */
    public function getRef(parameterIndex:int):Ref{
 	 var retObj:Object=this.call("getRef",arguments);
 	 return retObj as Ref;
@@ -471,14 +471,14 @@ package java.sql
 	 return retObj as NClob;
 
    }
-   public function setTime(parameterName:String,x:Time):void{
+   /* public function setTime(parameterName:String,x:Time):void{
 	 var retObj:Object=this.call("setTime",arguments);
 
    }
    public function setTime1(parameterName:String,x:Time,cal:Calendar):void{
 	 var retObj:Object=this.call("setTime",arguments);
 
-   }
+   } */
    public function getInt(parameterIndex:int):int{
 	 var retObj:Object=this.call("getInt",arguments);
 	 return Number(retObj);
@@ -509,14 +509,14 @@ package java.sql
 	 return retObj as Reader;
 
    }
-   public function setDate(parameterName:String,x:Date):void{
+   /* public function setDate(parameterName:String,x:Date):void{
 	 var retObj:Object=this.call("setDate",arguments);
 
    }
    public function setDate1(parameterName:String,x:Date,cal:Calendar):void{
 	 var retObj:Object=this.call("setDate",arguments);
 
-   }
+   } */
    public function getTime(parameterIndex:int):Time{
 	 var retObj:Object=this.call("getTime",arguments);
 	 return retObj as Time;
@@ -537,7 +537,7 @@ package java.sql
 	 return retObj as Time;
 
    }
-   public function setNull(parameterName:String,sqlType:int):void{
+   /* public function setNull(parameterName:String,sqlType:int):void{
 	 var retObj:Object=this.call("setNull",arguments);
 
    }
@@ -564,7 +564,7 @@ package java.sql
    public function setSQLXML(parameterName:String,xmlObject:SQLXML):void{
 	 var retObj:Object=this.call("setSQLXML",arguments);
 
-   }
+   } */
  }
 
 }

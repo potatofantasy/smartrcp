@@ -17,7 +17,7 @@ package java.sql
 	 var retObj:Object=this.call("free",arguments);
 
    }
-   public function setCharacterStream():Writer{
+  /*  public function setCharacterStream():Writer{
 	 var retObj:Object=this.call("setCharacterStream",arguments);
 	 return retObj as Writer;
 
@@ -26,7 +26,7 @@ package java.sql
 	 var retObj:Object=this.call("setResult",arguments);
 	 return retObj as T;
 
-   }
+   } */
    public function setString(value:String):void{
 	 var retObj:Object=this.call("setString",arguments);
 
@@ -41,11 +41,11 @@ package java.sql
 	 return retObj as String;
 
    }
-   public function getSource(sourceClass:Class):T{
+  /*  public function getSource(sourceClass:Class):T{
 	 var retObj:Object=this.call("getSource",arguments);
 	 return retObj as T;
 
-   }
+   } */
    public function setBinaryStream():OutputStream{
 	 var retObj:Object=this.call("setBinaryStream",arguments);
 	 return retObj as OutputStream;

@@ -1,8 +1,6 @@
 package java.sql
 {
  import cn.smartinvoke.RemoteObject;
- import java.lang.Class;
- import java.lang.Class;
 
 [Bindable]
 [RemoteClass(alias="java.sql.Wrapper")]
@@ -11,7 +9,7 @@ package java.sql
 	 super();
   }
 
-   public function unwrap(iface:Class):T{
+  /*  public function unwrap(iface:Class):T{
 	 var retObj:Object=this.call("unwrap",arguments);
 	 return retObj as T;
 
@@ -20,7 +18,7 @@ package java.sql
 	 var retObj:Object=this.call("isWrapperFor",arguments);
 	 return retObj as Boolean;
 
-   }
+   } */
  }
 
 }

@@ -1,91 +1,13 @@
 package java.sql
 {
  import cn.smartinvoke.RemoteObject;
- import java.sql.Wrapper;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
+ 
+ import java.io.InputStream;
  import java.io.Reader;
  import java.math.BigDecimal;
- import java.math.BigDecimal;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
- import java.math.BigDecimal;
- import java.math.BigDecimal;
- import java.math.BigDecimal;
- import java.math.BigDecimal;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.sql.Timestamp;
- import java.sql.Timestamp;
- import java.sql.Time;
- import java.sql.Time;
- import java.sql.Ref;
- import java.sql.Ref;
- import java.sql.Date;
- import java.sql.Date;
- import java.util.Calendar;
- import java.sql.Date;
- import java.util.Calendar;
- import java.sql.Date;
  import java.net.URL;
- import java.net.URL;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.sql.Array;
- import java.sql.Array;
- import java.sql.Timestamp;
- import java.sql.Timestamp;
  import java.util.Calendar;
- import java.sql.Timestamp;
- import java.util.Calendar;
- import java.sql.Timestamp;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.Reader;
- import java.io.Reader;
- import java.sql.Blob;
- import java.sql.Blob;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.io.InputStream;
- import java.sql.Date;
- import java.sql.Date;
- import java.sql.Clob;
- import java.sql.Clob;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
- import java.io.Reader;
- import java.sql.Time;
- import java.sql.Time;
- import java.util.Calendar;
- import java.sql.Time;
- import java.util.Calendar;
- import java.sql.Time;
- import java.io.InputStream;
- import java.io.InputStream;
+
 
 [Bindable]
 [RemoteClass(alias="java.sql.ResultSet")]
@@ -393,14 +315,14 @@ package java.sql
 	 return Number(retObj);
 
    }
-   public function updateBytes(columnIndex:int,x[]:int):void{
+   /* public function updateBytes(columnIndex:int,x[]:int):void{
 	 var retObj:Object=this.call("updateBytes",arguments);
 
    }
    public function updateBytes1(columnLabel:String,x[]:int):void{
 	 var retObj:Object=this.call("updateBytes",arguments);
 
-   }
+   } */
    public function findColumn(columnLabel:String):int{
 	 var retObj:Object=this.call("findColumn",arguments);
 	 return Number(retObj);
@@ -437,24 +359,24 @@ package java.sql
 	 var retObj:Object=this.call("refreshRow",arguments);
 
    }
-   public function getDate(columnIndex:int):Date{
+   public function getDate(columnIndex:int):RemoteObject{
 	 var retObj:Object=this.call("getDate",arguments);
-	 return retObj as Date;
+	 return retObj as RemoteObject;
 
    }
-   public function getDate1(columnLabel:String):Date{
+   public function getDate1(columnLabel:String):RemoteObject{
 	 var retObj:Object=this.call("getDate",arguments);
-	 return retObj as Date;
+	 return retObj as RemoteObject;
 
    }
-   public function getDate2(columnIndex:int,cal:Calendar):Date{
+   public function getDate2(columnIndex:int,cal:Calendar):RemoteObject{
 	 var retObj:Object=this.call("getDate",arguments);
-	 return retObj as Date;
+	 return retObj as RemoteObject;
 
    }
-   public function getDate3(columnLabel:String,cal:Calendar):Date{
+   public function getDate3(columnLabel:String,cal:Calendar):RemoteObject{
 	 var retObj:Object=this.call("getDate",arguments);
-	 return retObj as Date;
+	 return retObj as RemoteObject;
 
    }
    public function getFetchSize():int{
@@ -666,11 +588,11 @@ package java.sql
 	 return retObj as RowId;
 
    }
-   public function getWarnings():SQLWarning{
+  /*  public function getWarnings():SQLWarning{
 	 var retObj:Object=this.call("getWarnings",arguments);
 	 return retObj as SQLWarning;
 
-   }
+   } */
    public function updateNString(columnIndex:int,nString:String):void{
 	 var retObj:Object=this.call("updateNString",arguments);
 
@@ -839,11 +761,11 @@ package java.sql
 	 return retObj as Boolean;
 
    }
-   public function updateDate(columnIndex:int,x:Date):void{
+   public function updateDate(columnIndex:int,x:RemoteObject):void{
 	 var retObj:Object=this.call("updateDate",arguments);
 
    }
-   public function updateDate1(columnLabel:String,x:Date):void{
+   public function updateDate1(columnLabel:String,x:RemoteObject):void{
 	 var retObj:Object=this.call("updateDate",arguments);
 
    }

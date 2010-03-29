@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
 	layout="absolute" horizontalAlign="center" verticalAlign="middle">
-	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import java.sql.Connection;
+			import smartrcp.db.DbUtil;
+			function onConn():void{
+				DbUtil.Instance.loadDriver("com.mysql.jdbc.Driver");
+				DbUtil.Instance.getConnection("jdbc:mysql://localhost/test","root","123",function (ret:Object):void{
+					if(ret is Connection){
+						var con:Connection=ret as Connection;
+					}else{
+						Alert.show("连接失败"+ret);
+					}
+				},this);
+			}
+		]]>
+	</mx:Script>
+	<mx:Button label="连接数据库" click="onConn()"/>
 </gui:RCPModule>

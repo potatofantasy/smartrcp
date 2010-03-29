@@ -85,11 +85,11 @@ package java.sql
 	 return retObj as Boolean;
 
    }
-   public function getRowIdLifetime():RowIdLifetime{
+   /* public function getRowIdLifetime():RowIdLifetime{
 	 var retObj:Object=this.call("getRowIdLifetime",arguments);
 	 return retObj as RowIdLifetime;
-
-   }
+ 
+   }*/
    public function ownInsertsAreVisible(type:int):Boolean{
 	 var retObj:Object=this.call("ownInsertsAreVisible",arguments);
 	 return retObj as Boolean;
@@ -710,11 +710,11 @@ package java.sql
 	 return retObj as String;
 
    }
-   public function getTables(catalog:String,schemaPattern:String,tableNamePattern:String,types[]:String):ResultSet{
+   /* public function getTables(catalog:String,schemaPattern:String,tableNamePattern:String,types[]:String):ResultSet{
 	 var retObj:Object=this.call("getTables",arguments);
 	 return retObj as ResultSet;
 
-   }
+   } */
    public function allProceduresAreCallable():Boolean{
 	 var retObj:Object=this.call("allProceduresAreCallable",arguments);
 	 return retObj as Boolean;

@@ -4,10 +4,11 @@ package java.sql
 
 [Bindable]
 [RemoteClass(alias="java.sql.Date")]
- public class Date extends java.util.Date {
+ public class Date extends RemoteObject {
   public function Date(){
 	 super();
-  }
+	 
+  } 
 
    public function setTime(date:Number):void{
 	 var retObj:Object=this.call("setTime",arguments);
@@ -22,7 +23,7 @@ package java.sql
 	 var retObj:Object=this.call("setHours",arguments);
 
    }
-  public static function create_Date(year:int,month:int,day:int):Date{
+ /*  public static function create_Date(year:int,month:int,day:int):Date{
 	   var remoteObj:Date=new Date();
 	   remoteObj.createRemoteObject(null,arguments);
 	   return remoteObj;
@@ -32,7 +33,7 @@ package java.sql
 	   var remoteObj:Date=new Date();
 	   remoteObj.createRemoteObject(null,arguments);
 	   return remoteObj;
-  }
+  } */
 
    public function getHours():int{
 	 var retObj:Object=this.call("getHours",arguments);

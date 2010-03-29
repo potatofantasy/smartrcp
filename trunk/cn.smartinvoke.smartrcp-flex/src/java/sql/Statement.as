@@ -65,11 +65,11 @@ package java.sql
 	 return Number(retObj);
 
    }
-   public function getWarnings():SQLWarning{
+   /* public function getWarnings():SQLWarning{
 	 var retObj:Object=this.call("getWarnings",arguments);
 	 return retObj as SQLWarning;
 
-   }
+   } */
    public function getMaxRows():int{
 	 var retObj:Object=this.call("getMaxRows",arguments);
 	 return Number(retObj);
@@ -107,7 +107,7 @@ package java.sql
 	 return retObj as Boolean;
 
    }
-   public function execute2(sql:String,columnIndexes[]:int):Boolean{
+  /*  public function execute2(sql:String,columnIndexes[]:int):Boolean{
 	 var retObj:Object=this.call("execute",arguments);
 	 return retObj as Boolean;
 
@@ -116,7 +116,7 @@ package java.sql
 	 var retObj:Object=this.call("execute",arguments);
 	 return retObj as Boolean;
 
-   }
+   } */
    public function setFetchSize(rows:int):void{
 	 var retObj:Object=this.call("setFetchSize",arguments);
 
@@ -159,7 +159,7 @@ package java.sql
 	 return Number(retObj);
 
    }
-   public function executeUpdate2(sql:String,columnIndexes[]:int):int{
+   /* public function executeUpdate2(sql:String,columnIndexes[]:int):int{
 	 var retObj:Object=this.call("executeUpdate",arguments);
 	 return Number(retObj);
 
@@ -168,7 +168,7 @@ package java.sql
 	 var retObj:Object=this.call("executeUpdate",arguments);
 	 return Number(retObj);
 
-   }
+   } */
    public function setMaxRows(max:int):void{
 	 var retObj:Object=this.call("setMaxRows",arguments);
 

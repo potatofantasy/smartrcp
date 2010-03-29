@@ -2,11 +2,8 @@ package java.sql
 {
  import cn.smartinvoke.RemoteObject;
  import java.sql.Wrapper;
- import java.util.Properties;
- import java.util.Properties;
-
 [Bindable]
-[RemoteClass(alias="java.sql.Connection")]
+[RemoteClass(alias="smartrcp.db.CConnection")]
  public class Connection extends Wrapper {
   public function Connection(){
 	 super();
@@ -56,11 +53,11 @@ package java.sql
 	 return retObj as String;
 
    }
-   public function getWarnings():SQLWarning{
+   /* public function getWarnings():SQLWarning{
 	 var retObj:Object=this.call("getWarnings",arguments);
 	 return retObj as SQLWarning;
 
-   }
+   } */
    public function setHoldability(holdability:int):void{
 	 var retObj:Object=this.call("setHoldability",arguments);
 
@@ -139,7 +136,7 @@ package java.sql
 	 return retObj as PreparedStatement;
 
    }
-   public function prepareStatement4(sql:String,columnIndexes[]:int):PreparedStatement{
+   /* public function prepareStatement4(sql:String,columnIndexes[]:int):PreparedStatement{
 	 var retObj:Object=this.call("prepareStatement",arguments);
 	 return retObj as PreparedStatement;
 
@@ -148,15 +145,15 @@ package java.sql
 	 var retObj:Object=this.call("prepareStatement",arguments);
 	 return retObj as PreparedStatement;
 
-   }
+   } */
    public function setClientInfo(name:String,value:String):void{
 	 var retObj:Object=this.call("setClientInfo",arguments);
 
    }
-   public function setClientInfo1(properties:Properties):void{
+   /* public function setClientInfo1(properties:Properties):void{
 	 var retObj:Object=this.call("setClientInfo",arguments);
 
-   }
+   } */
    public function isClosed():Boolean{
 	 var retObj:Object=this.call("isClosed",arguments);
 	 return retObj as Boolean;
@@ -195,11 +192,11 @@ package java.sql
 	 return retObj as String;
 
    }
-   public function getClientInfo1():Properties{
+   /* public function getClientInfo1():Properties{
 	 var retObj:Object=this.call("getClientInfo",arguments);
 	 return retObj as Properties;
 
-   }
+   } */
    public function setCatalog(catalog:String):void{
 	 var retObj:Object=this.call("setCatalog",arguments);
 
