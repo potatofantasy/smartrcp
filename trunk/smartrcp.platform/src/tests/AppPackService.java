@@ -1,21 +1,11 @@
-package cn.smartinvoke.smartrcp.app.pack;
-
+package tests;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
-import org.eclipse.core.runtime.jobs.Job;
-
 import cn.smartinvoke.IServerObject;
-import cn.smartinvoke.smartrcp.app.CAppService;
-import cn.smartinvoke.smartrcp.app.download.http.ICompleteListener;
-import cn.smartinvoke.smartrcp.app.download.http.SiteFileFetch;
-import cn.smartinvoke.smartrcp.app.download.http.SiteInfoBean;
-import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 import cn.smartinvoke.util.HelpMethods;
 /**
  * 应用程序管理类
@@ -39,15 +29,8 @@ public class AppPackService implements IServerObject{
 		  if(spl!=-1){
 			saveName=downloadUrl.substring(spl+1);
 			if(saveName.endsWith(".rcp")){
-			 SiteInfoBean bean=new SiteInfoBean(downloadUrl,getSaveFolder(),saveName,1);
-			 SiteFileFetch job =new SiteFileFetch("下载", bean,new ICompleteListener() {
-					public void complete(CAppInfo appInfo) {
-						fireEvents(appInfo);
-					}
-				 });
-			 job.setUser(true);
-			 
-			 job.schedule();
+
+
 			}
 		  }
     	}
@@ -73,7 +56,7 @@ public class AppPackService implements IServerObject{
     		    out.flush();
     		    out.close();
     		   }catch(Exception e){
-    			   throw new RuntimeException("无法将"+file.getAbsolutePath()+"拷贝到"+getSaveFolder()+"目录");
+    			   throw new RuntimeException("无法将"+file.getAbsolutePath()+"拷贝到"+this.getSaveFolder()+"目录");
     		   }finally{
     			   if(source!=null){
     				   try{source.close();}catch(Exception e){};
@@ -90,28 +73,23 @@ public class AppPackService implements IServerObject{
      * 返回所有程序包的信息
      * @return
      */
-    public List<CAppInfo> getApps(){
-    	List<CAppInfo> ret=new LinkedList<CAppInfo>();
-    	File folder=new File(getSaveFolder());
-    	File[] filePacks=folder.listFiles();
-    	if(filePacks!=null){
-    		for(int i=0;i<filePacks.length;i++){
-    		   String name=filePacks[i].getName();
-    		   if(name.endsWith(".rcp")){
-    			String packPath=filePacks[i].getAbsolutePath();
-    			if(!new File(packPath+File.separator+name+".info").exists()){
-    			  try{
-    				  ret.add(PackageTool.readBasicInfo(packPath));
-    			  }catch(Exception e){//跳过文件格式不正确的情况
-    				  
-    			  }
-    			}
-    		   }
-    		}
-    	}
-    	return ret;
+    public List<String> getApps(){
+    	List<String> ret=new LinkedList<String>();
+    		for(int i=0;i<5;i++){
+    			ret.add(String.valueOf(i));
+     		}
+     	return ret;
     }
-    
+    /**
+     * 安装指定路径下的程序
+     * @param path
+     */
+    public void installApp(String path){
+    	if(path!=null){
+    	 if(new File(path).exists()){
+    	 }
+    	}
+    }
     /**
      * 删除指定路径下的打包程序
      * @param path
@@ -119,26 +97,6 @@ public class AppPackService implements IServerObject{
     public void deleteAppPack(String path){
     	if(path!=null){
     		new File(path).delete();
-    	}
-    }
-    private static List<CEventBean> eventBeans=new LinkedList<CEventBean>();
-    /**
-     * 
-     * @param eventBean
-     */
-    public void addListener(CEventBean eventBean){
-      if(eventBean!=null){
-    	eventBeans.add(eventBean);
-      }
-    }
-    /**
-     * 唤醒flex监听器
-     * @param appInfo
-     */
-    private void fireEvents(CAppInfo appInfo){
-    	List<CEventBean> listeners=eventBeans;
-    	for(int i=0;i<listeners.size();i++){
-    		listeners.get(i).fireEvent(appInfo);
     	}
     }
     /**
@@ -153,7 +111,6 @@ public class AppPackService implements IServerObject{
     	}
     	return path;
     }
-    
 	/**
 	 * @param args
 	 */

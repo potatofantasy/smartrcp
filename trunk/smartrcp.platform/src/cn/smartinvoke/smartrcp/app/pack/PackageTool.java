@@ -37,7 +37,7 @@ public class PackageTool {
 		    out=new DataOutputStream(new FileOutputStream(saveFolder+File.separator+fileName));
 		    appInfo.init();
 		    out.writeUTF(appInfo.name);
-		    out.writeFloat(appInfo.version); 
+		    out.writeUTF(appInfo.version); 
 		    out.writeUTF(appInfo.provider);
 		    out.writeUTF(appInfo.updateUrl);//更新地址
 		    out.writeUTF(appInfo.describe);
@@ -117,7 +117,7 @@ public class PackageTool {
 		try{
 		  in=new DataInputStream(new FileInputStream(appFilePath));
 		  appInfo.name=in.readUTF();
-		  appInfo.version=in.readFloat();
+		  appInfo.version=in.readUTF();
 		  //读取提供者，更新地址
 		  appInfo.provider=in.readUTF();
 		  appInfo.updateUrl=in.readUTF();
@@ -139,13 +139,14 @@ public class PackageTool {
 	 * @param appFilePath 本地文件路径
 	 * @param targetPath 释放的目标路径
 	 */
-	public void uncompress(String appFilePath,String targetPath){
+	public CAppInfo uncompress(String appFilePath,String targetPath){
 		DataInputStream in=null;
+		CAppInfo appInfo=null;
 		try{
 		  in=new DataInputStream(new FileInputStream(appFilePath));
-		  CAppInfo appInfo=new CAppInfo();
+		  appInfo=new CAppInfo();
 		  appInfo.name=in.readUTF();
-		  appInfo.version=in.readFloat();
+		  appInfo.version=in.readUTF();
 		  //读取提供者，更新地址
 		  appInfo.provider=in.readUTF();
 		  appInfo.updateUrl=in.readUTF();
@@ -190,6 +191,7 @@ public class PackageTool {
 				try{in.close();}catch(Exception e){};
 			}
 		}
+		return appInfo;
 	}
 	private void writeFileList(String appFolderStr,DataInputStream in)throws Exception{
 	    //uncompress模块文件
@@ -215,7 +217,7 @@ public class PackageTool {
 		int width=in.readInt();int height=in.readInt();
 		appInfo.splashWidth=width;appInfo.splashHeight=height;
 		
-		String configFilePath=appFolderStr+File.separator+"config.ini";
+		String configFilePath=appFolderStr+File.separator+Key_Config_File;
 		FileWriter fileWriter=new FileWriter(configFilePath);
 		fileWriter.write(ConfigerLoader.key_splash+"="+appInfo.splashSwfPath+"\r\n");
 		fileWriter.write(ConfigerLoader.key_splash_size+"="+width+"*"+height+"\r\n");
@@ -223,20 +225,25 @@ public class PackageTool {
 		fileWriter.flush();
 		fileWriter.close();
 	}
+	public static final String Key_Modules_Folder="modules";
+	public static final String Key_Icons_Folder="icons";
+	
+	public static final String Key_Config_File="config.ini";
+	public static final String Key_Property_File="property.prop";
 	/**
 	 * 将程序的属性信息写入到熟悉文件中
 	 * @param appFolderStr
 	 * @param appInfo
 	 */
 	private void writePropertyFile(String appFolderStr,CAppInfo appInfo)throws Exception{
-		String path=appFolderStr+File.separator+"property.prop";
+		String path=appFolderStr+File.separator+Key_Property_File;
 		File propFile=new File(path);
 		propFile.createNewFile();
 		DataOutputStream out=null;
 		try{
 		 out=new DataOutputStream(new FileOutputStream(propFile));
 		 out.writeUTF(appInfo.name);
-		 out.writeFloat(appInfo.version); 
+		 out.writeUTF(appInfo.version); 
 		 out.writeUTF(appInfo.provider);
 		 out.writeUTF(appInfo.updateUrl);//更新地址
 		 out.writeUTF(appInfo.describe);
@@ -279,8 +286,8 @@ public class PackageTool {
 	 * @param args
 	 */
 	public static void main(String[] args)throws Exception {
-		unCompress();
-		//compress();
+		//unCompress();
+		compress();
 	}
 	static void unCompress(){
 		new PackageTool().uncompress("C:/牛逼_1.22.rcp", "C:/rcp");
@@ -289,9 +296,9 @@ public class PackageTool {
 		CAppInfo appInfo=new CAppInfo();
 	   	appInfo.basePath="F:/explort/SmartRCP/plugins/start_1.0";
 	   	appInfo.name="牛逼";
-	   	appInfo.version=1.22f;
+	   	appInfo.version="2010-03-08";
 	   	appInfo.provider="smartinvoke";
-	   	appInfo.describe="describe";
+	   	appInfo.describe="在房地产市场频遇调控的同时";
 	   	appInfo.logoPath="C:/smartrcp.png";
 	   	appInfo.mainSwfPath="F:/explort/SmartRCP/plugins/start_1.0/modules/SmartRCPDemo.swf";
 	   	appInfo.splashSwfPath="F:/explort/SmartRCP/plugins/start_1.0/modules/Splash.swf";
@@ -299,7 +306,6 @@ public class PackageTool {
 	   	
 	   	appInfo.addLib("C:/smartrcp.io.jar");
 	   	appInfo.addLib("C:/cn.smartinvoke.smartrcp.io_1.0.0.jar");
-	   	
 	   	
 	   	new PackageTool().compress(appInfo, "C:");
 	}

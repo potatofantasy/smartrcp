@@ -32,7 +32,7 @@ public class Perspective implements IPerspectiveFactory {
 		folderLayout.addView(progressId);
 		
 		layout.getViewLayout(PlatAppMana.ID).setCloseable(false);
-		layout.getViewLayout(AppBrowserView.ID).setCloseable(false);
+		layout.getViewLayout(AppBrowserView.ID+":"+appViewSecId).setCloseable(false);
 		layout.getViewLayout(progressId).setCloseable(false);
 		//
 	    

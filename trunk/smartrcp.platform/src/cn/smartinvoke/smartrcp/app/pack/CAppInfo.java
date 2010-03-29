@@ -26,7 +26,7 @@ public class CAppInfo {
 	//应用程序名称必须符合文件（夹）名规范
     public String name;
     //版本号
-    public float version;
+    public String version;
     //提供者
     public String provider;
     //logo.png文件路径，只能是png格式
@@ -69,12 +69,12 @@ public class CAppInfo {
     	this.splashSwfPath=this.splashSwfPath.substring(this.basePath.length());
     	
     	//初始化模块路径
-    	File folder = new File(this.basePath+File.separator+"modules");
+    	File folder = new File(this.basePath+File.separator+PackageTool.Key_Modules_Folder);
     	this.initFileList(folder, this.modules);
 		//初始化图标路径
-    	folder=new File(this.basePath+File.separator+"icons");
+    	folder=new File(this.basePath+File.separator+PackageTool.Key_Icons_Folder);
     	this.initFileList(folder, this.icons);
-           	
+        
     }
     private void initFileList(File folder,List<String> list){
     	//List<String> ret = new LinkedList<String>();

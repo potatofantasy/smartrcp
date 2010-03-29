@@ -31,6 +31,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.smartrcp.app.download.http.SiteFileFetch;
 import cn.smartinvoke.smartrcp.app.download.http.SiteInfoBean;
+import cn.smartinvoke.smartrcp.app.pack.AppPackService;
 
 import smartrcp.platform.ApplicationWorkbenchAdvisor;
 
@@ -193,15 +194,7 @@ class DownloadFun extends BrowserFunction{
 		if (args != null && args.length > 0) {
 			final String downloadUrl=args[0].toString();
 			//解析下载文件名称
-			String saveName="temp.rcp";
-			int spl=downloadUrl.lastIndexOf('/');
-			if(spl!=-1){
-				saveName=downloadUrl.substring(spl+1);
-			}
-			SiteInfoBean bean=new SiteInfoBean(downloadUrl,"C:/",saveName,1);
-			Job job =new SiteFileFetch("下载", bean);
-			job.setUser(true);
-			job.schedule();
+			new AppPackService().downloadAppFromUrl(downloadUrl);
 			
 		}
 		return null;
