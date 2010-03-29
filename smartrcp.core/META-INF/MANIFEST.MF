@@ -18,8 +18,10 @@ Export-Package: cn.smartinvoke,
  cn.smartinvoke.smartrcp.gui.browser,
  cn.smartinvoke.smartrcp.gui.control,
  cn.smartinvoke.smartrcp.gui.module,
- cn.smartinvoke.util
+ cn.smartinvoke.util,
+ smartrcp.db
 Bundle-ClassPath: .,
  flex-messaging-common.jar,
  flex-messaging-core.jar,
- cn.smartinvoke.jar
+ cn.smartinvoke.jar,
+ mysql-connector-java-5.0.6-bin.jar

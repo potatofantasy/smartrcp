@@ -22,6 +22,8 @@ public class GlobalServiceId {
     
     public static final String   Flex_CEvent_Notifer="smartrcpCEvent_Notifer";
     
+    public static final String DB_Util="smartrcp_db_util";  
+    
 	public GlobalServiceId() {
 		
 	}

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="mysql-connector-java-5.0.6-bin.jar"/>
 	<classpathentry exported="true" kind="lib" path="cn.smartinvoke.jar"/>
 	<classpathentry exported="true" kind="lib" path="flex-messaging-common.jar"/>
 	<classpathentry exported="true" kind="lib" path="flex-messaging-core.jar"/>
