@@ -9,7 +9,7 @@ package smartrcp.app.pack
 	//应用程序名称必须符合文件（夹）名规范
     public var name:String;
     //版本号
-    public var version:Number;
+    public var version:String;
     //提供者
     public var provider:String;
     //logo.png文件路径，只能是png格式
