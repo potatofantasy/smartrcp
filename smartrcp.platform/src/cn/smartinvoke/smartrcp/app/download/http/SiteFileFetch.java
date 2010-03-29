@@ -8,6 +8,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import cn.smartinvoke.smartrcp.app.pack.CAppInfo;
+import cn.smartinvoke.smartrcp.app.pack.PackageTool;
+
 import smartrcp.platform.Application;
 
 public class SiteFileFetch extends Job {
@@ -22,9 +25,12 @@ public class SiteFileFetch extends Job {
 	File tmpFile; // 文件下载的临时信息
 	DataOutputStream output; // 输出到文件的输出流
     private IProgressMonitor monitor;
+    //下载完成后的监听器
+    public ICompleteListener completeListener;
     
-	public SiteFileFetch(String taskName,SiteInfoBean bean){
+	public SiteFileFetch(String taskName,SiteInfoBean bean,ICompleteListener completeListener){
 		super(taskName);
+		this.completeListener=completeListener;
 		siteInfoBean = bean;
 		tmpFile = new File(bean.getSFilePath() + File.separator
 				+ bean.getSFileName() + ".info");
@@ -108,6 +114,12 @@ public class SiteFileFetch extends Job {
 			}
 			if(!isErrorShutDown){//不是错误退出
 			  finishDownload("文件"+siteInfoBean.getSSiteURL()+"下载结束",false);
+			  //唤醒监听器
+			  if(completeListener!=null){ 
+			   String savePath=siteInfoBean.getSFilePath()+File.separator+siteInfoBean.getSFileName();
+			   CAppInfo appInfo=PackageTool.readBasicInfo(savePath);
+			   completeListener.complete(appInfo);
+			  }
 			  tmpFile.delete();//删除配置文件
 			}
 			
