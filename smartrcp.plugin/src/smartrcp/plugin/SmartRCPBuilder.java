@@ -21,6 +21,8 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+import smartrcp.db.DbUtil;
+
 import cn.smartinvoke.IServiceObjectCreator;
 import cn.smartinvoke.TypeMapper;
 import cn.smartinvoke.gui.FlashViewer;
@@ -87,6 +89,7 @@ public class SmartRCPBuilder {
 			}
  		};
  	    // ----------- 注册全局服务
+ 		objectPool.putObject(new DbUtil(), GlobalServiceId.DB_Util);
 		objectPool.putObject(new CApplication(), GlobalServiceId.Cur_Application);
 		objectPool.putObject(new FlashViewInvoker(),GlobalServiceId.FlashView_Invoker);
 		// 添加事件注册器服务
