@@ -1,28 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application 
-	xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" verticalGap="2">
+<mx:Application  backgroundAlpha=".3"
+	xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" verticalGap="2" creationComplete="init()">
 <mx:Style>
-Application {
-   backgroundImage: Embed(source="assets/bg.swf");
-}
+/* Application {
+   backgroundImage: Embed(source="assets/bg1.swf");
+} */
 	global{  
    	 font-size:12px;
    	}
-   	Panel {
+   	ToolTip{
+   	 font-size:12px;
+   	}
+   Panel {
    borderStyle: solid;
-   borderAlpha: 0.2;
-   roundedBottomCorners: true;
-   cornerRadius: 3;
-   backgroundAlpha: 0.39;
-   backgroundColor: #666666;
-   shadowDirection: center;
+   borderAlpha: 0.49;
+   borderThickness: 0;
+   roundedBottomCorners: false;
+   backgroundAlpha: 0.14;
+   backgroundColor: #cccccc;
+   shadowDistance: 2;
 }
 </mx:Style>
 <mx:Script>
 	<![CDATA[
+		import mx.collections.ArrayCollection;
+		import cn.smartinvoke.executor.Executor;
+		import smartrcp.app.pack.AppPackService;
+		private var packService:AppPackService=null;
+		
+		[Bindable]
+		public var packs:ArrayCollection=new ArrayCollection();
+		private function init():void{
+			Executor.init();
+			
+			packService=new AppPackService();
+			
+			this.packs=this.packService.getApps();
+		}
 		
 	]]>
 </mx:Script>
+<mx:Panel width="100%" height="40"  cornerRadius="1">
+	
+</mx:Panel>
+<mx:HBox width="100%" height="100%" y="50">
+
 <mx:Panel width="50%" height="100%" title="已安装软件">
 	<mx:DataGrid  backgroundAlpha=".2"  width="100%" height="100%">
             <mx:columns>
@@ -35,14 +57,84 @@ Application {
      </mx:DataGrid>
 </mx:Panel>
 <mx:Panel width="50%" height="100%" title="未安装软件">
-	<mx:DataGrid  backgroundAlpha=".2"  width="100%" height="100%">
+	<mx:DataGrid dataProvider="{this.packs}"  backgroundAlpha=".2"  width="100%" height="100%">
             <mx:columns>
                 <mx:DataGridColumn dataField="name" headerText="名称"/>
-                <mx:DataGridColumn dataField="describe" headerText="描述"/>
-                <mx:DataGridColumn dataField="describe" headerText="安装"/>
-                <mx:DataGridColumn dataField="describe" headerText="删除"/>
+                <mx:DataGridColumn dataField="describe" headerText="描述">
+                 <mx:itemRenderer>
+                 	<mx:Component>
+                 	   <mx:HBox horizontalAlign="center">
+                 	   	
+                 		<mx:Button    fontWeight="normal" width="40"
+            icon="@Embed('assets/help.gif')"
+                 			
+                 			 toolTip="{'提供者:'+this.data.provider+'\n 版本号:'+this.data.version+'\n 描述:'+this.data.describe}"/>
+                 			 
+                 	   </mx:HBox>
+                 	</mx:Component>
+                 </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn dataField="describe" headerText="安装">
+                    <mx:itemRenderer>
+                 	<mx:Component>
+                 	<mx:HBox horizontalAlign="center">
+                 	<mx:Script>
+                 		<![CDATA[
+                 			import mx.controls.Alert;
+                 			import smartrcp.app.pack.AppPackService;
+                 			public function onInstallClick():void{
+                 			 if(this.data.packLocation!=null){
+			                   var packService:AppPackService=new AppPackService();
+			                   try{
+			                    packService.installApp(this.data.packLocation);
+			                   }catch(e:Error){
+			                   	Alert.show("无法安装程序"+data.packLocation+"，检查该文件是否存在");
+			                   }finally{
+			                    packService.gc();
+			                   }
+			                 }else{
+			                 	Alert.show("目录为空，检查程序目录是否被修改");
+			                 }
+		                    }
+                 		]]>
+                 	</mx:Script>
+                 		<mx:Button   fontWeight="normal"  width="40" click="onInstallClick()"
+            icon="@Embed('assets/install.gif')"/></mx:HBox>
+                 	</mx:Component>
+                 </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn dataField="describe" headerText="删除">
+                    <mx:itemRenderer>
+                 	<mx:Component>
+                 	<mx:HBox horizontalAlign="center">
+                 	<mx:Script>
+                 		<![CDATA[
+                 			import smartrcp.app.pack.AppPackService;
+                 			import mx.collections.ArrayCollection;
+                 			import mx.controls.DataGrid;
+                 			import mx.controls.Alert;
+                 			function onDelectClick():void{
+                 			   var dataGrid:DataGrid=this.parent.parent as DataGrid;
+                 			   if(dataGrid!=null){
+                 			   	  var packService:AppPackService=new AppPackService();
+                 			   	  packService.deleteAppPack(this.data.packLocation);
+                 			   	  packService.gc();
+                 			   	  
+                 			   	  var dataProvider:ArrayCollection=dataGrid.dataProvider as ArrayCollection;
+                 			   	  var index:int=dataProvider.getItemIndex(this.data);
+                 			   	  dataProvider.removeItemAt(index);
+                 			   }
+                 			}
+                 		]]>
+                 	</mx:Script>
+                 		<mx:Button   fontWeight="normal" width="40" click="onDelectClick()"
+            icon="@Embed('assets/remove.gif')"/></mx:HBox>
+                 	</mx:Component>
+                 </mx:itemRenderer>
+                </mx:DataGridColumn>
             </mx:columns>
      </mx:DataGrid>
 </mx:Panel>
-	<mx:LinkButton  label="hello"/>
+		
+</mx:HBox>
 </mx:Application>

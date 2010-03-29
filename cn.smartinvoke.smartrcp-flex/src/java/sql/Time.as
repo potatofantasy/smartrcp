@@ -4,7 +4,7 @@ package java.sql
 
 [Bindable]
 [RemoteClass(alias="java.sql.Time")]
- public class Time extends java.util.Date {
+ public class Time extends RemoteObject{
   public function Time(){
 	 super();
   }
@@ -22,7 +22,7 @@ package java.sql
 	 return Number(retObj);
 
    }
-  public static function create_Time(hour:int,minute:int,second:int):Time{
+  /* public static function create_Time(hour:int,minute:int,second:int):Time{
 	   var remoteObj:Time=new Time();
 	   remoteObj.createRemoteObject(null,arguments);
 	   return remoteObj;
@@ -32,7 +32,7 @@ package java.sql
 	   var remoteObj:Time=new Time();
 	   remoteObj.createRemoteObject(null,arguments);
 	   return remoteObj;
-  }
+  } */
 
    public function setYear(i:int):void{
 	 var retObj:Object=this.call("setYear",arguments);

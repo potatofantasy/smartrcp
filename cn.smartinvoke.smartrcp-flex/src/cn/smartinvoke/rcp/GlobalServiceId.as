@@ -20,6 +20,8 @@ package cn.smartinvoke.rcp
         public static const  FlashViewer_Control:String="smartrcpFlashViewer_Control";
         
         public static const  Flex_CEvent_Notifer:String="smartrcpCEvent_Notifer";
+        
+        public static const DB_Util:String="smartrcp_db_util";
 		public function GlobalServiceId()
 		{
 			

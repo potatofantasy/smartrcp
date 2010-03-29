@@ -1,15 +1,10 @@
 package java.sql
 {
  import cn.smartinvoke.RemoteObject;
- import java.sql.Timestamp;
- import java.sql.Timestamp;
- import java.lang.Object;
- import java.sql.Timestamp;
- import java.sql.Timestamp;
 
 [Bindable]
 [RemoteClass(alias="java.sql.Timestamp")]
- public class Timestamp extends java.util.Date {
+ public class Timestamp extends RemoteObject {
   public function Timestamp(){
 	 super();
   }
@@ -57,7 +52,7 @@ package java.sql
 	 return Number(retObj);
 
    }
-   public function compareTo1(o:Date):int{
+   public function compareTo1(o:RemoteObject):int{
 	 var retObj:Object=this.call("compareTo",arguments);
 	 return Number(retObj);
 
@@ -67,7 +62,7 @@ package java.sql
 	 return retObj as String;
 
    }
-  public static function create_Timestamp(year:int,month:int,date:int,hour:int,minute:int,second:int,nano:int):Timestamp{
+  /* public static function create_Timestamp(year:int,month:int,date:int,hour:int,minute:int,second:int,nano:int):Timestamp{
 	   var remoteObj:Timestamp=new Timestamp();
 	   remoteObj.createRemoteObject(null,arguments);
 	   return remoteObj;
@@ -77,7 +72,7 @@ package java.sql
 	   var remoteObj:Timestamp=new Timestamp();
 	   remoteObj.createRemoteObject(null,arguments);
 	   return remoteObj;
-  }
+  } */
 
  }
 

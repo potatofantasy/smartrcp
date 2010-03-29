@@ -13,11 +13,11 @@ package java.sql
 	 super();
   }
 
-   public function position(pattern[]:int,start:Number):Number{
+   /* public function position(pattern[]:int,start:Number):Number{
 	 var retObj:Object=this.call("position",arguments);
 	 return Number(retObj);
 
-   }
+   } */
    public function position1(pattern:Blob,start:Number):Number{
 	 var retObj:Object=this.call("position",arguments);
 	 return Number(retObj);

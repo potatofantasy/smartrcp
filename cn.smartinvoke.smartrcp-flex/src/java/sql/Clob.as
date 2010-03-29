@@ -29,11 +29,11 @@ package java.sql
 	 var retObj:Object=this.call("free",arguments);
 
    }
-   public function setCharacterStream(pos:Number):Writer{
+  /*  public function setCharacterStream(pos:Number):Writer{
 	 var retObj:Object=this.call("setCharacterStream",arguments);
 	 return retObj as Writer;
 
-   }
+   } */
    public function truncate(len:Number):void{
 	 var retObj:Object=this.call("truncate",arguments);
 
