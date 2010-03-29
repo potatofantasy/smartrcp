@@ -34,10 +34,12 @@ public class AppPackService implements IServerObject{
 		  int spl=downloadUrl.lastIndexOf('/');
 		  if(spl!=-1){
 			saveName=downloadUrl.substring(spl+1);
-			SiteInfoBean bean=new SiteInfoBean(downloadUrl,this.getSaveFolder(),saveName,1);
-			Job job =new SiteFileFetch("下载", bean);
-			job.setUser(true);
-			job.schedule();
+			if(saveName.endsWith(".rcp")){
+			 SiteInfoBean bean=new SiteInfoBean(downloadUrl,this.getSaveFolder(),saveName,1);
+			 Job job =new SiteFileFetch("下载", bean);
+			 job.setUser(true);
+			 job.schedule();
+			}
 		  }
     	}
     }
@@ -45,10 +47,11 @@ public class AppPackService implements IServerObject{
      * 将本地程序文件存储到应用程序目录下
      * @param file
      */
-    public void downloadAppFromLocal(File file){
-    	if(file!=null){
+    public void downloadAppFromLocal(String filePath){
+    	if(filePath!=null){
+    		File file=new File(filePath);
     		if(file.exists()){
-    		   File saveFile=new File(this.getSaveFolder()+"/"+file.getName());
+    		   File saveFile=new File(getSaveFolder()+"/"+file.getName());
     		   FileInputStream source=null;FileOutputStream out=null;
     		   try{
     		    source=new FileInputStream(file);
@@ -80,11 +83,13 @@ public class AppPackService implements IServerObject{
      */
     public List<CAppInfo> getApps(){
     	List<CAppInfo> ret=new LinkedList<CAppInfo>();
-    	File folder=new File(this.getSaveFolder());
+    	File folder=new File(getSaveFolder());
     	File[] filePacks=folder.listFiles();
     	if(filePacks!=null){
     		for(int i=0;i<filePacks.length;i++){
+    		   if(filePacks[i].getName().endsWith(".rcp")){
     			ret.add(PackageTool.readBasicInfo(filePacks[i].getAbsolutePath()));
+    		   }
     		}
     	}
     	return ret;

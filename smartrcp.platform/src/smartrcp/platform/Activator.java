@@ -4,6 +4,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import cn.smartinvoke.ServiceObject;
+import cn.smartinvoke.TypeMapper;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 
 /**
@@ -30,6 +32,11 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		TypeMapper.addServicePack("java.io");
+		TypeMapper.addServicePack("java.sql");
+		TypeMapper.addServicePack("java.math");
+		TypeMapper.addServicePack("java.util");
+		TypeMapper.addServicePack("java.net");
 		//³õÊ¼»¯smartrcp²å¼þ
 		SmartRCPBuilder.init(context);
 	}

@@ -181,6 +181,8 @@ public class PackageTool {
 		  }
 		  //解压配置文件
 		  this.writeConfigFile(appFolderStr,appInfo,in);
+		  //存储配置信息到property.prop文件
+		  writePropertyFile(appFolderStr,appInfo);
 		}catch(Exception e){
 			throw new RuntimeException(ErrorMessages.Uncompress_Error+e.getMessage());
 		}finally{
@@ -221,6 +223,32 @@ public class PackageTool {
 		fileWriter.flush();
 		fileWriter.close();
 	}
+	/**
+	 * 将程序的属性信息写入到熟悉文件中
+	 * @param appFolderStr
+	 * @param appInfo
+	 */
+	private void writePropertyFile(String appFolderStr,CAppInfo appInfo)throws Exception{
+		String path=appFolderStr+File.separator+"property.prop";
+		File propFile=new File(path);
+		propFile.createNewFile();
+		DataOutputStream out=null;
+		try{
+		 out=new DataOutputStream(new FileOutputStream(propFile));
+		 out.writeUTF(appInfo.name);
+		 out.writeFloat(appInfo.version); 
+		 out.writeUTF(appInfo.provider);
+		 out.writeUTF(appInfo.updateUrl);//更新地址
+		 out.writeUTF(appInfo.describe);
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}finally{
+			if(out!=null){
+				out.flush();
+				out.close();
+			}
+		}
+	}
 	private void writeFileData(String toPath,DataInputStream in)throws Exception{
 		int len=in.readInt();
 		FileOutputStream fileOut=null;
@@ -251,12 +279,8 @@ public class PackageTool {
 	 * @param args
 	 */
 	public static void main(String[] args)throws Exception {
-		//unCompress();
+		unCompress();
 		//compress();
-		Properties properties=new Properties();
-		properties.load(new FileInputStream("C:/rcp/牛逼_1.22/config.ini"));
-		
-		System.out.println(properties.getProperty(ConfigerLoader.key_runtime));
 	}
 	static void unCompress(){
 		new PackageTool().uncompress("C:/牛逼_1.22.rcp", "C:/rcp");
