@@ -26,7 +26,8 @@ public class ConfigerLoader {
 	public static void init() throws FileNotFoundException, IOException{
 	  if(properties==null){
 		properties=new Properties();
-		configPath=HelpMethods.getPluginFolder()+"/start.ini";
+		String path="F:/myWork/cn.smartinvoke.smartrcp.core/src/cn/smartinvoke/util/start.ini";
+		configPath=path;//HelpMethods.getPluginFolder()+"/start.ini";
 		Log.println("start.ini location="+configPath);
 		properties.load(new FileInputStream(configPath));
 	  }
