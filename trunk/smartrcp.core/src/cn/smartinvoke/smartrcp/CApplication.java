@@ -2,6 +2,7 @@ package cn.smartinvoke.smartrcp;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -9,6 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.gui.FlashViewer;
@@ -20,9 +22,30 @@ import cn.smartinvoke.rcp.CPerspective;
  */
 public class CApplication implements IServerObject {
     private Map<String,Object> dataMap=new HashMap<String, Object>();
+    //标准bundle
+    private static List<Bundle> standardBundles=null;
+    //当前smartrcp应用
+    private static SmartRCPBundle curApp=null;
 	public CApplication() {
-	   	
+	     	
 	}
+	
+	public static SmartRCPBundle getCurApp() {
+		return curApp;
+	}
+
+	public static void setCurApp(SmartRCPBundle curApp) {
+		CApplication.curApp = curApp;
+	}
+
+	public static  List<Bundle> getStandardBundles() {
+		return standardBundles;
+	}
+
+	public static void setStandardBundles(List<Bundle> standardBundles) {
+		CApplication.standardBundles = standardBundles;
+	}
+
 	/**
 	 * 返回当前获得焦点的FlashViewer对象
 	 * @return
@@ -102,9 +125,7 @@ public class CApplication implements IServerObject {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-	   	File f=null;
-	   	f.list();
-	   	
+	   
 	}
 	public void dispose() {
 		dataMap.clear();
@@ -123,7 +144,6 @@ public class CApplication implements IServerObject {
 		MessageDialog.openInformation(mainShell, title, message);
 	}
 	public  void openWarning(Shell mainShell,String title, String message) {
-		//Shell mainShell=(Shell)ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Main_Win);
 		mainShell=Display.getCurrent().getActiveShell();
 		MessageDialog.openWarning(mainShell, title, message);
 	}

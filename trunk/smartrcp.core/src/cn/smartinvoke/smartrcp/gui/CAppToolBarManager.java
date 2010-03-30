@@ -58,7 +58,7 @@ public class CAppToolBarManager implements IServerObject {
 							//curDisplayToolBar = this.createToolBar(toolBar.type);
 							curDisplayToolBar.add(new Separator());
 						} else {
-							IAction action = SmartRCPBuilder.actionManager
+							IAction action = SmartRCPBuilder.Instance.actionManager
 									.getAction(id);
 							if (action != null) {
 								ActionContributionItem contributionItem = new ActionContributionItem(
@@ -124,7 +124,7 @@ public class CAppToolBarManager implements IServerObject {
 				return;
 			}
 			
-			IAction action = SmartRCPBuilder.actionManager.getAction(actionId);
+			IAction action = SmartRCPBuilder.Instance.actionManager.getAction(actionId);
 			if (action != null) {
 				ActionContributionItem contributionItem = new ActionContributionItem(
 						action);
@@ -146,7 +146,7 @@ public class CAppToolBarManager implements IServerObject {
 			if(this.curToolBar.actionIds.contains(actionId)){
 				return;
 			}
-			IAction action = SmartRCPBuilder.actionManager.getAction(actionId);
+			IAction action = SmartRCPBuilder.Instance.actionManager.getAction(actionId);
 			if (action != null) {
 				    ActionContributionItem contributionItem = new ActionContributionItem(action);
 					if (this.curToolBar.type != CToolBar.Image) {
@@ -172,7 +172,7 @@ public class CAppToolBarManager implements IServerObject {
 			if(this.curToolBar.actionIds.contains(actionId)){
 				return;
 			}
-			IAction action = SmartRCPBuilder.actionManager.getAction(actionId);
+			IAction action = SmartRCPBuilder.Instance.actionManager.getAction(actionId);
 			if (action != null) {
 				    ActionContributionItem contributionItem = new ActionContributionItem(action);
 					if (this.curToolBar.type != CToolBar.Image) {
