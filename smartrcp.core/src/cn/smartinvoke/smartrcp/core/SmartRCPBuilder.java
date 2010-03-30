@@ -34,6 +34,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 import smartrcp.db.DbUtil;
 
@@ -59,6 +60,7 @@ import cn.smartinvoke.smartrcp.gui.control.EventRegister;
 import cn.smartinvoke.smartrcp.gui.control.FlashViewInvoker;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 import cn.smartinvoke.smartrcp.gui.control.ViewManager;
+import cn.smartinvoke.smartrcp.util.BundleHelpMethod;
 import cn.smartinvoke.smartrcp.util.JFaceConstant;
 import cn.smartinvoke.util.ConfigerLoader;
 import cn.smartinvoke.util.HelpMethods;
@@ -67,21 +69,25 @@ import cn.smartinvoke.util.Log;
 
 public class SmartRCPBuilder {
 	private static SplashWindow splash_win = SplashWindow.INSTANCE;
-    private static SmartRCPWindowAdvisor window_Advisor=new SmartRCPWindowAdvisor();
+   // private static SmartRCPWindowAdvisor window_Advisor=new SmartRCPWindowAdvisor();
+	public static SmartRCPBuilder Instance=new SmartRCPBuilder();
 	private SmartRCPBuilder() {
        
 	}
-	public static void createWindowContents(Shell shell,IWorkbenchWindowConfigurer configurer) {
-		window_Advisor.createWindowContents(shell, configurer);
-	}
-	public static void setShowToolbar(boolean visible) {
-		window_Advisor.setShowToolbar(visible);
-	}
+//	public static void createWindowContents(Shell shell,IWorkbenchWindowConfigurer configurer) {
+//		window_Advisor.createWindowContents(shell, configurer);
+//	}
+//	public static void setShowToolbar(boolean visible) {
+//		window_Advisor.setShowToolbar(visible);
+//	}
 	private static BundleContext context=null;
+	public static BundleContext getCurContext(){
+		return context;
+	}
 	/**
 	 * 初始化SmartRCP获得初始化信息
 	 */
-	public static void init(final BundleContext context){//IServiceObjectCreator objectCreator) {
+	public  void init(final BundleContext context){//IServiceObjectCreator objectCreator) {
 		//----------------------
 		SmartRCPBuilder.context=context;
 		//----------------------
@@ -89,7 +95,12 @@ public class SmartRCPBuilder {
 		try{
 			ConfigerLoader.init();
 			CPerspective.init();
-			startBundles(context);//启动库
+			//加载服务类
+			String servicePacks = ConfigerLoader
+			.getProperty(ConfigerLoader.key_export_package);
+	        TypeMapper.addServiceConfig(servicePacks);
+	        
+			startBundles(context);//启动标准库
 		}catch(Exception e){
 			throw new RuntimeException();
 		};
@@ -120,8 +131,8 @@ public class SmartRCPBuilder {
 				return cls;
 			}
  		};
- 	    // ----------- 注册全局服务
- 		objectPool.putObject(new DbUtil(), GlobalServiceId.DB_Util);
+ 		 // ----------- 注册全局服务
+ 		objectPool.putObject(new DbUtil(), GlobalServiceId.DB_Util);//数据库帮助方法
 		objectPool.putObject(new CApplication(), GlobalServiceId.Cur_Application);
 		objectPool.putObject(new FlashViewInvoker(),GlobalServiceId.FlashView_Invoker);
 		// 添加事件注册器服务
@@ -129,61 +140,61 @@ public class SmartRCPBuilder {
 		objectPool.putObject(eventRegister, GlobalServiceId.Event_Register);
 		
 	}
-	private static void startBundles(BundleContext context){
+	private  void startBundles(BundleContext context){
 		  
 		 String libPath=CPerspective.getRuntimeSwfFolder()+"/lib";
-		 String logFile=CPerspective.getRuntimeSwfFolder()+"/log.txt";
-		 PrintWriter logWriter=null;
+		// String logFile=CPerspective.getRuntimeSwfFolder()+"/log.txt";
+		 //PrintWriter logWriter=null;
 		 File folder=new File(libPath);
 		 if(!folder.exists()){
 			 folder.mkdirs();
 		 }
 		 //加载插件
-		 File[] bundleFiles=folder.listFiles();
-		 if(bundleFiles!=null){
-			 for(int i=0;i<bundleFiles.length;i++){
-				 String path="file:"+bundleFiles[i].getAbsolutePath();
-				 Log.println("load bundle:"+path);
-				 try{
-				  Bundle bundle=context.installBundle(path);
-				  bundle.start();
-				 }catch(Exception e){
-				   //记录错误日志
-				   if(logWriter==null){
-					   File log=new File(logFile);
-					   if(!log.exists()){
-						  try{ log.createNewFile();}catch(Exception e1){};
-					   }
-					   try{logWriter=new PrintWriter(log);}catch(Exception e1){};
-				   }
-				   e.printStackTrace(logWriter); 
-				   throw new RuntimeException(e);
-				 }
-			 }
+		 try{
+		   CApplication.setStandardBundles(BundleHelpMethod.installBundles(folder));
+		 }catch(BundleException e){
+			 throw new RuntimeException(e);
 		 }
-		 //关闭错误日志文件
-		 if(logWriter!=null){
-			 logWriter.flush();
-			 logWriter.close();
-		 }
+//		 File[] bundleFiles=folder.listFiles();
+//		 if(bundleFiles!=null){
+//			 for(int i=0;i<bundleFiles.length;i++){
+//				 String path="file:"+bundleFiles[i].getAbsolutePath();
+//				 Log.println("load bundle:"+path);
+//				 try{
+//				  Bundle bundle=context.installBundle(path);
+//				  bundle.start();
+//				 }catch(Exception e){
+//				   //记录错误日志
+//				   if(logWriter==null){
+//					   File log=new File(logFile);
+//					   if(!log.exists()){
+//						  try{ log.createNewFile();}catch(Exception e1){};
+//					   }
+//					   try{logWriter=new PrintWriter(log);}catch(Exception e1){};
+//				   }
+//				   e.printStackTrace(logWriter); 
+//				   throw new RuntimeException(e);
+//				 }
+//			 }
+//		 }
+//		 //关闭错误日志文件
+//		 if(logWriter!=null){
+//			 logWriter.flush();
+//			 logWriter.close();
+//		 }
 	}
 	/**
 	 * 打开Splash窗口获得初始化信息，初始化窗体
 	 */
-	public static void initWindows(){
+	public  void initWindows(){
 		// ------------加载配置信息
 		// 将splash窗口设置为服务对象供flex调用
 		ObjectPool.INSTANCE.putObject(splash_win, GlobalServiceId.Splash_Win);
 		try {
-			
-			String servicePacks = ConfigerLoader
-					.getProperty(ConfigerLoader.key_export_package);
-			TypeMapper.addServiceConfig(servicePacks);
-			
 			// -----------开启splash窗口，加载flex的splash信息
 			try {
 				splash_win.open();
-			} catch (Throwable e) {
+			}catch(Throwable e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
@@ -197,7 +208,7 @@ public class SmartRCPBuilder {
 	 * 初始化工作台配置
 	 * @param configurer
 	 */
-	public static void initWorkbench(IWorkbenchConfigurer configurer){
+	public  void initWorkbench(IWorkbenchConfigurer configurer){
 		if(SplashWindow.getPerspective().saveAndRestore){
 		  configurer.setSaveAndRestore(true);
 		}else{
@@ -210,7 +221,7 @@ public class SmartRCPBuilder {
 	 * 保存工作台设置信息
 	 * @param memento
 	 */
-	public static void saveWorkbenchState(IMemento memento){
+	public  void saveWorkbenchState(IMemento memento){
 		IViewReference[] refs=window.getActivePage().getViewReferences();
 		StringBuilder viewPartInfo=new StringBuilder();
 		if(refs!=null){
@@ -240,7 +251,7 @@ public class SmartRCPBuilder {
 	 * 恢复工作台设置信息
 	 * @param memento
 	 */
-	public static void restoreWorkbenchState(IMemento memento){
+	public  void restoreWorkbenchState(IMemento memento){
 		//加载start.ini文件
 		ConfigerLoader.configPath=memento.getString(key_config_path);
 		String val=memento.getString(key_workbench_state);
@@ -262,27 +273,27 @@ public class SmartRCPBuilder {
      * 初始化图像管理器
      * @param imageRegistry
      */
-	public static void initImageRegistry(ImageRegistry imageRegistry) {
+	public  void initImageRegistry(ImageRegistry imageRegistry) {
 		// ---------加载图像注册信息
 		ImageManager.init(imageRegistry);
 	}
 
-	public static CActionManager actionManager = null;
-	private static ActionBarAdvisor actionBarAdvisor;
-    public static IWorkbenchWindow window;
+	public  CActionManager actionManager = null;
+	private  ActionBarAdvisor actionBarAdvisor;
+    public  IWorkbenchWindow window;
 	/**
 	 * 创建action
 	 */
-	public static void createActions(ActionBarAdvisor actionBarAdvisor,IWorkbenchWindow window){
+	public  void createActions(ActionBarAdvisor actionBarAdvisor,IWorkbenchWindow window){
 		if(actionBarAdvisor!=null){
-			SmartRCPBuilder.actionBarAdvisor=actionBarAdvisor;
+			this.actionBarAdvisor=actionBarAdvisor;
 		}else{
-			actionBarAdvisor=SmartRCPBuilder.actionBarAdvisor;
+			actionBarAdvisor=this.actionBarAdvisor;
 		}
 		if(window!=null){
-		  SmartRCPBuilder.window=window;
+		  this.window=window;
 		}else{
-		  window=SmartRCPBuilder.window;
+		  window=this.window;
 		}
 		
 		ObjectPool.INSTANCE.putObject(new CActionManager(actionBarAdvisor,window),
@@ -309,17 +320,17 @@ public class SmartRCPBuilder {
 			}
 		}
 	}
-    private static IMenuManager MENU_BAR;
+    private  IMenuManager MENU_BAR;
 	/**
 	 * 创建菜单
 	 * 
 	 * @param menuBar
 	 */
-	public static void fillMenuBar(IMenuManager menuBar) {
+	public  void fillMenuBar(IMenuManager menuBar) {
 		if(menuBar!=null){//第一次启动
-		  SmartRCPBuilder.MENU_BAR=menuBar;
+		  this.MENU_BAR=menuBar;
 		}else{//第二次启动
-		  menuBar=SmartRCPBuilder.MENU_BAR;
+		  menuBar=this.MENU_BAR;
 		}
 		
 		CPerspective cPerspective = SplashWindow.getPerspective();
@@ -344,7 +355,7 @@ public class SmartRCPBuilder {
 		}
 	}
 
-	private static void fillMenuBar(IMenuManager menuBar, CMenuRelation cMenuBar,String managerId,String pathStr) {
+	private  void fillMenuBar(IMenuManager menuBar, CMenuRelation cMenuBar,String managerId,String pathStr) {
 		if (cMenuBar == null) {
 			return;
 		}
@@ -377,12 +388,12 @@ public class SmartRCPBuilder {
 			menuBar.add(menuManager);
 		}
 	}
-	private static ICoolBarManager COOL_BAR=null;
+	private  ICoolBarManager COOL_BAR=null;
     /**
      * 初始化工具栏
      * @param coolBar
      */
-	public static void fillCoolBar(ICoolBarManager coolBar) {
+	public  void fillCoolBar(ICoolBarManager coolBar) {
 		if(coolBar!=null){
 			COOL_BAR=coolBar;
 		}else{
@@ -403,12 +414,12 @@ public class SmartRCPBuilder {
 	 * 初始化状态栏管理器
 	 * @param statusLineManager
 	 */
-    public static void initStatusLine(IStatusLineManager statusLineManager){
+    public  void initStatusLine(IStatusLineManager statusLineManager){
     	CStatusLineManager lineManager=new CStatusLineManager(statusLineManager);
     	ObjectPool.INSTANCE.putObject(lineManager,GlobalServiceId.App_StatusLine_Manager);
     	
     }
-	public static void preWindowOpen(IWorkbenchWindowConfigurer configurer) {
+	public  void preWindowOpen(IWorkbenchWindowConfigurer configurer) {
 		// TODO 将Display对象注册为全局服务对象，并且添加事件处理程序
 		// System.out.println();
 		Display curDisp = Display.getCurrent();
@@ -498,7 +509,7 @@ public class SmartRCPBuilder {
         });
 	}
     public static Shell Main_Shell=null;
-	public static void postWindowOpen(Shell shell) {
+	public  void postWindowOpen(Shell shell) {
 		if(shell!=null){
 		  Main_Shell=shell;
 		}else{
@@ -515,11 +526,10 @@ public class SmartRCPBuilder {
 			if(imageDescriptor!=null){
 				shell.setImage(imageDescriptor.createImage());
 			}
-			
 		}
 		// 全局服务 对象设置视图管理器
 		ViewManager viewManager=new ViewManager();
-		IWorkbenchWindow window=SmartRCPBuilder.window;
+		IWorkbenchWindow window=this.window;
 		viewManager.initIWorkbenchPageListener(window.getActivePage());
 		ObjectPool.INSTANCE.putObject(viewManager,
 				GlobalServiceId.View_Manager);
@@ -540,8 +550,8 @@ public class SmartRCPBuilder {
 	/**
 	 * 打开debug服务，接收flexBuilder的请求，如果已经打开就直接返回
 	 */
-	private static boolean isStart=false;
-    private static void openDebugServer(){
+	private  boolean isStart=false;
+    private  void openDebugServer(){
       if(!isStart){
        String debugStr=ConfigerLoader.getProperty(ConfigerLoader.key_debug);
        if(debugStr!=null){

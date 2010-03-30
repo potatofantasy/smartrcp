@@ -83,7 +83,7 @@ public class CResultSet implements IServerObject {
 	}
 
 	public Array getArray(int columnIndex) throws SQLException {
-
+        
 		return this.instance.getArray(columnIndex);
 	}
 

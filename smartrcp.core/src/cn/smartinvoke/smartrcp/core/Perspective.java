@@ -44,7 +44,7 @@ public class Perspective implements IPerspectiveFactory {
 		CPerspective perspective=SplashWindow.getPerspective();
 		if(perspective==null){
 			
-			SmartRCPBuilder.initWindows();
+			SmartRCPBuilder.Instance.initWindows();
 		}
 		//如果保存了工作台的状态就不执行下面的代码
 		/*if(perspective.saveAndRestore){
