@@ -45,8 +45,7 @@ package java.sql
 
    }
    public function close():void{
-	 var retObj:Object=this.call("close",arguments);
-
+	 this.asyncCall("close",arguments);
    }
    public function nativeSQL(sql:String):String{
 	 var retObj:Object=this.call("nativeSQL",arguments);

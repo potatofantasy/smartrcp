@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
-	layout="absolute" horizontalAlign="center" verticalAlign="middle">
+	layout="vertical" horizontalAlign="center" verticalAlign="middle">
 	<mx:Script>
 		<![CDATA[
+			import java.sql.ResultSet;
+			import java.sql.Statement;
 			import mx.controls.Alert;
 			import java.sql.Connection;
 			import smartrcp.db.DbUtil;
@@ -11,6 +13,17 @@
 				DbUtil.Instance.getConnection("jdbc:mysql://localhost/test","root","123",function (ret:Object):void{
 					if(ret is Connection){
 						var con:Connection=ret as Connection;
+						var statement:Statement=con.createStatement();
+						statement.executeQuery("select * from info",function ret(resultSet:ResultSet):void{
+						   var str:String="";
+						   while(resultSet.next()){
+						   	  str+=resultSet.getString(3)+"\n";
+						   }
+						   textInfo.text=str;
+						   resultSet.close();
+						},this);
+						
+						con.close();
 					}else{
 						Alert.show("连接失败"+ret);
 					}
@@ -19,4 +32,7 @@
 		]]>
 	</mx:Script>
 	<mx:Button label="连接数据库" click="onConn()"/>
+	<mx:Text width="100%" id="textInfo">
+		
+	</mx:Text>
 </gui:RCPModule>

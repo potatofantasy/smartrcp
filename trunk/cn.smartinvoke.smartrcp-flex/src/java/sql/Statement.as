@@ -1,10 +1,10 @@
 package java.sql
 {
- import cn.smartinvoke.RemoteObject;
- import java.sql.Wrapper;
+ import cn.smartinvoke.smartrcp.gui.module.CEventBean;
+ import cn.smartinvoke.smartrcp.util.HelpMethod;
 
 [Bindable]
-[RemoteClass(alias="java.sql.Statement")]
+[RemoteClass(alias="smartrcp.db.CStatement")]
  public class Statement extends Wrapper {
   public function Statement(){
 	 super();
@@ -37,7 +37,7 @@ package java.sql
 
    }
    public function close():void{
-	 var retObj:Object=this.call("close",arguments);
+	 this.asyncCall("close",arguments);
 
    }
    public function executeBatch():Array{
@@ -135,10 +135,9 @@ package java.sql
 	 return retObj as ResultSet;
 
    }
-   public function executeQuery(sql:String):ResultSet{
-	 var retObj:Object=this.call("executeQuery",arguments);
-	 return retObj as ResultSet;
-
+   public function executeQuery(sql:String,listener:Function,thisObject:Object):void{
+   	 var bean:CEventBean=HelpMethod.createEventBean(listener,thisObject);
+	 var retObj:Object=this.call("executeQuery",[sql,bean]);
    }
    public function isPoolable():Boolean{
 	 var retObj:Object=this.call("isPoolable",arguments);
