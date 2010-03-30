@@ -23,7 +23,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     public void postWindowOpen() {
     	final Shell shell=this.getWindowConfigurer().getWindow().getShell();
     	
-    	SmartRCPBuilder.postWindowOpen(shell);
+    	SmartRCPBuilder.Instance.postWindowOpen(shell);
     }
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
@@ -38,7 +38,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		         IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR,
 		         IWorkbenchPreferenceConstants.TOP_RIGHT);
 		     
-		SmartRCPBuilder.preWindowOpen(this.getWindowConfigurer());
+		SmartRCPBuilder.Instance.preWindowOpen(this.getWindowConfigurer());
 		configurer.setShowPerspectiveBar(true);
 		configurer.setShowProgressIndicator(true);
 		configurer.setShowStatusLine(true);

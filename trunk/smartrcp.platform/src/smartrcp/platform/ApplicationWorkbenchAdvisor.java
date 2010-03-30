@@ -22,21 +22,21 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		return new ApplicationWorkbenchWindowAdvisor(configurer);
 	}
 	public IStatus restoreState(IMemento memento) {
-    	SmartRCPBuilder.restoreWorkbenchState(memento);
+    	SmartRCPBuilder.Instance.restoreWorkbenchState(memento);
     	return org.eclipse.core.runtime.Status.OK_STATUS;
 		//return Status.OK;
 	}
     public IStatus saveState(IMemento memento) {
-    	SmartRCPBuilder.saveWorkbenchState(memento);
+    	SmartRCPBuilder.Instance.saveWorkbenchState(memento);
     	return org.eclipse.core.runtime.Status.OK_STATUS;
 	}
     public void initialize(IWorkbenchConfigurer configurer) {
     	 super.initialize(configurer);
     	//初始化窗口
-  		SmartRCPBuilder.initWindows();
+  		SmartRCPBuilder.Instance.initWindows();
      	//---------加载图像注册信息
-     	SmartRCPBuilder.initImageRegistry(Activator.getDefault().getImageRegistry());
-        SmartRCPBuilder.initWorkbench(configurer); 
+     	SmartRCPBuilder.Instance.initImageRegistry(Activator.getDefault().getImageRegistry());
+        SmartRCPBuilder.Instance.initWorkbench(configurer); 
     }
 	public String getInitialWindowPerspectiveId() {
 		return PERSPECTIVE_ID;
