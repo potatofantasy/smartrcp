@@ -40,11 +40,12 @@ public class BundleHelpMethod {
 		}
 		// 启动所有的bundle
 		BundleContext context = SmartRCPBuilder.getCurContext();
-		BundleFile[] bundleFileArr = (BundleFile[]) bundleFiels.toArray();
+		Object[] bundleFileArr = bundleFiels.toArray();
 		Arrays.sort(bundleFileArr);// 排序
 
 		for (int i = 0; i < bundleFileArr.length; i++) {
-			String path = bundleFileArr[i].getLocation();
+			BundleFile bundleFile=(BundleFile)bundleFileArr[i];
+			String path = bundleFile.getLocation();
 			Bundle bundle = context.installBundle(path);
 			bundle.start();
 			Log.println("load bundle jar:" + path);
@@ -67,7 +68,7 @@ class BundleFile implements Comparable {
 			try {
 				leve = Integer.valueOf(leveStr);
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			;
 		}

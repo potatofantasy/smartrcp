@@ -3,9 +3,14 @@ package smartrcp.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
+
+import org.eclipse.core.runtime.Platform;
+import org.osgi.framework.Bundle;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.rcp.ErrorMessages;
+import cn.smartinvoke.smartrcp.CApplication;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 
@@ -22,7 +27,21 @@ public class DbUtil implements IServerObject {
 	 */
 	public void loadDriver(String driverName) {
 		try {
-			Class.forName(driverName);
+            Class.forName(driverName);
+//		    List<Bundle> standardBundles=CApplication.getStandardBundles();
+//		    for(int i=0;i<standardBundles.size();i++){
+//		    	Bundle bundle=standardBundles.get(i);
+//		    	String name=bundle.getSymbolicName();
+//		    	if(name.equals(driverName)){
+//		    		bundle.loadClass(name)
+//		    	}
+//		    }
+//			Bundle bundle=Platform.getBundle(driverName);
+//			if(bundle!=null){
+//			  bundle.loadClass(driverName);
+//			}else{
+//			  throw new ClassNotFoundException(ErrorMessages.DB_Driver_Load_Error+driverName);
+//			}
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(ErrorMessages.DB_Driver_Load_Error+driverName);
 		}

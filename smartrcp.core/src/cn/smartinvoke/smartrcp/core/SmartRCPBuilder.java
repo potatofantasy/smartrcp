@@ -71,7 +71,7 @@ public class SmartRCPBuilder {
 	private static SplashWindow splash_win = SplashWindow.INSTANCE;
    // private static SmartRCPWindowAdvisor window_Advisor=new SmartRCPWindowAdvisor();
 	public static SmartRCPBuilder Instance=new SmartRCPBuilder();
-	private SmartRCPBuilder() {
+	private SmartRCPBuilder(){
        
 	}
 //	public static void createWindowContents(Shell shell,IWorkbenchWindowConfigurer configurer) {
