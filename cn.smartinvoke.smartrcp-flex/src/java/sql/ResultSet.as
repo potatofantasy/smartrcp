@@ -10,7 +10,7 @@ package java.sql
 
 
 [Bindable]
-[RemoteClass(alias="java.sql.ResultSet")]
+[RemoteClass(alias="smartrcp.db.CResultSet")]
  public class ResultSet extends Wrapper {
   public function ResultSet(){
 	 super();
@@ -111,8 +111,7 @@ package java.sql
 
    }
    public function close():void{
-	 var retObj:Object=this.call("close",arguments);
-
+	 this.asyncCall("close",arguments);
    }
    public function cancelRowUpdates():void{
 	 var retObj:Object=this.call("cancelRowUpdates",arguments);
