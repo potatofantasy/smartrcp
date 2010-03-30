@@ -11,10 +11,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CPerspective;
+import cn.smartinvoke.rcp.ErrorMessages;
 /**
  * 全局服务类，本类负责管理当前应用程序信息，和提供程序退出等一些实用方法
  * @author pengzhen
@@ -129,6 +131,13 @@ public class CApplication implements IServerObject {
 	}
 	public void dispose() {
 		dataMap.clear();
+		if(curApp!=null){
+			try {
+				curApp.unLoad();
+			} catch (BundleException e) {
+				openError(null,"",ErrorMessages.Bundle_UnLoad_Error+e.getMessage());
+			}
+		}
 	}
 	//--颜色对话框
 	
