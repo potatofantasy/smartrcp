@@ -42,16 +42,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	protected void makeActions(final IWorkbenchWindow window) {
-		SmartRCPBuilder.createActions(this,window);
+		SmartRCPBuilder.Instance.createActions(this,window);
 	}
 	protected void fillMenuBar(IMenuManager menuBar) {
-		SmartRCPBuilder.fillMenuBar(menuBar);
+		SmartRCPBuilder.Instance.fillMenuBar(menuBar);
 	}
 	protected void fillCoolBar(ICoolBarManager coolBar) {	
-		SmartRCPBuilder.fillCoolBar(coolBar);
+		SmartRCPBuilder.Instance.fillCoolBar(coolBar);
 	}
 	protected void fillStatusLine(IStatusLineManager statusLine) {
-		SmartRCPBuilder.initStatusLine(statusLine);
+		SmartRCPBuilder.Instance.initStatusLine(statusLine);
 	}
 }
 /*protected void fillStatusLine(IStatusLineManager statusLine) {

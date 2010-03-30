@@ -38,7 +38,7 @@ public class Activator extends AbstractUIPlugin {
 		TypeMapper.addServicePack("java.util");
 		TypeMapper.addServicePack("java.net");
 		//³õÊ¼»¯smartrcp²å¼þ
-		SmartRCPBuilder.init(context);
+		SmartRCPBuilder.Instance.init(context);
 	}
 	/*
 	 * (non-Javadoc)
