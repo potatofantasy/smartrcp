@@ -21,7 +21,7 @@ import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.util.Log;
 public class Perspective implements IPerspectiveFactory {
-	public static final String ID="cn.smartinvoke.smartrcp.core.Perspective";
+	public static final String ID="cn.smartinvoke.smartrcp.core.perspective";
 	/*public void createInitialLayout(IPageLayout layout) {
 		String editorArea = layout.getEditorArea();
 		layout.setEditorAreaVisible(false);

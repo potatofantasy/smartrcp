@@ -16,7 +16,7 @@ import cn.smartinvoke.rcp.CPerspective;
 
 public class SplashWindow {
 	public static SplashWindow INSTANCE=new SplashWindow();
-    private Shell shell;
+    public Shell shell;
     public FlashContainer container;
     private Display display;
     Thread thread;

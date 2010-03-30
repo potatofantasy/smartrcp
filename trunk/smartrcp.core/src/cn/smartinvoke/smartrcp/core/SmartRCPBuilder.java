@@ -46,8 +46,12 @@ import cn.smartinvoke.rcp.CMenuRelation;
 import cn.smartinvoke.rcp.CPageLayout;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.rcp.CWindowConfigurer;
+import cn.smartinvoke.rcp.ErrorMessages;
 import cn.smartinvoke.smartrcp.CApplication;
 import cn.smartinvoke.smartrcp.DebugServer;
+import cn.smartinvoke.smartrcp.SmartRCPBundle;
+import cn.smartinvoke.smartrcp.app.pack.CAppInfo;
+import cn.smartinvoke.smartrcp.app.pack.PackageTool;
 import cn.smartinvoke.smartrcp.gui.CAppMenuBarManager;
 import cn.smartinvoke.smartrcp.gui.CAppToolBarManager;
 import cn.smartinvoke.smartrcp.gui.CStatusLineManager;
@@ -190,6 +194,17 @@ public class SmartRCPBuilder {
 		// ------------加载配置信息
 		// 将splash窗口设置为服务对象供flex调用
 		ObjectPool.INSTANCE.putObject(splash_win, GlobalServiceId.Splash_Win);
+		//加载当前smartrcp bundle
+		try {
+			CAppInfo appInfo=
+				PackageTool.readBasicInfo(ConfigerLoader.appPath+File.separator+PackageTool.Key_Property_File);
+			SmartRCPBundle rcpBundle=new SmartRCPBundle(appInfo);
+			rcpBundle.load();
+			CApplication.setCurApp(rcpBundle);
+			
+		} catch (BundleException e1){
+			MessageDialog.openError(splash_win.shell, "", ErrorMessages.Bundle_Load_Error+e1.getMessage());
+		}
 		try {
 			// -----------开启splash窗口，加载flex的splash信息
 			try {
@@ -565,7 +580,7 @@ public class SmartRCPBuilder {
       }
     }
     
-    public static void dispose(){
+    public  void dispose(){
     	//关闭所有视图
     	CPageLayout.Instance.close();
     	//清空全局缓存信息
@@ -589,16 +604,16 @@ public class SmartRCPBuilder {
     }
     /**
      * 程序布局系统
-     * @param configPath
+     * @param installFolder 程序的安装目录
      */
-    /*public static void reStart(String configPath){
-    	if(configPath!=null){
-    	 String loadAppConfig=HelpMethods.getPluginFolder()+"/loadApp.ini";
+    public  void reStart(String installFolder){
+    	if(installFolder!=null){
+    	 String loadAppConfig=ConfigerLoader.startFilePath;//启动文件路径
     	 FileWriter fileWriter=null;
     	 try{
     	   //写配置文件
     	   fileWriter=new FileWriter(loadAppConfig);
-    	   fileWriter.write(configPath);
+    	   fileWriter.write(installFolder+"\n");
     	   fileWriter.flush();
     	   fileWriter.close();
     	   //重新启动系统
@@ -610,28 +625,25 @@ public class SmartRCPBuilder {
     	    	try{fileWriter.close();}catch(Exception e){};
     	    }
     	 }
-    	 File configFile=new File(configPath);
-    	 if(configFile.exists()){
-    		
-    		 try{
-    		   
+    	 
+    	 try{  
     		   //设置加载程序的配置路径
-    		   ConfigerLoader.init(configPath);
+    		   ConfigerLoader.init();
     		   CPerspective.init();
     		   //最小化窗口释放flex内存资源
     		   Main_Shell.setMinimized(true);
     		   
-    		   //打开加载窗口Splashwin
-    		   SmartRCPBuilder.initWindows();
+    		   //打开加载窗口Splashwin，并加载扩展库
+    		   this.initWindows();
     		   //重新打开透视图
-    		   String perspectiveId="cn.smartinvoke.smartrcp.core.perspective";
+    		   String perspectiveId=Perspective.ID;
     		   
     		   window.getWorkbench().showPerspective(perspectiveId, window);
     		   
-    		   SmartRCPBuilder.createActions(null,null);
-    		   SmartRCPBuilder.fillMenuBar(null);
-    		   SmartRCPBuilder.fillCoolBar(null);
-    		   SmartRCPBuilder.postWindowOpen(null);
+    		   this.createActions(null,null);
+    		   this.fillMenuBar(null);
+    		   this.fillCoolBar(null);
+    		   this.postWindowOpen(null);
     		   
     		   //还原窗口
     		   Main_Shell.setMinimized(false);
@@ -640,7 +652,7 @@ public class SmartRCPBuilder {
     			 MessageDialog.openError(mainShell, "错误", "程序启动错误，信息如下：\n"+e.getMessage());
     		 }
     	}
-    }*/
+    }
 	/**
 	 * @param args
 	 */

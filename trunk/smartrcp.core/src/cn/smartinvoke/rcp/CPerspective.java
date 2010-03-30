@@ -16,7 +16,7 @@ public class CPerspective {
 	//private static String installFolder;
 	public static void init()throws Exception{
 		
-		String installFolder=HelpMethods.getPluginFolder();//安装目录
+		String installFolder=ConfigerLoader.appPath;//安装目录
 		//
 		String splashSwfPath=ConfigerLoader.getProperty(ConfigerLoader.key_splash);
 		if(splashSwfPath==null){
