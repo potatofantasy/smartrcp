@@ -9,6 +9,7 @@ import java.util.List;
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.smartrcp.app.pack.CAppInfo;
 import cn.smartinvoke.smartrcp.app.pack.PackageTool;
+import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
 import cn.smartinvoke.util.HelpMethods;
 import cn.smartinvoke.util.Log;
@@ -77,7 +78,7 @@ public class CAppService implements IServerObject {
      * @param installFolder
      * @return
      */
-    private CAppInfo getAppInfo(String installFolder){
+    public static CAppInfo getAppInfo(String installFolder){
     	CAppInfo ret=new CAppInfo();
     	DataInputStream in=null;
     	try{
@@ -137,7 +138,7 @@ public class CAppService implements IServerObject {
     }
     
     public void runApp(String installFolder){
-    	Log.println("运行程序"+installFolder);
+    	SmartRCPBuilder.Instance.reStart(installFolder);
     }
     public void deleteApp(String installFolder){
     	Log.println("拆卸程序"+installFolder);

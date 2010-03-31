@@ -29,12 +29,12 @@ public class ConfigerLoader {
 	public static String configPath=null;
 	public static void init() throws FileNotFoundException, IOException{
 	  getStartInfo();//获得启动信息
-	  if(properties==null){
+	  //if(properties==null){
 		properties=new Properties();
 		configPath=appPath+File.separator+PackageTool.Key_Config_File;
 		Log.println("start.ini location="+configPath);
 		properties.load(new FileInputStream(configPath));
-	  }
+	  //}
 	}
 	/**
 	 * 当前启动的应用程序安装目录

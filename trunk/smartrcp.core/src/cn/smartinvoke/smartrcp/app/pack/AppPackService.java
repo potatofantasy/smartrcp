@@ -16,6 +16,7 @@ import cn.smartinvoke.smartrcp.app.download.http.ICompleteListener;
 import cn.smartinvoke.smartrcp.app.download.http.SiteFileFetch;
 import cn.smartinvoke.smartrcp.app.download.http.SiteInfoBean;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
+import cn.smartinvoke.smartrcp.util.JFaceHelpMethod;
 import cn.smartinvoke.util.HelpMethods;
 /**
  * 应用程序管理类
@@ -59,8 +60,16 @@ public class AppPackService implements IServerObject{
     public void downloadAppFromLocal(String filePath){
     	if(filePath!=null){
     		File file=new File(filePath);
+    		
+    		
     		if(file.exists()){
-    		   File saveFile=new File(getSaveFolder()+"/"+file.getName());
+    		   String savePath=getSaveFolder()+"/"+file.getName();
+    		   File saveFile=new File(savePath);
+    		   //转移文件已经存在，是否覆盖
+    		   if(!JFaceHelpMethod.checkOverWrite(savePath)){
+       			return;
+       		   }
+    		   
     		   FileInputStream source=null;FileOutputStream out=null;
     		   try{
     		    source=new FileInputStream(file);
@@ -72,6 +81,9 @@ public class AppPackService implements IServerObject{
     		    }
     		    out.flush();
     		    out.close();
+    		    
+    		    CAppInfo appInfo=PackageTool.readBasicInfo(savePath);
+    		    fireEvents(appInfo);//唤醒flex监听器
     		   }catch(Exception e){
     			   throw new RuntimeException("无法将"+file.getAbsolutePath()+"拷贝到"+getSaveFolder()+"目录");
     		   }finally{
@@ -83,6 +95,8 @@ public class AppPackService implements IServerObject{
     				   try{out.close();}catch(Exception e){};
     			   }
     		   }
+    		}else{
+    			JFaceHelpMethod.showInfo("文件"+filePath+"不存在");
     		}
     	}
     }

@@ -23,30 +23,38 @@ public class ImageManager {
 	public static void init(ImageRegistry imageRegistry) {
 		try {
 			ImageManager.imageRegistry = imageRegistry;// new ImageRegistry();
-			String plugInFolder = HelpMethods.getPluginFolder();
-			String imgFolder = plugInFolder + "/icons";
-			File folder = new File(imgFolder);
-			if (!folder.exists()) {
-				folder.mkdirs();
-			} else {
-
-				List<String> subFiles = getSubFiles(folder);
-				for (int i = 0; i < subFiles.size(); i++) {
-					String filePath = subFiles.get(i);
-					String key = filePath.substring(plugInFolder.length());
-					//Log.println("image key=" + key);
-					URL url = new URL("file:/" + filePath);
-					ImageDescriptor descriptor = ImageDescriptor
-							.createFromURL(url);
-					imageRegistry.put(key, descriptor);
-				}
-
-			}
-		} catch (Exception e) {
+			//String plugInFolder = HelpMethods.getPluginFolder();
+			//loadImages(plugInFolder);
+		} catch (Exception e){
 			e.printStackTrace();
 		}
 	}
-
+    public static void loadImages(String imageFolder) throws MalformedURLException{
+    	try{
+    	if(imageRegistry!=null){
+    	 imageRegistry.dispose();
+    	 
+    	 String imgFolder = imageFolder+File.separator+"icons";
+ 		File folder = new File(imgFolder);
+ 		if (!folder.exists()) {
+ 			folder.mkdirs();
+ 		} else {
+ 			List<String> subFiles = getSubFiles(folder);
+ 			for (int i = 0; i < subFiles.size(); i++) {
+ 				String filePath = subFiles.get(i);
+ 				String key = filePath.substring(imageFolder.length());
+ 				URL url = new URL("file:/" + filePath);
+ 				ImageDescriptor descriptor = ImageDescriptor
+ 						.createFromURL(url);
+ 				imageRegistry.put(key, descriptor);
+ 			}
+ 		}
+    	}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	
+    }
 	// 从文件夹中获得所有文件
 	private static List<String> getSubFiles(File folder) {
 		List<String> ret = new LinkedList<String>();

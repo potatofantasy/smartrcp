@@ -41,7 +41,12 @@ public class PackageTool {
 		    out.writeUTF(appInfo.updateUrl);//更新地址
 		    out.writeUTF(appInfo.describe);
 		    //压缩logo.png
-		    saveFileData(appInfo.logoPath,out);
+		    if(appInfo.logoPath==null){//没有logo文件
+		    	out.writeBoolean(false);
+		    }else{
+		    	out.writeBoolean(true);
+		    	saveFileData(appInfo.logoPath,out);
+		    }
 		    //压缩main.swf路径
 		    out.writeUTF(appInfo.mainSwfPath);
 		    //压缩splash.swf路径
@@ -158,9 +163,10 @@ public class PackageTool {
 		  appFolder.mkdirs();
 		  appInfo.basePath=appFolderStr;
 		  //解压logo.png
-		  String logoStr=appFolderStr+File.separator+"logo.png";
-		  this.writeFileData(logoStr, in);
-		  
+		  if(in.readBoolean()){//如果有logo文件
+		   String logoStr=appFolderStr+File.separator+"logo.png";
+		   this.writeFileData(logoStr, in);
+		  }
 		  //解压main.swf文件
 		  String mainStr=in.readUTF();//main.swf完整路径
 		  appInfo.mainSwfPath=mainStr;
@@ -285,26 +291,25 @@ public class PackageTool {
 	 * @param args
 	 */
 	public static void main(String[] args)throws Exception {
-		//unCompress();
-		compress();
+		unCompress();
+		//compress();
 	}
 	static void unCompress(){
-		new PackageTool().uncompress("C:/牛逼_1.22.rcp", "C:/rcp");
+		new PackageTool().uncompress("C:/DBExplorer_2010-03-18.rcp", "C:/rcp");
 	}
 	static void compress(){
 		CAppInfo appInfo=new CAppInfo();
-	   	appInfo.basePath="F:/explort/SmartRCP/plugins/start_1.0";
-	   	appInfo.name="牛逼";
-	   	appInfo.version="2010-03-08";
-	   	appInfo.provider="smartinvoke";
-	   	appInfo.describe="在房地产市场频遇调控的同时";
-	   	appInfo.logoPath="C:/smartrcp.png";
-	   	appInfo.mainSwfPath="F:/explort/SmartRCP/plugins/start_1.0/modules/SmartRCPDemo.swf";
-	   	appInfo.splashSwfPath="F:/explort/SmartRCP/plugins/start_1.0/modules/Splash.swf";
-	   	appInfo.splashWidth=300;appInfo.splashHeight=200;
+	   	appInfo.basePath="D:/temp/dbExplorer";
+	   	appInfo.name="DBExplorer";
+	   	appInfo.version="2010-03-18";
+	   	appInfo.provider="smartDB";
+	   	appInfo.describe="data base explorer";
+	   	//appInfo.logoPath="C:/smartrcp.png";
+	   	appInfo.mainSwfPath="D:/temp/dbExplorer/modules/main.swf";
+	   	appInfo.splashSwfPath="D:/temp/dbExplorer/modules/DBSplash.swf";
+	   	appInfo.splashWidth=300;appInfo.splashHeight=300;
 	   	
-	   	appInfo.addLib("C:/smartrcp.io.jar");
-	   	appInfo.addLib("C:/cn.smartinvoke.smartrcp.io_1.0.0.jar");
+	   	appInfo.addLib("D:/temp/com.mysql.jdbc.Driver_1.0.0.201003301725.jar");
 	   	
 	   	new PackageTool().compress(appInfo, "C:");
 	}
