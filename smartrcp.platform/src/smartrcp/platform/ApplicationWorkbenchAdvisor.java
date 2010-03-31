@@ -10,6 +10,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
+import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
@@ -31,15 +32,15 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
     	return org.eclipse.core.runtime.Status.OK_STATUS;
 	}
     public void initialize(IWorkbenchConfigurer configurer) {
-    	 super.initialize(configurer);
+    	super.initialize(configurer);
+    	//---------加载图像注册信息
+      	SmartRCPBuilder.Instance.initImageRegistry(Activator.getDefault().getImageRegistry());
     	//初始化窗口
   		SmartRCPBuilder.Instance.initWindows();
-     	//---------加载图像注册信息
-     	SmartRCPBuilder.Instance.initImageRegistry(Activator.getDefault().getImageRegistry());
         SmartRCPBuilder.Instance.initWorkbench(configurer); 
     }
 	public String getInitialWindowPerspectiveId() {
-		return PERSPECTIVE_ID;
+		return Perspective.ID;
 	}
 
 }

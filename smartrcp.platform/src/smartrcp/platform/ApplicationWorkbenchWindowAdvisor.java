@@ -1,5 +1,6 @@
 package smartrcp.platform;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
@@ -22,7 +23,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	}
     public void postWindowOpen() {
     	final Shell shell=this.getWindowConfigurer().getWindow().getShell();
-    	
     	SmartRCPBuilder.Instance.postWindowOpen(shell);
     }
 	public void preWindowOpen() {
