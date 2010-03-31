@@ -39,6 +39,7 @@ public class HelpMethods {
 			e.printStackTrace();
 		}
 	   }
+	   Log.println("plugin folder:"+installFolder);
 		return installFolder;
 	}
 	public static String getStringFromFile(String filePath) {

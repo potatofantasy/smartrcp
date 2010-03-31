@@ -3,6 +3,7 @@ package cn.smartinvoke.smartrcp.core;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.util.List;
 
 import org.eclipse.jface.action.IAction;
@@ -50,6 +51,7 @@ import cn.smartinvoke.rcp.ErrorMessages;
 import cn.smartinvoke.smartrcp.CApplication;
 import cn.smartinvoke.smartrcp.DebugServer;
 import cn.smartinvoke.smartrcp.SmartRCPBundle;
+import cn.smartinvoke.smartrcp.app.CAppService;
 import cn.smartinvoke.smartrcp.app.pack.CAppInfo;
 import cn.smartinvoke.smartrcp.app.pack.PackageTool;
 import cn.smartinvoke.smartrcp.gui.CAppMenuBarManager;
@@ -145,15 +147,15 @@ public class SmartRCPBuilder {
 		
 	}
 	private  void startBundles(BundleContext context){
-		  
-		 String libPath=CPerspective.getRuntimeSwfFolder()+"/lib";
-		// String logFile=CPerspective.getRuntimeSwfFolder()+"/log.txt";
+		
+		 String libPath=HelpMethods.getPluginFolder()+"/lib";
+		 Log.println("加载"+libPath+"中的标准库");
 		 //PrintWriter logWriter=null;
 		 File folder=new File(libPath);
 		 if(!folder.exists()){
 			 folder.mkdirs();
 		 }
-		 //加载插件
+		 //加载标注库插件
 		 try{
 		   CApplication.setStandardBundles(BundleHelpMethod.installBundles(folder));
 		 }catch(BundleException e){
@@ -196,14 +198,17 @@ public class SmartRCPBuilder {
 		ObjectPool.INSTANCE.putObject(splash_win, GlobalServiceId.Splash_Win);
 		//加载当前smartrcp bundle
 		try {
-			CAppInfo appInfo=
-				PackageTool.readBasicInfo(ConfigerLoader.appPath+File.separator+PackageTool.Key_Property_File);
+			CAppInfo appInfo=CAppService.getAppInfo(ConfigerLoader.appPath);
 			SmartRCPBundle rcpBundle=new SmartRCPBundle(appInfo);
 			rcpBundle.load();
 			CApplication.setCurApp(rcpBundle);
-			
+			//加载图片资源
+			ImageManager.loadImages(ConfigerLoader.appPath);
 		} catch (BundleException e1){
 			MessageDialog.openError(splash_win.shell, "", ErrorMessages.Bundle_Load_Error+e1.getMessage());
+		} catch (MalformedURLException e) {
+			MessageDialog.openError(splash_win.shell, "", ErrorMessages.Image_Load_Error+e.getMessage());
+			e.printStackTrace();
 		}
 		try {
 			// -----------开启splash窗口，加载flex的splash信息
@@ -616,8 +621,8 @@ public class SmartRCPBuilder {
     	   fileWriter.write(installFolder+"\n");
     	   fileWriter.flush();
     	   fileWriter.close();
-    	   //重新启动系统
-    	   PlatformUI.getWorkbench().restart();
+    	   //关闭当前透视图
+    	   PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().close();
     	 }catch(Exception e){
     	   throw new RuntimeException(e.getMessage()); 
     	 }finally{
@@ -627,6 +632,9 @@ public class SmartRCPBuilder {
     	 }
     	 
     	 try{  
+    		   //清空以前的程序内存
+    		   this.dispose();
+    		   
     		   //设置加载程序的配置路径
     		   ConfigerLoader.init();
     		   CPerspective.init();
@@ -647,7 +655,9 @@ public class SmartRCPBuilder {
     		   
     		   //还原窗口
     		   Main_Shell.setMinimized(false);
+    		   Main_Shell.layout(true);
     		 }catch(Exception e){
+    			 e.printStackTrace();
     			 Shell mainShell=Display.getCurrent().getActiveShell();
     			 MessageDialog.openError(mainShell, "错误", "程序启动错误，信息如下：\n"+e.getMessage());
     		 }

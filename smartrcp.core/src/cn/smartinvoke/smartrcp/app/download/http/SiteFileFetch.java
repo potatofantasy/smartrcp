@@ -7,10 +7,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 
 import cn.smartinvoke.smartrcp.CApplication;
 import cn.smartinvoke.smartrcp.app.pack.CAppInfo;
 import cn.smartinvoke.smartrcp.app.pack.PackageTool;
+import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
+import cn.smartinvoke.smartrcp.util.JFaceHelpMethod;
 
 public class SiteFileFetch extends Job {
 	SiteInfoBean siteInfoBean = null; // 文件信息Bean
@@ -55,12 +59,19 @@ public class SiteFileFetch extends Job {
 		// 启动FileSplitterFetch线程
 		// 等待子线程返回
 		try {
+			String saveFile=siteInfoBean.getSFilePath()
+			+ File.separator + siteInfoBean.getSFileName();
+			if(!JFaceHelpMethod.checkOverWrite(saveFile)){//用户取消下载
+				return Status.OK_STATUS;
+			}
 			if (bFirst) {
 				nFileLength = getFileSize();
 				if (nFileLength == -1) {
 					this.finishDownload("无法获得文件"+siteInfoBean.getSSiteURL()+"长度",true);
+					return Status.OK_STATUS;
 				} else if (nFileLength == -2){
 					this.finishDownload("无法下载文件"+siteInfoBean.getSSiteURL(),true);
+					return Status.OK_STATUS;
 				} else {
 					this.mbSize=(float)nFileLength/1048576f;//文件兆大小
 					//开始任务显示
@@ -85,8 +96,7 @@ public class SiteFileFetch extends Job {
 			fileSplitterFetch = new FileSplitterFetch[nStartPos.length];
 			for (int i = 0; i < nStartPos.length; i++) {
 				fileSplitterFetch[i] = new FileSplitterFetch(this,siteInfoBean
-						.getSSiteURL(), siteInfoBean.getSFilePath()
-						+ File.separator + siteInfoBean.getSFileName(),
+						.getSSiteURL(),saveFile,
 						nStartPos[i], nEndPos[i], i);
 				//Utility.log("Thread " + i + " , nStartPos = " + nStartPos[i]
 				//		+ ", nEndPos = " + nEndPos[i]);
@@ -127,6 +137,7 @@ public class SiteFileFetch extends Job {
 		}
 		return Status.OK_STATUS;
 	}
+	
 	//添加已完成进度
 	public synchronized void addWorked(int num){
 		this.monitor.worked(num);
@@ -138,11 +149,10 @@ public class SiteFileFetch extends Job {
 	 */
     private void finishDownload(String info,boolean isError){
     	monitor.done();
-    	CApplication app=new CApplication();
     	if(isError){
-    		app.openError(null, "", info);
+    		JFaceHelpMethod.showError(info);
     	}else{
-    	    app.openInformation(null,"",info);
+    		JFaceHelpMethod.showInfo(info);
     	}
     }
     private boolean isErrorShutDown=false;

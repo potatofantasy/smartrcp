@@ -8,6 +8,7 @@ import java.util.List;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.service.packageadmin.PackageAdmin;
 
 import cn.smartinvoke.smartrcp.app.pack.CAppInfo;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
@@ -46,7 +47,7 @@ public class SmartRCPBundle{
      */
     public void unLoad() throws BundleException{
     	//以启动leve的反方向拆卸bundle
-    	for(int i=bundles.size()-1;i<=0;i--){
+    	for(int i=bundles.size()-1;i>=0;i--){
     		Bundle bundle=bundles.get(i);
     		Log.println("unLoad bundle jar:"+bundle);
     		bundle.uninstall();
@@ -60,6 +61,6 @@ public class SmartRCPBundle{
     	
     }
     public static void main(String[] args) {
-		
+    	
 	}
 }
