@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<spl:SplashApp xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:spl="cn.smartinvoke.gui.*" backgroundColor="#ffffff"
+	  xmlns:rcp="cn.smartinvoke.rcp.*"
+	   paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
+	 layout="vertical" horizontalAlign="center" verticalAlign="middle">
+	 
+	 <mx:Style>
+	 	global{
+	 	font-size:12px;
+	 	}
+	 </mx:Style>
+	 <mx:Script>
+	 	<![CDATA[
+	 		import cn.smartinvoke.smartrcp.CApplication;
+	 		import cn.smartinvoke.smartrcp.util.CWorkbenchActions;
+	 		import cn.smartinvoke.rcp.CPageLayout;
+	 		import cn.smartinvoke.rcp.CStandaloneLayout;
+	 		import cn.smartinvoke.rcp.CToolBar;
+	 		import org.eclipse.swt.SWT;
+	 		import cn.smartinvoke.rcp.CFolderLayout;
+	 		
+	 		public override function getAutomatic():Boolean{
+	 		   
+			   return true;
+		    }
+	 		public override function getPerspective():CPerspective{
+	 			
+   			   return ret;
+   		    }
+   		    private function onClick():void{
+   			 this.closeWin();
+   		    }
+   		    private function onExitClick():void{
+   		    	CApplication.Instance.exit();
+   		    }
+   		//--------
+	 	]]>
+	 </mx:Script>
+	 
+	<rcp:CPerspective id="ret" saveAndRestore="false">
+	
+	<!--action的定义 -->
+   	<rcp:actions>
+   	    <rcp:CAction actionId="{CWorkbenchActions.QUIT}" text="退出" imageUrl="/icons/exist.gif"/>
+   	</rcp:actions>
+   	<!--菜单栏-->
+   	<rcp:menuBars>
+   	    <rcp:CMenuRelation label="程序">
+   	    	<rcp:actions>
+   	    		<mx:String>{CWorkbenchActions.ID_QUIT}</mx:String>
+   	    	</rcp:actions>
+   	    </rcp:CMenuRelation>
+   	</rcp:menuBars>
+   	<!--工具栏-->
+	<rcp:toolBar>
+   		<rcp:CToolBar type="{CToolBar.Image_Text_Horizontal}"> 
+   			<rcp:actionIds>
+   			    <mx:ArrayCollection>
+   			           <mx:String>{CWorkbenchActions.ID_QUIT}</mx:String>
+   			    </mx:ArrayCollection>				
+   			</rcp:actionIds>
+   		</rcp:CToolBar>
+   	</rcp:toolBar>
+   	<!--窗口-->
+   	<rcp:windowConfigurer>
+   		<rcp:CWindowConfigurer shellWidth="1000" shellHeight="800" 
+   			showPerspectiveBar="false" showStatusLine="true" shellImage="/icons/exist.gif"
+   			 shellTitle="数据库管理程序..."
+   			/>
+   	</rcp:windowConfigurer>
+   	<!--视图布局-->
+    <rcp:page>
+    	<rcp:CPageLayout id="page" editorAreaVisible="false" fixed="false">
+	 	<rcp:layouts>
+	 	  <mx:ArrayCollection>
+	 	       <rcp:CFolderLayout id="layoutContent" viewId="views/DbInvoke.swf" title="数据库操作"
+	 	  		placeholderViewId="cn.smartinvoke.smartrcp.gui.FlashViewPart"
+	 	  		 relationship="{CPageLayout.TOP}" ratio="0.5" refLayout="{page}" moveable="true"
+	 	  		/>
+	 	  </mx:ArrayCollection>
+	 	</rcp:layouts>
+	  </rcp:CPageLayout>
+    </rcp:page>
+</rcp:CPerspective>
+<mx:Text text="DBExplore" fontSize="20"/>
+</spl:SplashApp>

@@ -66,15 +66,15 @@ package cn.smartinvoke.smartrcp
 		
 		//-----------------常用对话框
 		public function openError(title:String,message:String):void{
-			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+			var shell:Shell=null;//RCPApplication.Instance.flashViewer.getShell();
 			 this.asyncCall("openError",[shell,title,message]);
 		}
 		public function openInformation(title:String,message:String):void{
-			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+			var shell:Shell=null;//RCPApplication.Instance.flashViewer.getShell();
 			 this.asyncCall("openInformation",[shell,title,message]);
 		}
 		public function openWarning(title:String,message:String):void{
-			var shell:Shell=RCPApplication.Instance.flashViewer.getShell();
+			var shell:Shell=null;//RCPApplication.Instance.flashViewer.getShell();
 			 this.asyncCall("openWarning",[shell,title,message]);
 		}
 		
