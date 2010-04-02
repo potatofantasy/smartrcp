@@ -28,6 +28,9 @@
 						Alert.show("连接失败"+ret);
 					}
 				},this);
+				
+				var path:String="http://localhost:8080/explorer.swf";
+				this.swfLoader.source=path;
 			}
 		]]>
 	</mx:Script>
@@ -35,4 +38,7 @@
 	<mx:Text width="100%" id="textInfo">
 		
 	</mx:Text>
+	<mx:SWFLoader  id="swfLoader" width="100%">
+		
+	</mx:SWFLoader>
 </gui:RCPModule>

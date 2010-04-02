@@ -11,7 +11,7 @@
    	ToolTip{
    	  font-size:12px;
    	}
-   Panel {
+   /* Panel {
    borderStyle: solid;
    borderAlpha: 0.49;
    borderThickness: 0;
@@ -19,10 +19,11 @@
    backgroundAlpha: 0.14;
    backgroundColor: #cccccc;
    shadowDistance: 2;
-}
+} */
 </mx:Style>
 <mx:Script>
-	<![CDATA[
+	<![CDATA[//
+		import cn.smartinvoke.smartrcp.gui.module.CommonDialogs;
 		import smartrcp.app.pack.CAppInfo;
 		import smartrcp.app.pack.CAppService;
 		import smartrcp.app.pack.AppPackService;
@@ -52,13 +53,25 @@
 			this.apps=PlatformManager.appService.getInstallApps();
 			//Alert.show(this.packs.length+"");
 		}
+		private function onAddLocalPackClick():void{
+			CommonDialogs.Instance.openFileSelDialog(function (paths:ArrayCollection):void{
+				  	if(paths!=null && paths.length>0){
+				  		var path:String=paths[0] as String;
+				  	    PlatformManager.packService.downloadAppFromLocal(path);
+				  	}
+			},this,false,["*.rcp"]);
+		}
+		private function onUpdateClick():void{
+			
+			
+		}
 	]]>
 </mx:Script>
-<mx:Panel width="100%" height="40"  cornerRadius="1">
-	
-</mx:Panel>
+<mx:ApplicationControlBar width="100%" height="40"  cornerRadius="1" >
+	<mx:Button  icon="@Embed('assets/addLocal.gif')"  label="添加本地程序" click="onAddLocalPackClick()"/>
+	<mx:Button icon="@Embed('assets/update.gif')" label="更新" click="onUpdateClick()"/>
+</mx:ApplicationControlBar>
 <mx:HBox width="100%" height="100%" y="50">
-
 <mx:Panel width="50%" height="100%" title="已安装软件">
 	<mx:DataGrid  backgroundAlpha=".2"  width="100%" height="100%" dataProvider="{this.apps}" rowHeight="30">
             <mx:columns>
@@ -155,8 +168,13 @@
                  	 <mx:HBox horizontalAlign="center">
                  	   <mx:Script>
 	                     <![CDATA[
+	                     	import cn.smartinvoke.smartrcp.CApplication;
 		                      function onInstallClick():void{
+		                      	try{
 		                      	PlatformManager.appService.installApp(this.data.packLocation);
+		                      	}catch(e:Error){
+		                      		CApplication.Instance.openError('',e.message);
+		                      	}
 		                      }
 	                        ]]>
                        </mx:Script>
