@@ -288,8 +288,13 @@ public class CConnection implements IServerObject{
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		if(this.connection!=null){
+			try {
+				this.connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

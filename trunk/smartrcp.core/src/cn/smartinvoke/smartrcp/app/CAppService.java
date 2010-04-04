@@ -1,8 +1,14 @@
 package cn.smartinvoke.smartrcp.app;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,11 +41,13 @@ public class CAppService implements IServerObject {
     	}
     	return path;
     }
+    private static List<CAppInfo> appPacks=null;
     /**
      * 返回已安装的程序
      * @return
      */
     public List<CAppInfo> getInstallApps(){
+      if(appPacks==null){
     	List<CAppInfo> ret=new LinkedList<CAppInfo>();
     	File folder=new File(getInstallFolder());
     	File[] appFolders=folder.listFiles();
@@ -54,7 +62,9 @@ public class CAppService implements IServerObject {
     			}
     		}
     	}
-    	return ret;
+    	appPacks=ret;
+       }
+       return appPacks;
     }
     /**
      * 判断一目录是否为程序目录
@@ -93,6 +103,10 @@ public class CAppService implements IServerObject {
     	 in=new DataInputStream(new FileInputStream(installFolder+File.separator+PackageTool.Key_Property_File));
     	 ret.name=in.readUTF();ret.version=in.readUTF();
     	 ret.provider=in.readUTF();ret.updateUrl=in.readUTF();
+    	 String logoPath=installFolder+File.separator+"logo.png";
+    	 if(new File(logoPath).exists()){
+    		 ret.setLogoPath(logoPath);
+    	 }
     	 ret.describe=in.readUTF();
     	}catch(Exception e){
     	 throw new RuntimeException(e);	
@@ -131,10 +145,15 @@ public class CAppService implements IServerObject {
      * @param appInfo
      */
     private void fireEvents(CAppInfo appInfo){
-    	List<CEventBean> listeners=CAppService.listeners;
-    	for(int i=0;i<listeners.size();i++){
-    		listeners.get(i).fireEvent(appInfo);
-    	}
+		if (appInfo != null) {
+			if (!appPacks.contains(appInfo)) {
+				appPacks.add(appInfo);
+				List<CEventBean> listeners = CAppService.listeners;
+				for (int i = 0; i < listeners.size(); i++) {
+					listeners.get(i).fireEvent(appInfo);
+				}
+			}
+		}
     }
     
     public void runApp(String installFolder){
@@ -152,10 +171,13 @@ public class CAppService implements IServerObject {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		File folder=new File("C:/rcp/牛逼_1.22");
-		File[] subFiles=folder.listFiles();
-		System.out.println(subFiles);
+	public static void main(String[] args)throws Exception{
+		URL url = new URL("http://javaeye.com");
+		URLConnection connection=url.openConnection();
+		InputStream in=connection.getInputStream();
+		byte[] buf=new byte[1024*1024];
+		int red=in.read(buf,0,buf.length);
+		
+		System.out.println(new String(buf,0,red,"utf-8"));
 	}
-
 }

@@ -32,10 +32,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
+import org.eclipse.ui.internal.WorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+
+import com.sun.corba.se.spi.orbutil.threadpool.Work;
 
 import smartrcp.db.DbUtil;
 
@@ -439,9 +442,12 @@ public class SmartRCPBuilder {
     	ObjectPool.INSTANCE.putObject(lineManager,GlobalServiceId.App_StatusLine_Manager);
     	
     }
+    private IWorkbenchWindowConfigurer winConfigurer;
 	public  void preWindowOpen(IWorkbenchWindowConfigurer configurer) {
 		// TODO 将Display对象注册为全局服务对象，并且添加事件处理程序
 		// System.out.println();
+		this.winConfigurer=configurer;
+		
 		Display curDisp = Display.getCurrent();
 		ObjectPool.INSTANCE.putObject(curDisp, GlobalServiceId.Swt_Display);
 		EventFilter.exeFilter(curDisp);
@@ -634,7 +640,7 @@ public class SmartRCPBuilder {
     	 try{  
     		   //清空以前的程序内存
     		   this.dispose();
-    		   
+    		   //
     		   //设置加载程序的配置路径
     		   ConfigerLoader.init();
     		   CPerspective.init();
@@ -643,6 +649,13 @@ public class SmartRCPBuilder {
     		   
     		   //打开加载窗口Splashwin，并加载扩展库
     		   this.initWindows();
+    		   //设置窗口标题与图标
+    		   CWindowConfigurer cWindowConfigurer=SplashWindow.getPerspective().windowConfigurer;
+    		   Main_Shell.setText(cWindowConfigurer.shellTitle);
+    		   ImageDescriptor descriptor=ImageManager.getImageDescriptor(cWindowConfigurer.shellImage);
+    		   if(descriptor!=null){
+    			   Main_Shell.setImage(descriptor.createImage());
+    		   }
     		   //重新打开透视图
     		   String perspectiveId=Perspective.ID;
     		   
@@ -656,6 +669,17 @@ public class SmartRCPBuilder {
     		   //还原窗口
     		   Main_Shell.setMinimized(false);
     		   Main_Shell.layout(true);
+    		   if(window instanceof WorkbenchWindow){
+    			   WorkbenchWindow wBen=(WorkbenchWindow)window;
+    			   wBen.getMenuBarManager().update(true);
+    			   wBen.getMenuManager().createMenuBar(wBen.getShell());
+//    			   wBen.showHeapStatus(true);
+    			   //wBen.getMenuManager().setVisible(false);
+    		   }
+    		   IViewReference[] refs=window.getActivePage().getViewReferences();
+    		   if(refs!=null && refs.length>0){
+    			   window.getActivePage().activate(refs[0].getPart(true));
+    		   }
     		 }catch(Exception e){
     			 e.printStackTrace();
     			 Shell mainShell=Display.getCurrent().getActiveShell();

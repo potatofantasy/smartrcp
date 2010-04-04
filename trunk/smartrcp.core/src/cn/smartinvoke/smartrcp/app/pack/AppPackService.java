@@ -76,7 +76,7 @@ public class AppPackService implements IServerObject{
     		    out=new FileOutputStream(saveFile);
     		    int readNum=0;
     		    byte[] buf=new byte[1024];
-    		    while((readNum=source.read(buf,0,buf.length))!=0){
+    		    while((readNum=source.read(buf,0,buf.length))>0){
     		    	out.write(buf, 0, readNum);
     		    }
     		    out.flush();
@@ -100,15 +100,17 @@ public class AppPackService implements IServerObject{
     		}
     	}
     }
+    private static List<CAppInfo> appPacks=null;
     /**
      * 返回所有程序包的信息
      * @return
      */
     public List<CAppInfo> getApps(){
-    	List<CAppInfo> ret=new LinkedList<CAppInfo>();
-    	File folder=new File(getSaveFolder());
-    	File[] filePacks=folder.listFiles();
-    	if(filePacks!=null){
+    	if(appPacks==null){
+    	 List<CAppInfo> ret=new LinkedList<CAppInfo>();
+    	 File folder=new File(getSaveFolder());
+    	 File[] filePacks=folder.listFiles();
+    	 if(filePacks!=null){
     		for(int i=0;i<filePacks.length;i++){
     		   String name=filePacks[i].getName();
     		   if(name.endsWith(".rcp")){
@@ -122,8 +124,10 @@ public class AppPackService implements IServerObject{
     			}
     		   }
     		}
+    	 }
+    	 appPacks=ret;
     	}
-    	return ret;
+    	return appPacks;
     }
     
     /**
@@ -150,10 +154,15 @@ public class AppPackService implements IServerObject{
      * @param appInfo
      */
     private void fireEvents(CAppInfo appInfo){
-    	List<CEventBean> listeners=eventBeans;
-    	for(int i=0;i<listeners.size();i++){
+      if(appInfo!=null){
+    	if(!appPacks.contains(appInfo)){
+    	 appPacks.add(appInfo);
+    	 List<CEventBean> listeners=eventBeans;
+    	 for(int i=0;i<listeners.size();i++){
     		listeners.get(i).fireEvent(appInfo);
+    	 }
     	}
+      }
     }
     /**
      * 程序包的存储目录

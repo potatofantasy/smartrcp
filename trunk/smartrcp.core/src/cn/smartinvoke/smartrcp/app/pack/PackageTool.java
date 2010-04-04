@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Properties;
 
 import cn.smartinvoke.rcp.ErrorMessages;
+import cn.smartinvoke.smartrcp.CApplication;
+import cn.smartinvoke.smartrcp.util.JFaceHelpMethod;
 import cn.smartinvoke.util.ConfigerLoader;
 
 /**
@@ -158,10 +160,22 @@ public class PackageTool {
 		  appInfo.describe=in.readUTF();
 		  
 		  //创建程序目录
-		  String appFolderStr=targetPath+File.separator+appInfo.name+"_"+appInfo.version;
+		  String appFolderStr=targetPath+File.separator+appInfo.name;//
+		  appInfo.basePath=appFolderStr; 
 		  File appFolder=new File(appFolderStr);
+		  //当前程序是否已经安装，并且正在运行中
+		  CAppInfo runningApp=CApplication.getCurApp().getAppInfo();
+		  if(new File(runningApp.basePath).equals(appFolder)){
+			  throw new RuntimeException(ErrorMessages.Install_Already_Running_Error);
+			  //return  appInfo;
+		  }
+		  //检查程序是否安装，如果已安装，提示用户是否覆盖
+		  if(!JFaceHelpMethod.checkOverWrite(appFolderStr)){
+			  return  appInfo;
+		  }
+		  //
 		  appFolder.mkdirs();
-		  appInfo.basePath=appFolderStr;
+		  
 		  //解压logo.png
 		  if(in.readBoolean()){//如果有logo文件
 		   String logoStr=appFolderStr+File.separator+"logo.png";

@@ -19,6 +19,7 @@ public class CAppMenuBarManager implements IServerObject{
 		if(id!=null && label!=null){
 		  MenuManager menuManager = new MenuManager(label,id);
 		  this.root.add(menuManager);
+		  this.root.updateAll(true);
 		}
 	}
 	public void addMenuItem(String actionId, String path) {

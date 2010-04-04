@@ -11,6 +11,7 @@ package cn.smartinvoke.rcp;
 import cn.smartinvoke.rcp.CLayout;
 public class CFolderLayout extends CLayout  implements ICFolderLayout{
    public String placeholderViewId=null;
+   public Object[] additionalViews;
    public CFolderLayout(){
 	   
    }

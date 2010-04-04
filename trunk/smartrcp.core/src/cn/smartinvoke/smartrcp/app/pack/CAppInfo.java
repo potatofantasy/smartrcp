@@ -9,6 +9,8 @@ import java.util.Stack;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import cn.smartinvoke.smartrcp.app.CAppService;
+
 /**
  * 
  * smartrcp应用程序信息类
@@ -30,17 +32,18 @@ public class CAppInfo {
     //提供者
     public String provider;
     //logo.png文件路径，只能是png格式
-    public String logoPath;
+    String logoPath;
     //应用程序说明
     public String describe;
     //更新地址
     public String updateUrl="http://smartinvoke.cn/update";
+    public boolean isUpdate=true;//是否更新，用户可以选择不更新程序
+    public String updateVersion;
+    public String updateDescribe;
     /**swf地址
     */
     public String mainSwfPath;//主swf地址
     public String splashSwfPath;//splash启动见面地址
-    
-    
     
     public List<String> modules=new LinkedList<String>();//swf模块文件路径集合
     /**
@@ -58,8 +61,9 @@ public class CAppInfo {
     public int splashHeight=225;
     //程序打包文件的绝对路径
     public String packLocation=null;
+    
 	public CAppInfo(){
-	    
+	  
 	}
 	/**
 	 * 解析basePath目录下的程序文件初始化该字段
@@ -113,6 +117,41 @@ public class CAppInfo {
     public List<String> getLibs(){
     	return this.libs;
     }
+    public boolean equals(Object obj){
+    	boolean ret=false;
+    	if(obj!=null ){
+    		if(obj instanceof CAppInfo){
+    			CAppInfo other=(CAppInfo)obj;
+    			if(other.packLocation!=null && this.packLocation!=null){
+    				ret=new File(this.packLocation).equals(new File(other.packLocation));
+    			}
+    			if(other.basePath!=null && this.basePath !=null){
+    				ret=new File(this.basePath).equals(new File(other.basePath));
+    			}
+    		}
+    	}
+    	return ret;
+    }
+    public int hashCode(){
+    	if(this.packLocation!=null){
+    		return this.packLocation.hashCode();
+    	}
+    	if(this.basePath!=null){
+    		return this.basePath.hashCode();
+    	}
+    	return super.hashCode();
+    }
+    
+	public String getLogoPath() {
+		if(this.logoPath==null){
+			return CAppService.getInstallFolder()+"/smartrcp.png";
+		}else{
+		    return this.logoPath;
+		}
+	}
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
+	}
 	/**
 	 * @param args
 	 */

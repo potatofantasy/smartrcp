@@ -46,6 +46,7 @@ public class Perspective implements IPerspectiveFactory {
 			
 			SmartRCPBuilder.Instance.initWindows();
 		}
+		
 		//如果保存了工作台的状态就不执行下面的代码
 		/*if(perspective.saveAndRestore){
 			return;
@@ -112,7 +113,8 @@ public class Perspective implements IPerspectiveFactory {
 		   if(folderLayout.placeholderViewId!=null){
 			   folder.addPlaceholder(folderLayout.placeholderViewId+":*");
 		   }
-		   String viewIdSstr=this.getViewIdString(folderLayout);
+		   //----
+		   String viewIdSstr=this.getViewIdString(folderLayout.getViewId(),folderLayout);
 		   if(viewIdSstr!=null){
 		    folder.addView(viewIdSstr);
 		   }
@@ -120,6 +122,7 @@ public class Perspective implements IPerspectiveFactory {
 		   IViewLayout viewPart=layout.getViewLayout(viewIdSstr);
 		   viewPart.setCloseable(folderLayout.isCloseable());
 		   viewPart.setMoveable(folderLayout.isMoveable());
+		   //-----设置该viewlayout上的所有viewPart
 		   
 		   folderLayout.setCreate(true);
 		  }
@@ -140,7 +143,7 @@ public class Perspective implements IPerspectiveFactory {
 		}
 		String relFolderName=layoutMap.get(refFolder);
 		if(relFolderName!=null){
-			String viewIdSstr=this.getViewIdString(standaloneLayout);
+			String viewIdSstr=this.getViewIdString(standaloneLayout.getViewId(),standaloneLayout);
 			if(viewIdSstr!=null){
 			 layout.addStandaloneView(viewIdSstr, standaloneLayout.isShowTitle(), standaloneLayout.getRelationship(),
 					(float)standaloneLayout.getRatio(),relFolderName);
@@ -151,9 +154,9 @@ public class Perspective implements IPerspectiveFactory {
 		}
 		
 	}
-	private String getViewIdString(CLayout layout){
+	private String getViewIdString(String viewSwf,CLayout layout){
 		   String viewIdSstr=null;
-		   String layoutViewStr=layout.getViewId();
+		   String layoutViewStr=viewSwf;//layout.getViewId();
 		   if(layoutViewStr!=null && layoutViewStr.endsWith(".swf")){
 			   int viewNum=FlashViewer.getViewNum();
 			   viewIdSstr=viewId+":"+viewNum;
