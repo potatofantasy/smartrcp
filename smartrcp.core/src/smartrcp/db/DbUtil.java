@@ -3,7 +3,10 @@ package smartrcp.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
@@ -49,17 +52,18 @@ public class DbUtil implements IServerObject {
 	public void dispose() {
        
 	}
-
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("over");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		System.out.println(Math.round(11.2));
+		//Thread thread=new Thread(target)
 	}
 
+}
+class Sup{
+	
+}
+abstract class Sub extends Sup{
+	
 }
