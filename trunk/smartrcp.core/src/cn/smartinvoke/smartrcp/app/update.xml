@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+ <update>true</update>
+ <version>2.0beta</version>
+ <describe>
+ # * 接收未解析的实体声明事件的通知。 
+#      * 参数意义如下： 
+#      *     name - 未解析的实体的名称。 
+#      *     publicId - 实体的公共标识符，如果未提供，则为 null。 
+#      *     systemId - 实体的系统标识符。 
+#      *     notationName - 相关注释的名称。 
+ </describe>
+</root>
