@@ -25,7 +25,9 @@ public abstract class CObservable implements IServerObject{
 	}
     public void addListener(CEventBean eventBean){
       if(eventBean!=null){
-    	this.listeners.add(eventBean);
+       if(!this.listeners.contains(eventBean)){
+    	 this.listeners.add(eventBean);
+       }
       }
     }
     public void removeListener(CEventBean eventBean){
