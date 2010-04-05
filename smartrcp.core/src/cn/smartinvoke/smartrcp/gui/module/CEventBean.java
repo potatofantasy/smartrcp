@@ -190,7 +190,7 @@ public class CEventBean {
 		if (this.funId != null && this.tagetId != null) {
 			return this.funId.hashCode() + this.tagetId.hashCode();
 		}
-		return 0;
+		return super.hashCode();
 	}
     public String toString(){
     	return this.appId;

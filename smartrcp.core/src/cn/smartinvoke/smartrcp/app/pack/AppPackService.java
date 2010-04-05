@@ -177,6 +177,21 @@ public class AppPackService implements IServerObject{
     	return path;
     }
     
+    /**
+     * java端的同步方法
+     * @param bean flex调用时传入的事件监听对象
+     */
+    public void syncMethod(final CEventBean bean){
+    	//启动新线程完成必要的工作
+    	new Thread(){
+    		public void run(){
+    			System.out.println("完成必要的工作");
+    			//唤醒flex监听器，告知任务的完成，这里可以传入任何对象
+    			bean.fireEvent("flex任务完成了");
+    		}
+    	}.start();
+    	
+    }
 	/**
 	 * @param args
 	 */

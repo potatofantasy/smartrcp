@@ -9,13 +9,16 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.graphics.Region;
 import org.osgi.framework.Bundle;
 
 import cn.smartinvoke.IServerObject;
+import cn.smartinvoke.gui.Flash;
 import cn.smartinvoke.rcp.ErrorMessages;
 import cn.smartinvoke.smartrcp.CApplication;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
+import cn.smartinvoke.smartrcp.gui.module.CObservable;
 
 public class DbUtil implements IServerObject {
 
@@ -57,7 +60,9 @@ public class DbUtil implements IServerObject {
 	 */
 	public static void main(String[] args) {
 		System.out.println(Math.round(11.2));
-		//Thread thread=new Thread(target)
+		Region region=null;
+		Flash flash=null;
+		
 	}
 
 }
