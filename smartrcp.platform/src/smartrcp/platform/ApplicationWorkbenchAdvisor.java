@@ -37,10 +37,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
       	SmartRCPBuilder.Instance.initImageRegistry(Activator.getDefault().getImageRegistry());
     	//³õÊ¼»¯´°¿Ú
   		SmartRCPBuilder.Instance.initWindows();
-        SmartRCPBuilder.Instance.initWorkbench(configurer); 
+        SmartRCPBuilder.Instance.initWorkbench(configurer);
     }
 	public String getInitialWindowPerspectiveId() {
 		return Perspective.ID;
 	}
-
 }
