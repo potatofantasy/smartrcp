@@ -1,13 +1,10 @@
 package cn.smartinvoke.smartrcp.app.pack;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 
 import cn.smartinvoke.smartrcp.app.CAppService;
 
@@ -27,6 +24,7 @@ public class CAppInfo {
 	public String basePath;
 	//应用程序名称必须符合文件（夹）名规范
     public String name;
+    
     //版本号
     public String version;
     //提供者
@@ -35,8 +33,15 @@ public class CAppInfo {
     String logoPath;
     //应用程序说明
     public String describe;
+    //该程序的启动菜单，在开始菜单结构中的位置
+    public String menuPath;
+    //菜单图标，该图标一定要位于icons目录
+    public String meunIcon;
+    
     //更新地址
     public String updateUrl="http://smartinvoke.cn/update";
+    
+    
     public boolean isUpdate=true;//是否更新，用户可以选择不更新程序
     public String updateVersion;
     public String updateDescribe;
