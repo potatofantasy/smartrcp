@@ -40,6 +40,10 @@ import cn.smartinvoke.util.Log;
 public class ViewManager  extends CObservable implements IServerObject{
     private IWorkbenchPage page;
     /**
+     * 单实例
+     */
+    public static final ViewManager Instance=new ViewManager();
+    /**
      * 为非FlashViewPart视图创建FlashViewer对象，并添加到FlashViewer集合，以便ViewManager统一管理
      * @param num
      * @param viewId
@@ -60,7 +64,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 		 
 		 return flashViewer;
     }*/
-	public ViewManager() {
+	private ViewManager() {
         
 	}
 	public void initIWorkbenchPageListener(IWorkbenchPage page){
@@ -151,10 +155,10 @@ public class ViewManager  extends CObservable implements IServerObject{
 		try {
 			FlashViewer ret=null;int appId=-1;
 			if (basicInfo != null) {
-				String viewId=basicInfo.getViewId();
+				String viewId=basicInfo.modulePath;
 				if(viewId!=null){
 				  // IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
-				   
+				   //TODO 这里需要修改以适应swt控件单元部分的逻辑
 				   if(viewId.endsWith(".swf")){//如果是swf
 					  appId = FlashViewer.getViewNum();
 					  basicInfo.autoLoad=true;//设置为true，以便FlashViewPart自动加载swf
@@ -183,7 +187,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 			return ret;
 		} catch (Throwable e) {
 			if(basicInfo!=null){
-			  throw new RuntimeException("view "+basicInfo.getViewId()+" create fault,check isMultiple param or viewId");
+			  throw new RuntimeException("view "+basicInfo.modulePath+" create fault,check isMultiple param or viewId");
 			}else{
 			  throw new RuntimeException(e.getMessage());
 			}

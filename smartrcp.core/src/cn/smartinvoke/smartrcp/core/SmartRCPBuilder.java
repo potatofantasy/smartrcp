@@ -80,7 +80,7 @@ public class SmartRCPBuilder {
 	private static SplashWindow splash_win = SplashWindow.INSTANCE;
    // private static SmartRCPWindowAdvisor window_Advisor=new SmartRCPWindowAdvisor();
 	public static SmartRCPBuilder Instance=new SmartRCPBuilder();
-	private SmartRCPBuilder(){
+	public SmartRCPBuilder(){
        
 	}
 //	public static void createWindowContents(Shell shell,IWorkbenchWindowConfigurer configurer) {
@@ -108,6 +108,9 @@ public class SmartRCPBuilder {
 			String servicePacks = ConfigerLoader
 			.getProperty(ConfigerLoader.key_export_package);
 	        TypeMapper.addServiceConfig(servicePacks);
+	        //添加服务类
+	        TypeMapper.addServicePack("org.eclipse.swt.widgets");
+	        TypeMapper.addServicePack("org.eclipse.swt");
 	        
 			startBundles(context);//启动标准库
 		}catch(Exception e){
@@ -149,7 +152,7 @@ public class SmartRCPBuilder {
 		objectPool.putObject(eventRegister, GlobalServiceId.Event_Register);
 		
 	}
-	private  void startBundles(BundleContext context){
+	protected  void startBundles(BundleContext context){
 		
 		 String libPath=HelpMethods.getPluginFolder()+"/lib";
 		 Log.println("加载"+libPath+"中的标准库");
@@ -158,7 +161,7 @@ public class SmartRCPBuilder {
 		 if(!folder.exists()){
 			 folder.mkdirs();
 		 }
-		 //加载标注库插件
+		 //加载标准库插件
 		 try{
 		   CApplication.setStandardBundles(BundleHelpMethod.installBundles(folder));
 		 }catch(BundleException e){
@@ -524,10 +527,7 @@ public class SmartRCPBuilder {
 					}
 					
 				});
-				
-				
 			}
-
 			public void perspectiveChanged(IWorkbenchPage page,
 					IPerspectiveDescriptor perspective, String changeId) {
 			}
@@ -552,9 +552,12 @@ public class SmartRCPBuilder {
 			if(imageDescriptor!=null){
 				shell.setImage(imageDescriptor.createImage());
 			}
+			if(cWinConfig.maximized){
+				shell.setMaximized(true);
+			}
 		}
 		// 全局服务 对象设置视图管理器
-		ViewManager viewManager=new ViewManager();
+		ViewManager viewManager=ViewManager.Instance;
 		IWorkbenchWindow window=this.window;
 		viewManager.initIWorkbenchPageListener(window.getActivePage());
 		ObjectPool.INSTANCE.putObject(viewManager,
@@ -577,7 +580,7 @@ public class SmartRCPBuilder {
 	 * 打开debug服务，接收flexBuilder的请求，如果已经打开就直接返回
 	 */
 	private  boolean isStart=false;
-    private  void openDebugServer(){
+    protected  void openDebugServer(){
       if(!isStart){
        String debugStr=ConfigerLoader.getProperty(ConfigerLoader.key_debug);
        if(debugStr!=null){
@@ -691,7 +694,7 @@ public class SmartRCPBuilder {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-          
+         
 	}
 
 }

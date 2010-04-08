@@ -21,6 +21,8 @@ import cn.smartinvoke.exception.InvokeException;
 import cn.smartinvoke.exception.Messages;
 import cn.smartinvoke.rcp.CPageLayout;
 import cn.smartinvoke.rcp.CPerspective;
+import cn.smartinvoke.smartrcp.core.ISWTPartUnit;
+import cn.smartinvoke.smartrcp.core.SWTUnitViewPart;
 import cn.smartinvoke.smartrcp.gui.FlashShell;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
@@ -517,6 +519,13 @@ public class FlashViewer implements IServerObject {
 	public Object invoke(String methodName,Object[] pars){
 		if(this.parent instanceof FlashViewPart || this.parent instanceof FlashShell){
 		  return this.flexApp.call(methodName, pars);
+		}else if(this.parent instanceof SWTUnitViewPart){
+		  ISWTPartUnit partUnit=((SWTUnitViewPart)this.parent).getPartUnit();
+		  if(partUnit!=null){
+			  return partUnit.invoke(methodName, pars);
+		  }else{
+			  throw new RuntimeException("current ViewPart's ISWTPartUnit is null");
+		  }
 		}else{
 		  return invokeObject(parent,methodName,pars);
 		}

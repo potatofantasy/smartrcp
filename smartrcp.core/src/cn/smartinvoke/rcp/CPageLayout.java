@@ -19,7 +19,7 @@ import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.gui.ObjectPool;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
 import cn.smartinvoke.smartrcp.gui.control.ViewManager;
- public class CPageLayout  implements ICFolderLayout{
+ public class CPageLayout extends CFolderLayout implements ICFolderLayout{
 	
 	public static final CPageLayout Instance=new CPageLayout();
 	/**
@@ -28,12 +28,12 @@ import cn.smartinvoke.smartrcp.gui.control.ViewManager;
 	private Map<String,List<String>> moduleIdAppIdMap=new HashMap<String, List<String>>();
 	private boolean editorAreaVisible=true;
 	public boolean fixed=false;
-    private LinkedList<CLayout> layouts=null;
+    private LinkedList<ICFolderLayout> layouts=null;
     
-	public LinkedList<CLayout> getLayouts() {
+	public LinkedList<ICFolderLayout> getLayouts() {
 		return layouts;
 	}
-	public void setLayouts(LinkedList<CLayout> layouts) {
+	public void setLayouts(LinkedList<ICFolderLayout> layouts) {
 		this.layouts = layouts;
 	}
 	public boolean isEditorAreaVisible() {

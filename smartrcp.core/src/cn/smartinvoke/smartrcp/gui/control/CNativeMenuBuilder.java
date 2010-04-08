@@ -84,9 +84,15 @@ private  void fillMenu(IMenuManager menuBar, CMenuRelation menuRelation,String m
 		if (menuRelation == null) {
 			return;
 		}
-		MenuManager menuManager = new MenuManager(menuRelation.label,managerId);
+		
+		IMenuManager menuManager =null;
 		Object[] actions = menuRelation.actions;
 		if (actions != null) {
+			menuManager=this.root.findMenuUsingPath(pathStr);
+			if(menuManager==null){
+			  Log.println(" create menu path="+pathStr);
+			  menuManager=new MenuManager(menuRelation.label,managerId);
+			}
 			for (int a = 0; a < actions.length; a++) {
 				Object action = actions[a];
 				if (action instanceof CMenuRelation) {

@@ -1,23 +1,15 @@
-
-/*******************************************************************************
-* Copyright (c) 2009 SmartInvoke.
-* 此代理类由CodeTransform工具自动生成
-* 您可以通过 
-*  网站:http://smartinvoke.cn/ 
-*  邮件:pzxiaoxiao130130@gmail.com
-*  QQ：90636900*  联系到作者^_^ 
-*******************************************************************************/ 
 package cn.smartinvoke.rcp;
- import cn.smartinvoke.rcp.CLayout;
- public class CStandaloneLayout extends CLayout {
-	 private boolean showTitle=true;
 
-	public boolean isShowTitle() {
-		return showTitle;
-	}
-
-	public void setShowTitle(boolean showTitle) {
-		this.showTitle = showTitle;
-	}
-	 
- }
+public class CStandaloneLayout implements ICFolderLayout{
+	public boolean showTitle = true;
+	
+	public int relationship;
+	public double ratio;
+	public boolean closeable = true;
+	public boolean moveable = true;
+	public ICFolderLayout refLayout = null;
+	/**
+	 * 该layout中显示的模块
+	 */
+	public CLayoutBasicInfo module=null;
+}
