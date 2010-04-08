@@ -89,11 +89,11 @@
                       startMenu.show(evt.x,evt.y);
            }
 		   private function openView():void{
-		   	   var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
+		   	  /*  var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
 				basicInfo.viewId="platform/AppPackManager.swf";
 				basicInfo.title="已下载软件";
 				basicInfo.image="/icons/help.gif";
-			    var openedView:FlashViewer=ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_CREATE);
+			    var openedView:FlashViewer=ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_CREATE); */
 		   }
 		   
 		   /* private function explortPNG():void{

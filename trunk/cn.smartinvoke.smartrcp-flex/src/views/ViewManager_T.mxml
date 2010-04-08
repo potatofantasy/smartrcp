@@ -18,9 +18,9 @@
 			function init():void{
 			   
 			}
-			function openView():void{  
+			function openView():void{   
 				var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
-				basicInfo.viewId=this.path;//"cn.smartinvoke.smartrcp.WebBrowser";
+				basicInfo.viePartId=CLayoutBasicInfo.WebBrowser_View_Part;//"cn.smartinvoke.smartrcp.WebBrowser";
 				basicInfo.title="右键菜单";
 				basicInfo.image="/icons/allteamstrms_rep.gif";
 			    var openedView:FlashViewer=ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);

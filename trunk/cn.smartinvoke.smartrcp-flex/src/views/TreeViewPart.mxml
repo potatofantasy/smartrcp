@@ -5,7 +5,7 @@
 		<![CDATA[
 			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
 			import cn.smartinvoke.smartrcp.gui.control.CActionManager;
-			import cn.smartinvoke.RemoteObject;
+			import cn.smartinvoke.RemoteObject; 
 			import cn.smartinvoke.smartrcp.CApplication;
 			import cn.smartinvoke.smartrcp.gui.FlashViewer;
 			import mx.collections.ArrayCollection;
@@ -66,7 +66,7 @@
 					//打开视图
 					this.openViewPart(modulePath,selItem.@label);
 					//显示源代码
-					this.showSourceCode(modulePath);
+					//this.showSourceCode(modulePath);
 				}
 			}
 			/**
@@ -85,7 +85,8 @@
 					var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
 					basicInfo.isModuleSwf=true;
 					basicInfo.title=title;//selItem.@label;
-					basicInfo.viewId=modulePath;
+					basicInfo.modulePath=modulePath;
+					basicInfo.viePartId=CLayoutBasicInfo.Flash_View_Part;
 					ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_ACTIVATE);
 				}
 			}
@@ -102,55 +103,10 @@
 			 *显示指定模块的源代码
 			 */
 			private function showSourceCode(modulePath:String):void{
-				//获得modulePath模块对应的源代码
-				//如果是项目主页则打开项目网站
-				if(modulePath=="cn.smartinvoke.smartrcp.WebBrowser"){
-				  //获得浏览器视图对象并调用其setHtml方法设置其源代码
-			      var viewers:ArrayCollection=ViewManager.Instance.findFlashViewers(modulePath);
-			      if(viewers!=null && viewers.length>0){
-			    	 var viewer:FlashViewer=viewers[0] as FlashViewer;
-			    	 viewer.invoke("openUrl",["http://code.google.com/p/smartrcp/"]);
-			      }
-				  return;	
-				}
-				var path:String=CApplication.Instance.getBaseFolder()+"/srcview/source/"+modulePath;
-				path=path.substr(0,path.length-4)+".mxml.html";
-				/**var fileReader:RemoteObject=new RemoteObject();
-				fileReader.create("java.io.FileReader",[path]);
-				//根据fileReader对象创建BufferedReader对象
-				var reader:RemoteObject=new RemoteObject();
-				reader.create("java.io.BufferedReader",[fileReader]);
-			    //读取文件内容
-			    var content:String=this.htmlHeader;
-			    while(true){
-			    	var line:String=reader.call("readLine") as String;
-			    	if(line!=null){
-			    		content+=line+"\n";
-			    	}else{
-			    		break;
-			    	}
-			    }
-			    content+="</textarea></body></html>";
-			    //释放资源
-			    reader.asyncCall("close");
-			    //释放java中的对应服务对象
-			    reader.gc();
-			    fileReader.gc();
-			    */
-			    Alert.show(path);
-			    //显示文件
-			    this.showModuleContent(path);
+				
 			}
 			private function showModuleContent(path:String):void{
-				var browserId:String="cn.smartinvoke.smartrcp.WebBrowser";
-			    
-			    this.openViewPart(browserId,"源代码");
-			    //获得浏览器视图对象并调用其setHtml方法设置其源代码
-			    var viewers:ArrayCollection=ViewManager.Instance.findFlashViewers(browserId);
-			    if(viewers!=null && viewers.length>0){
-			    	var viewer:FlashViewer=viewers[0] as FlashViewer;
-			    	viewer.invoke("setHtml",[path]);
-			    }
+				
 			}
 		]]>
 	</mx:Script>

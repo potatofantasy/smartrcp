@@ -23,7 +23,7 @@ package cn.smartinvoke.rcp
 	[Inspectable(type="Boolean")]
 	public var autoLoad:Boolean=false;
 	//RCP的viewPart定义ID
-	public var viePartId:String=null;
+	public var viePartId:String=CLayoutBasicInfo.Flash_View_Part;
 	//需要加载的模块的Id
 	public var modulePath:String=null;
     [Inspectable(type="Boolean")]

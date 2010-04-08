@@ -8,11 +8,11 @@
 			import cn.smartinvoke.smartrcp.gui.module.CommonDialogs;
 			import cn.smartinvoke.smartrcp.gui.module.CRGB;
 			import cn.smartinvoke.smartrcp.CApplication;
-			import mx.controls.Alert;
+			import mx.controls.Alert; 
 			import cn.smartinvoke.smartrcp.gui.CMessageDialog;
 			function openMessageDialog():void{
 				var dialog:CMessageDialog=new  CMessageDialog("标题","消息",CMessageDialog.INFORMATION,["button1","button2"],0);
-				
+				 
 				dialog.open(this.onDialogRet,this);
 				//Alert.show(type+"");
 			}

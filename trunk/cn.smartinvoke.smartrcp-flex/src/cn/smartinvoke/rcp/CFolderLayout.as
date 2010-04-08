@@ -6,7 +6,7 @@ package cn.smartinvoke.rcp
 	[RemoteClass(alias="cn.smartinvoke.rcp.CFolderLayout")]
 	public class CFolderLayout implements ICFolderLayout
 	{
-	   [Inspectable(type="Number")]
+	   [Inspectable(type="Number")] 
 	   public var relationship:int=CPageLayout.LEFT;
 	   [Inspectable(type="Number")]
 	   public var ratio:Number=CPageLayout.RATIO_MIN;
