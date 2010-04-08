@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rcp:RCPApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:rcp="cn.smartinvoke.gui.*"
-	layout="absolute" verticalGap="2" creationComplete="init()">
+	paddingLeft="2" paddingRight="2" paddingBottom="2" xmlns:hc="com.hillelcoren.components.*"
+	layout="absolute" verticalGap="2" creationComplete="init()"  backgroundGradientColors="[#dee2e9, #cfd8ea]"
+	
+	modalTransparencyBlur="0" modalTransparencyColor="0" modalTransparency="0.2" modalTransparencyDuration="200">
 <mx:Style>
 /* Application {
    backgroundImage: Embed(source="assets/bg1.swf");
@@ -11,6 +14,23 @@
    	ToolTip{
    	  font-size:12px;
    	}
+   	.searchInput {
+   borderStyle: solid;
+   borderColor: #00ccff;
+   borderThickness: 5;
+   cornerRadius: 5;
+   backgroundAlpha: 1;
+   color: #339933;
+   textAlign: left;
+   dropShadowEnabled: true;
+   shadowDirection: center;
+   shadowDistance: 2;
+}
+   	CustomButton
+{
+    
+}
+
    /* Panel {
    borderStyle: solid;
    borderAlpha: 0.49;
@@ -23,191 +43,11 @@
 </mx:Style>
 <mx:Script>
 	<![CDATA[//
-		import cn.smartinvoke.smartrcp.gui.module.CommonDialogs;
-		import smartrcp.app.pack.CAppInfo;
-		import smartrcp.app.pack.CAppService;
-		import smartrcp.app.pack.AppPackService;
-		import mx.controls.Alert;
-		import mx.collections.ArrayCollection;
-		import cn.smartinvoke.executor.Executor;
-		public static var packService:AppPackService=null;
-		public static var appService:CAppService=null;
-		[Bindable]
-		public var packs:ArrayCollection=new ArrayCollection();
-		[Bindable]
-		public var apps:ArrayCollection=new ArrayCollection();
 		
 		private function init():void{
 			
-			PlatformManager.packService=new AppPackService();
-			PlatformManager.packService.addListener(function (appInfo:CAppInfo):void{
-				this.packs.addItem(appInfo);
-			},this);
-			
-			PlatformManager.appService=new CAppService();
-			PlatformManager.appService.addListener(function (appInfo:CAppInfo):void{
-				this.apps.addItem(appInfo);
-			},this);
-			
-			this.packs=PlatformManager.packService.getApps();
-			this.apps=PlatformManager.appService.getInstallApps();
-			//Alert.show(this.packs.length+"");
 		}
-		private function onAddLocalPackClick():void{
-			CommonDialogs.Instance.openFileSelDialog(function (paths:ArrayCollection):void{
-				  	if(paths!=null && paths.length>0){
-				  		var path:String=paths[0] as String;
-				  	    PlatformManager.packService.downloadAppFromLocal(path);
-				  	}
-			},this,false,["*.rcp"]);
-		}
-		private function onUpdateClick():void{
-			
-			
-		}
+		
 	]]>
 </mx:Script>
-<mx:ApplicationControlBar width="100%" height="40"  cornerRadius="1" >
-	<mx:Button  icon="@Embed('assets/addLocal.gif')"  label="添加本地程序" click="onAddLocalPackClick()"/>
-	<mx:Button icon="@Embed('assets/update.gif')" label="更新" click="onUpdateClick()"/>
-</mx:ApplicationControlBar>
-<mx:HBox width="100%" height="100%" y="50">
-<mx:Panel width="50%" height="100%" title="已安装软件">
-	<mx:DataGrid  backgroundAlpha=".2"  width="100%" height="100%" dataProvider="{this.apps}" rowHeight="30">
-            <mx:columns>
-                <mx:DataGridColumn dataField="name" headerText="名称"/>
-                <mx:DataGridColumn  headerText="描述">
-                  <mx:itemRenderer>
-                 	<mx:Component>
-                 		<mx:HBox horizontalAlign="center">
-                 	   <mx:Script>
-	                     <![CDATA[
-		                      
-	                        ]]>
-                       </mx:Script>
-                 		<mx:Button   width="40" icon="@Embed('assets/help.gif')" 
-                 			toolTip="{'提供者:'+this.data.provider+'\n版本:'+this.data.version+'\n 描述:'+this.data.describe}"/>
-                 	 </mx:HBox>
-                 	</mx:Component>
-                 </mx:itemRenderer>
-                </mx:DataGridColumn>
-                <mx:DataGridColumn  headerText="启动">
-                  <mx:itemRenderer>
-                 	<mx:Component>
-                 		<mx:HBox horizontalAlign="center">
-                 	   <mx:Script>
-	                     <![CDATA[
-	                     	import smartrcp.app.pack.CAppInfo;
-		                      function onRunClick():void{
-		                      	 var appInfo:CAppInfo=this.data as CAppInfo;
-		                      	 PlatformManager.appService.runApp(appInfo.basePath);
-		                      }
-	                        ]]>
-                       </mx:Script>
-                 		<mx:Button   width="40" icon="@Embed('assets/run.gif')" click="onRunClick()"/>
-                 	 </mx:HBox>
-                 	</mx:Component>
-                 </mx:itemRenderer>
-                </mx:DataGridColumn>
-                <mx:DataGridColumn  headerText="拆卸">
-                  <mx:itemRenderer>
-                 	<mx:Component>
-                 		<mx:HBox horizontalAlign="center">
-                 	   <mx:Script>
-	                     <![CDATA[
-		                      import smartrcp.app.pack.CAppInfo;
-		                      function onDelClick():void{
-		                      	 var appInfo:CAppInfo=this.data as CAppInfo;
-		                      	 PlatformManager.appService.deleteApp(appInfo.basePath);
-		                      }
-	                        ]]>
-                       </mx:Script>
-                 		<mx:Button   width="40" icon="@Embed('assets/remove.gif')" click="onDelClick()"/>
-                 	 </mx:HBox>
-                 	</mx:Component>
-                 </mx:itemRenderer>
-                </mx:DataGridColumn>
-                <mx:DataGridColumn  headerText="更新">
-                  <mx:itemRenderer>
-                 	<mx:Component>
-                 		<mx:HBox horizontalAlign="center">
-                 	   <mx:Script>
-	                     <![CDATA[
-		                      import smartrcp.app.pack.CAppInfo;
-		                      function onUpdateClick():void{
-		                      	 var appInfo:CAppInfo=this.data as CAppInfo;
-		                      	 PlatformManager.appService.updateApp(appInfo.basePath);
-		                      }
-	                        ]]>
-                       </mx:Script>
-                 		<mx:Button   width="40" icon="@Embed('assets/update.gif')" click="onUpdateClick()"/>
-                 	 </mx:HBox>
-                 	</mx:Component>
-                 </mx:itemRenderer>
-                </mx:DataGridColumn>
-            </mx:columns>
-     </mx:DataGrid>
-</mx:Panel>
-<mx:Panel width="50%" height="100%" title="未安装软件">
-	<mx:DataGrid dataProvider="{this.packs}"  backgroundAlpha=".2"  width="100%" height="100%" rowHeight="30">
-            <mx:columns>
-                <mx:DataGridColumn dataField="name" headerText="名称"/>
-                <mx:DataGridColumn dataField="describe" headerText="描述">
-                 <mx:itemRenderer>
-                 	<mx:Component>
-                 	 <mx:HBox horizontalAlign="center">
-                 		<mx:Button  icon="@Embed('assets/help.gif')" width="40"
-                 			 toolTip="{'提供者:'+this.data.provider+'\n版本:'+this.data.version+'\n 描述:'+this.data.describe}"/>
-                 	</mx:HBox>
-                 	</mx:Component>
-                 </mx:itemRenderer>
-                </mx:DataGridColumn>
-                <mx:DataGridColumn dataField="describe" headerText="安装">
-                    <mx:itemRenderer>
-                 	<mx:Component>
-                 	 <mx:HBox horizontalAlign="center">
-                 	   <mx:Script>
-	                     <![CDATA[
-	                     	import cn.smartinvoke.smartrcp.CApplication;
-		                      function onInstallClick():void{
-		                      	try{
-		                      	PlatformManager.appService.installApp(this.data.packLocation);
-		                      	}catch(e:Error){
-		                      		CApplication.Instance.openError('',e.message);
-		                      	}
-		                      }
-	                        ]]>
-                       </mx:Script>
-                 		<mx:Button   width="40" icon="@Embed('assets/install.gif')" click="onInstallClick()"/>
-                 	 </mx:HBox>
-                 	</mx:Component>
-                 </mx:itemRenderer>
-                </mx:DataGridColumn>
-                <mx:DataGridColumn dataField="describe" headerText="删除">
-                    <mx:itemRenderer>
-                 	<mx:Component>
-                 		<mx:HBox horizontalAlign="center">
-                 	   <mx:Script>
-	                     <![CDATA[
-	                     	import mx.collections.ArrayCollection;
-	                     	import mx.controls.DataGrid;
-		                      function onDelClick():void{
-		                      	PlatformManager.packService.deleteAppPack(this.data.packLocation);
-		                      	var grid:DataGrid=this.parent.parent as DataGrid;
-		                      	var gridData:ArrayCollection=grid.dataProvider as ArrayCollection;
-		                      	var index:int=gridData.getItemIndex(this.data);
-		                      	gridData.removeItemAt(index);
-		                      }
-	                        ]]>
-                       </mx:Script>
-                 		<mx:Button   width="40" icon="@Embed('assets/remove.gif')" click="onDelClick()"/>
-                 	 </mx:HBox>
-                 	</mx:Component>
-                 </mx:itemRenderer>
-                </mx:DataGridColumn>
-            </mx:columns>
-     </mx:DataGrid>
-</mx:Panel>
-		
-</mx:HBox>
 </rcp:RCPApplication>

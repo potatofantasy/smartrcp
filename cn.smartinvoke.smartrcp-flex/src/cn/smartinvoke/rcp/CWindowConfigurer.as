@@ -11,6 +11,7 @@ package cn.smartinvoke.rcp
     public var shellHeight:int=600;
     public var shellTitle:String;
     public var shellImage:String;
+    public var maximized:Boolean=false;//窗口是否最大化
     public var showMenuBar:Boolean=true;
     public var showPerspectiveBar:Boolean=true;
     public var showCoolBar:Boolean=true;

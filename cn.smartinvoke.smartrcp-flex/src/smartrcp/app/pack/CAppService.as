@@ -37,5 +37,8 @@ package smartrcp.app.pack
 		public function updateApp(installFolder:String):void{
 			this.asyncCall('updateApp',arguments);
 		}
+		public function getInstallFolder():String{
+		  return	this.call('getInstallFolder',arguments) as String;
+		}
 	}
 }
