@@ -104,16 +104,24 @@
 	 	<rcp:layouts>
 	 	  <mx:ArrayCollection>
 	 	       
-	 	       <rcp:CStandaloneLayout id="layoutNav" title="功能列表" closeable="false" image="/icons/nav.gif"
-	 	        viewId="views/TreeViewPart.swf" relationship="{CPageLayout.LEFT}" ratio="0.25" refLayout="{this.page}" showTitle="true">
+	 	       <rcp:CStandaloneLayout id="layoutNav" relationship="{CPageLayout.LEFT}" ratio="0.25" refLayout="{this.page}" showTitle="true">
+	 	         <rcp:module>
+	 	         	<rcp:CLayoutBasicInfo viePartId="{CLayoutBasicInfo.Flash_View_Part}" modulePath="views/TreeViewPart.swf"
+	 	         	 title="功能" closeable="false"/>
+	 	         </rcp:module>
 	           </rcp:CStandaloneLayout>
-	 	       <rcp:CFolderLayout id="layoutContent" viewId="views/ViewManager_T.swf" title="开始界面"
-	 	  		placeholderViewId="cn.smartinvoke.smartrcp.gui.FlashViewPart"
-	 	  		 relationship="{CPageLayout.TOP}" ratio="0.5" refLayout="{page}" moveable="true"
-	 	  		/>
-	           <rcp:CFolderLayout viewId="cn.smartinvoke.smartrcp.WebBrowser"
-	            relationship="{CPageLayout.BOTTOM}" ratio="0.5" refLayout="{this.layoutContent}"/>
-	 	       
+	 	       <rcp:CFolderLayout id="layoutContent"
+	 	  		 relationship="{CPageLayout.TOP}" ratio="0.5" refLayout="{page}">
+	 	  		 <rcp:modules>
+	 	  		   <mx:ArrayCollection>
+	 	  		   	  <rcp:CLayoutBasicInfo modulePath="views/ViewManager_T.swf"
+	 	         	    title="界面管理" closeable="true"/>
+	 	         	  <rcp:CLayoutBasicInfo viePartId="{CLayoutBasicInfo.WebBrowser_View_Part}" title="关于SmartRCP"
+	 	         	  	 closeable="false" moveable="true"
+	 	         	  	/>
+	 	  		   </mx:ArrayCollection>
+	 	  		 </rcp:modules>
+	 	  	   </rcp:CFolderLayout>
 	 	  </mx:ArrayCollection>
 	 	</rcp:layouts>
 	  </rcp:CPageLayout>

@@ -8,10 +8,10 @@ package cn.smartinvoke.rcp
 	   public var relationship:int=CPageLayout.LEFT;
 	   [Inspectable(type="Number")]
 	   public var ratio:Number=CPageLayout.RATIO_MIN;
-	   [Inspectable(type="Boolean")]
+	   /* [Inspectable(type="Boolean")]
 	   public var closeable:Boolean= true;
 	   [Inspectable(type="Boolean")]
-	   public var moveable:Boolean = true;
+	   public var moveable:Boolean = true; */
 	   [Inspectable(type="Boolean")]
 	   public var showTitle:Boolean = true;
 	   
@@ -19,6 +19,6 @@ package cn.smartinvoke.rcp
 	  /**
 	   * 该layout中显示的模块
 	   */
-	   private  var module:CLayoutBasicInfo=null;
+	   public  var module:CLayoutBasicInfo=null;
 	}
 }

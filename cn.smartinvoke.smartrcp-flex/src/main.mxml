@@ -7,7 +7,7 @@
    <mx:Style>
    	global{  
    	 font-size:12px;
-   	}
+   	} 
    </mx:Style>
    <mx:Script>
    	<![CDATA[
