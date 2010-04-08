@@ -4,6 +4,7 @@ package cn.smartinvoke.smartrcp.gui
 	import cn.smartinvoke.rcp.GlobalServiceId;
 	import cn.smartinvoke.smartrcp.CApplication;
 	
+	import org.eclipse.swt.widgets.Display;
 	import org.eclipse.swt.widgets.Shell;
     [Bindable]
 	[RemoteClass(alias="cn.smartinvoke.gui.FlashViewer")]
@@ -41,17 +42,7 @@ package cn.smartinvoke.smartrcp.gui
 		}
 		//--------------
 		public function getShell():Shell{
-			var ret:Shell=null;
-			var parent:RemoteObject=this.getParent();
-			//var parent:RemoteObject=new RemoteObject();
-			//parent.remoteId=parentObj.remoteId;
-			var typeStr:String=parent.call("getType") as String;
-			if(typeStr=="FlashShell"){
-				ret=parent.call("getShell",[]) as Shell;
-			}else{
-				ret=new Shell();
-				ret.remoteId=GlobalServiceId.Swt_Main_Win;
-			}
+			var ret:Shell=Display.getCurrent().call('getActiveShell',[]) as Shell;
 			return ret;
 		}
 		//返回模块路径

@@ -1,5 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
-	layout="vertical">
-	<mx:Label text="程序管理"/>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	xmlns:hc="com.hillelcoren.components.*"
+	layout="vertical" creationComplete="init()">
+	<mx:Style>
+		.panelPart{
+   borderStyle: solid;
+   borderColor: #5c94c5;
+   borderAlpha: .6;
+   borderThickness: 0;
+   cornerRadius: 0;
+   border-skin: ClassReference("border.SimpleGradientBorder");
+           fill-colors: #E9F0FD, #FFFFFF;
+    roundedBottomCorners: true;
+   dropShadowEnabled: false;
+   
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import cn.smartinvoke.rcp.CMenuRelation;
+			import cn.smartinvoke.smartrcp.gui.FlashShell;
+			import cn.smartinvoke.smartrcp.gui.control.CNativeMenuBuilder;
+			import cn.smartinvoke.smartrcp.util.UIHelpMethod;
+		    import flash.display.*;
+		    import flash.utils.*;
+		    
+			import cn.smartinvoke.smartrcp.gui.control.CAppToolBarManager;
+			import mx.controls.Alert;
+			import cn.smartinvoke.smartrcp.gui.module.CActionEvent;
+			import cn.smartinvoke.smartrcp.gui.control.CActionManager;
+			import cn.smartinvoke.rcp.CAction;
+			import cn.smartinvoke.smartrcp.gui.FlashViewer;
+			import cn.smartinvoke.rcp.CLayoutBasicInfo;
+			import cn.smartinvoke.smartrcp.gui.control.ViewManager;
+			import smartrcp.app.pack.CAppInfo;
+			import smartrcp.app.pack.CAppService;
+			import smartrcp.app.pack.AppPackService;
+			import mx.collections.ArrayCollection;
+			import mx.graphics.codec.PNGEncoder;
+			public static var packService:AppPackService=null;
+		    public static var appService:CAppService=null;
+		    
+			[Bindable]
+		    public var apps:ArrayCollection=new ArrayCollection();
+		    [Bindable]
+		    public var searchData:ArrayCollection=new ArrayCollection(['个第三个','覆盖','还不','还不']);
+		    //程序选择工具
+		    private var actionAppSel:CAction=null;
+		    //程序开始下拉菜单
+		    var startMenu:CNativeMenuBuilder=null;
+		    private function init():void{
+			 actionAppSel=new CAction("actionAppSel","启动","/icons/help.gif","选择需要启动的程序");
+			 this.actionAppSel.type=CAction.AS_DROP_DOWN_MENU;//下拉菜单样式
+			 CActionManager.Instance.addAction(this.actionAppSel);
+			 CActionManager.Instance.addListener(this.actionAppSel.actionId,this.onAppSelActionClick,this);
+			 //添加到工具条
+			 CAppToolBarManager.Instance.insertItem(this.actionAppSel.actionId);
+			 
+			 AppManager.appService=new CAppService();
+			 AppManager.appService.addListener(function (appInfo:CAppInfo):void{
+				this.apps.addItem(appInfo);
+			 },this);
+			 
+			 startMenu=new CNativeMenuBuilder(this.flashViewer.getShell());
+			 var actions:ArrayCollection=new ArrayCollection();
+			 var menuRef:CMenuRelation=new CMenuRelation();
+			 
+			 this.apps=AppManager.appService.getInstallApps();
+			 var actionRel:Array=[];
+			 for each(var app:CAppInfo in this.apps){
+			 	app.menuPath="标准/特殊";
+			 	app.meunIcon="/icons/search.gif";
+			    actionRel[actionRel.length]=app.getStartMenu(actions);
+			 }
+			 menuRef.actions=actionRel;
+			 startMenu.initAction(actions.toArray());
+			 startMenu.initMenu(menuRef);
+			 startMenu.addListener(function (evt:CActionEvent):void{
+			 	labelInfo.text=evt.actionId+" "+evt.path;
+			 },this);
+		   }
+		   /**
+		   *程序启动下拉菜单点击事件
+		   */
+		   private function onAppSelActionClick(evt:CActionEvent):void{
+                      //Alert.show(evt.x+"  "+evt.y);
+                      startMenu.show(evt.x,evt.y);
+           }
+		   private function openView():void{
+		   	   var basicInfo:CLayoutBasicInfo=new CLayoutBasicInfo();
+				basicInfo.viewId="platform/AppPackManager.swf";
+				basicInfo.title="已下载软件";
+				basicInfo.image="/icons/help.gif";
+			    var openedView:FlashViewer=ViewManager.Instance.openViewPart(basicInfo,true,ViewManager.VIEW_CREATE);
+		   }
+		   
+		   /* private function explortPNG():void{
+		   	  var pngEncoder:PNGEncoder = new PNGEncoder();  
+              var bitMapData:BitmapData = new BitmapData(clock.width,clock.height,true,0x000000);  
+              bitMapData.draw(clock);  
+              var imageByteArray:ByteArray = pngEncoder.encode(bitMapData);
+              var uiHelp:UIHelpMethod=new UIHelpMethod();
+              uiHelp.saveImage(imageByteArray,"C:/a.png");
+              uiHelp.gc();
+		   } */
+		]]>
+	</mx:Script>
+	<mx:Label id="labelInfo" width="100%"/>
+    <mx:ApplicationControlBar width="100%" height="40" horizontalGap="0"  paddingRight="50"
+    	fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #E9F0FD]" cornerRadius="0">
+		 <mx:LinkButton width="50" icon="@Embed('assets/search.gif')" toolTip="搜索"/>
+		<hc:AutoComplete id="autoComplete"  width="100%" dataProvider="{ apps }" selectedItem="{this.appList.selectedItem}"
+			 labelField="name" matchType="anyPart"  backspaceAction="focus" 
+			 allowMultipleSelection="false"/>
+			
+		 <mx:Button width="50" icon="@Embed('assets/run.gif')" height="26" toolTip="运行" cornerRadius="0"/>
+	</mx:ApplicationControlBar>
+	<mx:VBox width="100%" height="100%" paddingLeft="1" paddingRight="1" paddingTop="1" paddingBottom="1" styleName="panelPart">
+		<mx:List id="appList" width="100%"  
+			backgroundAlpha="0" iconField="" height="100%"  dataProvider="{this.apps}" labelField="name">
+		   <mx:itemRenderer>
+		   	 <mx:Component>
+		   	 	<mx:HBox width="100%" height="100%" 
+		   	 		toolTip="{'提供者:'+this.data.provider+'\n版本:'+this.data.version+'\n 描述:'+this.data.describe}">
+		   	 		<mx:Image source="{this.data.logoPath}" height="32"/> <mx:Label text="{this.data.name}" width="1000%"/>
+		   	 		
+		   	 	</mx:HBox>
+		   	 </mx:Component>
+		   </mx:itemRenderer>
+	    </mx:List>
+	</mx:VBox>
+	<!--<mx:DataGrid   width="100%" height="100%" dataProvider="{this.apps}" rowHeight="30">
+            <mx:columns>
+                <mx:DataGridColumn dataField="name" headerText="名称"/>
+                <mx:DataGridColumn  headerText="描述">
+                  <mx:itemRenderer>
+                 	<mx:Component>
+                 		<mx:HBox horizontalAlign="center">
+                 	   <mx:Script>
+	                     <![CDATA[
+		                      
+	                        ]]>
+                       </mx:Script>
+                 		<mx:Button   width="40" icon="@Embed('assets/help.gif')" 
+                 			toolTip="{'提供者:'+this.data.provider+'\n版本:'+this.data.version+'\n 描述:'+this.data.describe}"/>
+                 	 </mx:HBox>
+                 	</mx:Component>
+                 </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn  headerText="启动">
+                  <mx:itemRenderer>
+                 	<mx:Component>
+                 		<mx:HBox horizontalAlign="center">
+                 	   <mx:Script>
+	                     <![CDATA[
+	                     	import smartrcp.app.pack.CAppInfo;
+		                      function onRunClick():void{
+		                      	 var appInfo:CAppInfo=this.data as CAppInfo;
+		                      	 AppManager.appService.runApp(appInfo.basePath);
+		                      }
+	                        ]]>
+                       </mx:Script>
+                 		<mx:LinkButton   width="40" icon="@Embed('assets/run.gif')" click="onRunClick()"/>
+                 	 </mx:HBox>
+                 	</mx:Component>
+                 </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn  headerText="拆卸">
+                  <mx:itemRenderer>
+                 	<mx:Component>
+                 		<mx:HBox horizontalAlign="center">
+                 	   <mx:Script>
+	                     <![CDATA[
+		                      import smartrcp.app.pack.CAppInfo;
+		                      function onDelClick():void{
+		                      	 var appInfo:CAppInfo=this.data as CAppInfo;
+		                      	 AppManager.appService.deleteApp(appInfo.basePath);
+		                      }
+	                        ]]>
+                       </mx:Script>
+                 		<mx:Button   width="40" icon="@Embed('assets/remove.gif')" click="onDelClick()"/>
+                 	 </mx:HBox>
+                 	</mx:Component>
+                 </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn  headerText="更新">
+                  <mx:itemRenderer>
+                 	<mx:Component>
+                 		<mx:HBox horizontalAlign="center">
+                 	   <mx:Script>
+	                     <![CDATA[
+		                      import smartrcp.app.pack.CAppInfo;
+		                      function onUpdateClick():void{
+		                      	 var appInfo:CAppInfo=this.data as CAppInfo;
+		                      	 AppManager.appService.updateApp(appInfo.basePath);
+		                      }
+	                        ]]>
+                       </mx:Script>
+                 		<mx:Button   width="40" icon="@Embed('assets/update.gif')" click="onUpdateClick()"/>
+                 	 </mx:HBox>
+                 	</mx:Component>
+                 </mx:itemRenderer>
+                </mx:DataGridColumn>
+            </mx:columns>
+     </mx:DataGrid>-->
 </gui:RCPModule>

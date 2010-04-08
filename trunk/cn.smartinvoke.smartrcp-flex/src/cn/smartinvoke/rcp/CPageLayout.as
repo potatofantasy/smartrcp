@@ -7,7 +7,7 @@ package cn.smartinvoke.rcp
 	 */
 	 [Bindable]
 	[RemoteClass(alias="cn.smartinvoke.rcp.CPageLayout")]
-	public class CPageLayout implements ICFolderLayout
+	public class CPageLayout extends CFolderLayout implements ICFolderLayout
 	{ 
 	    public static const  LEFT:int = 1;
         public static const  RIGHT:int = 2;
@@ -31,7 +31,7 @@ package cn.smartinvoke.rcp
 		{
 			
 		}
-        public function addLayout(layout:CLayout):void{
+        public function addLayout(layout:ICFolderLayout):void{
            if(layout!=null){
         	this.layouts.addItem(layout);
            }

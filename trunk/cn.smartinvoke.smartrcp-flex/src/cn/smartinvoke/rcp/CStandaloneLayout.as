@@ -2,16 +2,23 @@ package cn.smartinvoke.rcp
 {
 	 [Bindable]
 	[RemoteClass(alias="cn.smartinvoke.rcp.CStandaloneLayout")]
-	public class CStandaloneLayout extends CLayout
+	public class CStandaloneLayout implements ICFolderLayout
 	{
-		[Inspectable(type="Boolean")]
-		public var showTitle:Boolean=true;
-		
-		public function CStandaloneLayout(viewId:String=null,refLayout:ICFolderLayout=null,relationship:int=1,ratio:Number=.5,
-		showTitle:Boolean=false,closeable:Boolean=true,moveable:Boolean=true)
-		{
-			super(viewId,relationship,ratio,refLayout,closeable,moveable);
-			this.showTitle=showTitle;
-		}
+	   [Inspectable(type="Number")]
+	   public var relationship:int=CPageLayout.LEFT;
+	   [Inspectable(type="Number")]
+	   public var ratio:Number=CPageLayout.RATIO_MIN;
+	   [Inspectable(type="Boolean")]
+	   public var closeable:Boolean= true;
+	   [Inspectable(type="Boolean")]
+	   public var moveable:Boolean = true;
+	   [Inspectable(type="Boolean")]
+	   public var showTitle:Boolean = true;
+	   
+	   public var refLayout:CFolderLayout= null;
+	  /**
+	   * 该layout中显示的模块
+	   */
+	   private  var module:CLayoutBasicInfo=null;
 	}
 }

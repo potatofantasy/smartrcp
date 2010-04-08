@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="450" height="370" title="程序更新" showCloseButton="true">
+  <mx:Script>
+  	<![CDATA[
+  		import mx.collections.ArrayCollection;
+  		[Bindable]
+  		public var appData:ArrayCollection=new ArrayCollection();
+  		
+  	]]>
+  </mx:Script>
+	<mx:DataGrid width="100%" height="60%" dataProvider="{this.appData}">
+		<mx:columns>
+			<mx:DataGridColumn headerText="程序名称" dataField="name"/>
+			<mx:DataGridColumn headerText="提供者" dataField="provider"/>
+			<mx:DataGridColumn headerText="更新版本" dataField="updateVersion"/>
+		</mx:columns>
+	</mx:DataGrid>
+	<mx:Text text="Text" width="100%" height="40%"/>
+	<mx:ControlBar horizontalAlign="center">
+		<mx:Button label="更新"/>
+		<mx:Button label="取消"/>
+	</mx:ControlBar>
+	
+</mx:TitleWindow>

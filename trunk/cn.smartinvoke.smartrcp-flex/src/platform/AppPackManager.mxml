@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gui:RCPModule xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:gui="cn.smartinvoke.gui.*" xmlns:rcp="cn.smartinvoke.rcp.*"
+	layout="vertical" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import org.eclipse.swt.SWT;
+			import cn.smartinvoke.smartrcp.gui.module.CEvent;
+			import org.eclipse.swt.CEventType;
+			import org.eclipse.swt.widgets.Display;
+			import cn.smartinvoke.smartrcp.gui.module.CommonDialogs;
+			import smartrcp.app.pack.CAppInfo;
+			import mx.collections.ArrayCollection;
+			import smartrcp.app.pack.CAppService;
+			import smartrcp.app.pack.AppPackService;
+		public static var packService:AppPackService=null;
+		public static var appService:CAppService=null;
+		[Bindable]
+		public var packs:ArrayCollection=new ArrayCollection();
+			function init():void{
+				AppPackManager.packService=new AppPackService();
+			    AppPackManager.packService.addListener(function (appInfo:CAppInfo):void{
+				   this.packs.addItem(appInfo);
+			    },this);
+			    this.packs=AppPackManager.packService.getApps();
+			    
+			    //添加监听事件
+			    Display.getCurrent().addListener(CEventType.KeyDown,function (evt:CEvent):void{
+				    //键盘ctrl + alt + F1组合键
+				   if(evt.stateMask==(SWT.CTRL | SWT.ALT)&& evt.keyCode==SWT.F1){
+				   	this.labelInfo.text="ctrl + alt + F1 pressed";
+				   }else{
+					this.labelInfo.text=evt.character+" down...";
+				   }
+				  },
+				this);
+			
+			}
+			/**
+			 *添加本地程序
+			 */
+			private function onAddLocalPackClick():void{
+			CommonDialogs.Instance.openFileSelDialog(function (paths:ArrayCollection):void{
+				  	if(paths!=null && paths.length>0){
+				  		var path:String=paths[0] as String;
+				  	    AppPackManager.packService.downloadAppFromLocal(path);
+				  	}
+			  },this,false,["*.rcp"]);
+		   }
+		   
+		]]>
+	</mx:Script>
+	<mx:TextInput />
+	<mx:Label id="labelInfo" width="100%"/>
+</gui:RCPModule>
