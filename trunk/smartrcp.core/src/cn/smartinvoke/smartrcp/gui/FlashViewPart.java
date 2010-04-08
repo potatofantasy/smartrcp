@@ -55,7 +55,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 			if(layoutInfo==null){
 				return;
 			}
-			String viewId = layoutInfo.getViewId();
+			String viewId = layoutInfo.modulePath;
 			if (viewId != null) {
 				if (layoutInfo.isModuleSwf) {
 					String[] paths = new String[] {
@@ -73,7 +73,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 				// 设置父亲控件
 				this.flashViewer.setParent(this);
 				// 设置布局信息
-				this.setViewTitle(layoutInfo.getTitle());
+				this.setViewTitle(layoutInfo.title);
                 //debug
 				//this.setPartName(flashViewer.getAppId());
 				// 设置图标

@@ -47,9 +47,9 @@ public class ConfigerLoader {
 	 * 获得启动信息
 	 */
 	private static void getStartInfo()throws FileNotFoundException, IOException{
-		//TODO 文件位置为临时，到时候改
-		//String path="F:/myWork/cn.smartinvoke.smartrcp.core/start.ini";
-		BufferedReader reader=new BufferedReader(new FileReader(startFilePath));
+		
+		String path=HelpMethods.getPluginFolder()+File.separator+"start.ini";
+		BufferedReader reader=new BufferedReader(new FileReader(path));
 		appPath=reader.readLine();
 		String debugStr=reader.readLine();
 		if(debugStr!=null){

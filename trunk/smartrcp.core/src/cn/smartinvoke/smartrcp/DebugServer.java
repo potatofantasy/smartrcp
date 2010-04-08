@@ -35,7 +35,7 @@ public class DebugServer {
 		        ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Display);
 				// »ñµÃ¶Ë¿Ú
 				int port = 1738;
-				/*String portStr = ConfigerLoader
+				String portStr = ConfigerLoader
 						.getProperty(ConfigerLoader.key_debug_port);
 				if (portStr != null) {
 					try {
@@ -43,7 +43,7 @@ public class DebugServer {
 					} catch (Throwable e) {
 					}
 					;
-				}*/
+				}
 				try {
 					ServerSocket serverSocket = new ServerSocket(port);
 					while (true) {
