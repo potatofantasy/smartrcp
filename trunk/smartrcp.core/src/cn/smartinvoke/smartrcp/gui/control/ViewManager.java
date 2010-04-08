@@ -153,11 +153,11 @@ public class ViewManager  extends CObservable implements IServerObject{
 	 */
 	public FlashViewer openViewPart(CLayoutBasicInfo basicInfo,boolean isMultiple, int state) {
 		try {
-			FlashViewer ret=null;int appId=-1;
+			FlashViewer ret=null;
 			if (basicInfo != null) {
-				String viewId=basicInfo.modulePath;
+				/*String viewId=basicInfo.modulePath;
 				if(viewId!=null){
-				  // IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
+				   // IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
 				   //TODO 这里需要修改以适应swt控件单元部分的逻辑
 				   if(viewId.endsWith(".swf")){//如果是swf
 					  appId = FlashViewer.getViewNum();
@@ -182,6 +182,15 @@ public class ViewManager  extends CObservable implements IServerObject{
 						  ret=smartRCPViewPart.getFlashViewer();
 					  }
 				   }
+				}*/
+				String viewId=basicInfo.viePartId;String modulePath=basicInfo.modulePath;
+				if(viewId!=null && modulePath!=null){
+					int moduleId= FlashViewer.getViewNum();//模块的唯一标识符
+					basicInfo.autoLoad=true;//设置为true，以便FlashViewPart自动加载swf
+					IViewPart iViewPart=this.page.showView(viewId,moduleId+"",state);
+					if(iViewPart instanceof SmartRCPViewPart){
+						ret=((SmartRCPViewPart)iViewPart).getFlashViewer();
+					}
 				}
 			}
 			return ret;
