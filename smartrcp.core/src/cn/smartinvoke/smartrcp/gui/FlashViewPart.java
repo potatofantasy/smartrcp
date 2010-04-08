@@ -22,10 +22,11 @@ import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
+import cn.smartinvoke.smartrcp.core.SmartRCPViewPart;
 import cn.smartinvoke.util.ImageManager;
 import cn.smartinvoke.util.Log;
 
-public class FlashViewPart extends ViewPart implements IServerObject,
+public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 		ISaveablePart2 {
 	public static final String ID = "cn.smartinvoke.smartrcp.gui.FlashViewPart"; //$NON-NLS-1$
 	private CLayoutBasicInfo layoutInfo;
@@ -154,7 +155,7 @@ public class FlashViewPart extends ViewPart implements IServerObject,
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		super.dispose();
+		//super.dispose();
 	}
 	public String getType(){
     	return "FlashViewPart";
