@@ -41,7 +41,7 @@ public class WebBrowser extends SmartRCPViewPart implements IServerObject {
 				
 				@Override
 				public void completed(ProgressEvent event){
-					Log.println("页面加载完毕...");
+					//Log.println("页面加载完毕...");
 					for(int i=0;i<listeners.size();i++){
 						CEventBean eventBean=listeners.get(i);
 						try{

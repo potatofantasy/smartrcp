@@ -1,20 +1,14 @@
 package cn.smartinvoke.smartrcp.gui.control;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
-import org.eclipse.ui.internal.PartListenerList2;
 import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.IServerObject;
@@ -26,10 +20,8 @@ import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 import cn.smartinvoke.smartrcp.core.SmartRCPViewPart;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
-import cn.smartinvoke.smartrcp.gui.SplashWindow;
 import cn.smartinvoke.smartrcp.gui.module.CObservable;
 import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
-import cn.smartinvoke.util.Log;
 
 /**
  * 视图管理器，主要是flex调用此类的方法，实现java与flex的同步 这里的视图包括：ViewPart ,Shell窗口
@@ -154,6 +146,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 	public FlashViewer openViewPart(CLayoutBasicInfo basicInfo,boolean isMultiple, int state) {
 		try {
 			FlashViewer ret=null;
+			IWorkbenchPage page=SmartRCPBuilder.Instance.window.getActivePage();
 			if (basicInfo != null) {
 				/*String viewId=basicInfo.modulePath;
 				if(viewId!=null){
@@ -187,6 +180,9 @@ public class ViewManager  extends CObservable implements IServerObject{
 				if(viewId!=null && modulePath!=null){
 					int moduleId= FlashViewer.getViewNum();//模块的唯一标识符
 					basicInfo.autoLoad=true;//设置为true，以便FlashViewPart自动加载swf
+					//注册布局信息到全局变量，以便对应viewPart创建的时候可以得到
+					Perspective.swfLayoutMap.put(Integer.valueOf(moduleId),basicInfo);
+					
 					IViewPart iViewPart=this.page.showView(viewId,moduleId+"",state);
 					if(iViewPart instanceof SmartRCPViewPart){
 						ret=((SmartRCPViewPart)iViewPart).getFlashViewer();
@@ -195,6 +191,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 			}
 			return ret;
 		} catch (Throwable e) {
+			e.printStackTrace();
 			if(basicInfo!=null){
 			  throw new RuntimeException("view "+basicInfo.modulePath+" create fault,check isMultiple param or viewId");
 			}else{

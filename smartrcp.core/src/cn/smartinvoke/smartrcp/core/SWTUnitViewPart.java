@@ -23,8 +23,8 @@ public class SWTUnitViewPart extends SmartRCPViewPart {
 		
 		String secondId=this.getViewSite().getSecondaryId();
 	    if(secondId!=null){
-	    	Map<Integer, CLayoutBasicInfo> layoutMap = Perspective.swfLayoutMap;
-	    	 CLayoutBasicInfo layoutInfo =layoutMap.get(Integer.valueOf(secondId));
+	    	//Map<Integer, CLayoutBasicInfo> layoutMap = Perspective.swfLayoutMap;
+	    	 CLayoutBasicInfo layoutInfo=this.getLayoutInfo();
 	    	 if(layoutInfo!=null){
 	    		String unitId=layoutInfo.modulePath;//swt控件单元的id
 	    		//设置标题和图片

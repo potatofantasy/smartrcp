@@ -20,6 +20,9 @@ public class Log implements IServerObject{
 		   System.out.println(obj.toString());
 	   }
    }
+   public static void printError(Object obj){
+	   System.err.println(obj);
+   }
    public  void trace(Object obj){
 	   if(!open){
 		   return;

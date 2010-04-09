@@ -76,19 +76,19 @@ public class FlashViewer implements IServerObject {
 			String modulePath=container.getModulePath();
 			String appId=container.getAppId();
 			page.addViewPartInfo(modulePath,appId);
-			Log.println(">>>>Map="+page.getModuleIdAppIdMap());
+			//Log.println(">>>>Map="+page.getModuleIdAppIdMap());
 		}
 	}
 
 	public static void remove_Viewer(FlashViewer container) {
 		if (container != null) {
 			    if(containers.contains(container)){
-				 containers.remove(container);
+				  containers.remove(container);
 			    }
 				//从PageLayout的appId模块对应表中删除该part的信息
 				CPageLayout page= CPageLayout.Instance;
 				page.removeViewPartInfo(container.getModulePath(),container.getAppId());
-				Log.println(">>>>Map="+page.getModuleIdAppIdMap());
+				//Log.println(">>>>Map="+page.getModuleIdAppIdMap());
 		}
 		
 	}
@@ -522,7 +522,7 @@ public class FlashViewer implements IServerObject {
 		}else if(this.parent instanceof SWTUnitViewPart){
 		  ISWTPartUnit partUnit=((SWTUnitViewPart)this.parent).getPartUnit();
 		  if(partUnit!=null){
-			  return partUnit.invoke(methodName, pars);
+			  return invokeObject(partUnit,methodName,pars);
 		  }else{
 			  throw new RuntimeException("current ViewPart's ISWTPartUnit is null");
 		  }

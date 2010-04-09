@@ -1,9 +1,12 @@
 package cn.smartinvoke.smartrcp.core;
 
+import java.util.Map;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.gui.FlashViewer;
+import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
 /**
  * 在SmartRCP中，只有两种ViewPart，分别是FlashViewPart，
@@ -28,7 +31,13 @@ public abstract class SmartRCPViewPart extends ViewPart {
 			appId=FlashViewer.getViewNum()+"";
 		}
 		this.flashViewer=new FlashViewer(appId);
-		String moduleStr=this.getConfigurationElement().getAttribute("id");
+		CLayoutBasicInfo layoutInfo =this.getLayoutInfo();
+		String moduleStr=null;
+   	    if(layoutInfo!=null){
+   	    	moduleStr=layoutInfo.modulePath;
+   	    }else{
+   	    	moduleStr=this.getConfigurationElement().getAttribute("id");
+   	    }
 		this.flashViewer.setModulePath(moduleStr);
 		this.flashViewer.setParent(this);
 		
@@ -36,9 +45,17 @@ public abstract class SmartRCPViewPart extends ViewPart {
 		//这里的flashViewer代表的并不是Flash容器，而是将swt的ViewPart 当做FlashViewer来对待
 		FlashViewer.add_Viewer(flashViewer);
 		
-		//super.setPartName(flashViewer.getAppId());
 	}
-
+   	 /**
+   	  * 从全局布局map中取出与当前viewPart对应的CLayoutBasicInfo，如果没有则返回null
+   	  * @return
+   	  */
+    protected CLayoutBasicInfo getLayoutInfo(){
+    	String secondId=this.getViewSite().getSecondaryId();
+    	Map<Integer, CLayoutBasicInfo> layoutMap = Perspective.swfLayoutMap;
+   	    CLayoutBasicInfo layoutInfo =layoutMap.get(Integer.valueOf(secondId));
+    	return layoutInfo;
+    }
 	@Override
 	public void setFocus() {
 		
@@ -48,6 +65,8 @@ public abstract class SmartRCPViewPart extends ViewPart {
 	}
 	public void dispose(){
 		if(this.flashViewer!=null){
+			Perspective.swfLayoutMap.remove(Integer.valueOf(this.flashViewer
+					.getAppId()));
 			FlashViewer.remove_Viewer(this.flashViewer);
 		}
 	}
