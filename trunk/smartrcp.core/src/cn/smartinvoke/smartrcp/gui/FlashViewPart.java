@@ -56,19 +56,19 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 			if(layoutInfo==null){
 				return;
 			}
-			String viewId = layoutInfo.modulePath;
-			if (viewId != null) {
+			String modulePath = layoutInfo.modulePath;
+			if (modulePath != null) {
 				if (layoutInfo.isModuleSwf) {
 					String[] paths = new String[] {
 							CPerspective.getRuntimeSWFPath(),
-							CPerspective.getRuntimeSwfFolder() + "/" + viewId };
+							CPerspective.getRuntimeSwfFolder() + "/" + modulePath };
 					flashViewer = new FlashViewer(secondId, parent, paths);
 				} else {
-					if(new File(viewId).exists()){
-						flashViewer = new FlashViewer(secondId, parent,viewId);
+					if(new File(modulePath).exists()){
+						flashViewer = new FlashViewer(secondId, parent,modulePath);
 					}else{
 					    flashViewer = new FlashViewer(secondId, parent,
-							CPerspective.getRuntimeSwfFolder() + "/" + viewId);
+							CPerspective.getRuntimeSwfFolder() + "/" + modulePath);
 					}
 				}
 				// 设置父亲控件
@@ -86,9 +86,9 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 					}
 				}
 				// 加载swf
-				//if (!isLoaded) {
-					//flashViewer.loadFlash();
-				//}
+				if (layoutInfo.autoLoad) {
+					flashViewer.loadFlash();
+				}
 			}
 			//初始化工具栏下拉菜单管理器对象
 			this.partActionBar=new ViewPartActionBar(this.getViewSite().getActionBars());
@@ -146,10 +146,11 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 	public void dispose() {
 		// 删除透视图对象中的layout信息对象
 		try {
-
-			Perspective.swfLayoutMap.remove(Integer.valueOf(this.flashViewer
-					.getAppId()));
-			if (this.flashViewer != null) {
+			if (this.flashViewer != null){
+				//从布局map中注销掉自己
+				Perspective.swfLayoutMap.remove(Integer.valueOf(this.flashViewer
+						.getAppId()));
+				
 				this.flashViewer.dispose();
 			}
 		} catch (Exception e) {
@@ -161,6 +162,9 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
     	return "FlashViewPart";
     }
 	public int promptToSaveOnClose() {
+		if(this.flashViewer==null){
+			return ISaveablePart2.YES;
+		}
 		if(!this.flashViewer.isLoaded){
 			return ISaveablePart2.NO;
 		}
@@ -189,6 +193,9 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 	}
 
 	public void doSave(IProgressMonitor monitor) {
+		if(this.flashViewer==null){
+			return ;
+		}
 		if(!this.flashViewer.isLoaded){
 			return ;
 		}
@@ -199,6 +206,9 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 	}
 
 	public void doSaveAs() {
+		if(this.flashViewer==null){
+			return;
+		}
 		if(!this.flashViewer.isLoaded){
 			return ;
 		}
@@ -208,6 +218,9 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 	}
 
 	public boolean isDirty() {
+		if(this.flashViewer==null){
+			return false;
+		}
 		if(!this.flashViewer.isLoaded){
 			return false;
 		}
@@ -224,6 +237,9 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 	}
 
 	public boolean isSaveAsAllowed() {
+		if(this.flashViewer==null){
+			return false;
+		}
 		if(!this.flashViewer.isLoaded){
 			return false;
 		}
@@ -240,6 +256,9 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 	}
 
 	public boolean isSaveOnCloseNeeded() {
+		if(this.flashViewer==null){
+			return false;
+		}
 		if(!this.flashViewer.isLoaded){
 			return false;
 		}
@@ -256,7 +275,7 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 	}
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
-		Log.println("FlashViewPart secondId="+this.getViewSite().getSecondaryId());
+		//Log.println("FlashViewPart secondId="+this.getViewSite().getSecondaryId());
 		CLayoutBasicInfo layoutInfo=new CLayoutBasicInfo();
 		if(layoutInfo.init(memento)){//信息已经存储到memento中
 			this.layoutInfo=layoutInfo;

@@ -83,12 +83,6 @@ public class SmartRCPBuilder {
 	public SmartRCPBuilder(){
        
 	}
-//	public static void createWindowContents(Shell shell,IWorkbenchWindowConfigurer configurer) {
-//		window_Advisor.createWindowContents(shell, configurer);
-//	}
-//	public static void setShowToolbar(boolean visible) {
-//		window_Advisor.setShowToolbar(visible);
-//	}
 	private static BundleContext context=null;
 	public static BundleContext getCurContext(){
 		return context;
@@ -167,33 +161,6 @@ public class SmartRCPBuilder {
 		 }catch(BundleException e){
 			 throw new RuntimeException(e);
 		 }
-//		 File[] bundleFiles=folder.listFiles();
-//		 if(bundleFiles!=null){
-//			 for(int i=0;i<bundleFiles.length;i++){
-//				 String path="file:"+bundleFiles[i].getAbsolutePath();
-//				 Log.println("load bundle:"+path);
-//				 try{
-//				  Bundle bundle=context.installBundle(path);
-//				  bundle.start();
-//				 }catch(Exception e){
-//				   //记录错误日志
-//				   if(logWriter==null){
-//					   File log=new File(logFile);
-//					   if(!log.exists()){
-//						  try{ log.createNewFile();}catch(Exception e1){};
-//					   }
-//					   try{logWriter=new PrintWriter(log);}catch(Exception e1){};
-//				   }
-//				   e.printStackTrace(logWriter); 
-//				   throw new RuntimeException(e);
-//				 }
-//			 }
-//		 }
-//		 //关闭错误日志文件
-//		 if(logWriter!=null){
-//			 logWriter.flush();
-//			 logWriter.close();
-//		 }
 	}
 	/**
 	 * 打开Splash窗口获得初始化信息，初始化窗体

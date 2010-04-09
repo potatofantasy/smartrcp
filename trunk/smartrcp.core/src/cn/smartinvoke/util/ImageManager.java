@@ -12,6 +12,8 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
+import cn.smartinvoke.smartrcp.app.pack.PackageTool;
+
 public class ImageManager {
 
 	public ImageManager() {
@@ -34,7 +36,7 @@ public class ImageManager {
     	if(imageRegistry!=null){
     	 imageRegistry.dispose();
     	 
-    	 String imgFolder = imageFolder+File.separator+"icons";
+    	 String imgFolder = imageFolder+File.separator+PackageTool.Key_Icons_Folder;
  		File folder = new File(imgFolder);
  		if (!folder.exists()) {
  			folder.mkdirs();

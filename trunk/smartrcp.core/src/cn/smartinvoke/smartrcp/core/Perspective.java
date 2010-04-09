@@ -124,8 +124,8 @@ public class Perspective implements IPerspectiveFactory {
 			 layout.addStandaloneView(viewIdSstr, standaloneLayout.showTitle, standaloneLayout.relationship,
 					(float)standaloneLayout.ratio,relFolderName);
 			 
-			 layout.getViewLayout(viewIdSstr).setCloseable(standaloneLayout.closeable);
-			 layout.getViewLayout(viewIdSstr).setMoveable(standaloneLayout.moveable);
+			 layout.getViewLayout(viewIdSstr).setCloseable(module.closeable);
+			 layout.getViewLayout(viewIdSstr).setMoveable(module.moveable);
 			}
 		   }
 		}
@@ -133,8 +133,8 @@ public class Perspective implements IPerspectiveFactory {
 	}
 	private String getViewIdString(CLayoutBasicInfo layoutInfo){
 		   String viewIdSstr=null;
-		   String modulePath=layoutInfo.modulePath;
-		   if(modulePath!=null){
+		   //String modulePath=layoutInfo.modulePath;
+		   if(layoutInfo.viePartId!=null){
 			   int viewNum=FlashViewer.getViewNum();
 			   viewIdSstr=layoutInfo.viePartId+":"+viewNum;
                swfLayoutMap.put(viewNum,layoutInfo);

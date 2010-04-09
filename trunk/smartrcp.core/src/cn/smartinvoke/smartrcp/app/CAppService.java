@@ -91,16 +91,11 @@ public class CAppService implements IServerObject {
     public static CAppInfo getAppInfo(String installFolder){
     	CAppInfo ret=new CAppInfo();
     	DataInputStream in=null;
+    	String propFilePath=installFolder+File.separator+PackageTool.Key_Property_File;
     	try{
-    		/**
-    		 * out.writeUTF(appInfo.name);
-		 out.writeUTF(appInfo.version); 
-		 out.writeUTF(appInfo.provider);
-		 out.writeUTF(appInfo.updateUrl);//¸üÐÂµØÖ·
-		 out.writeUTF(appInfo.describe);
-    		 */
+    	 
     	 ret.basePath=installFolder;
-    	 in=new DataInputStream(new FileInputStream(installFolder+File.separator+PackageTool.Key_Property_File));
+    	 in=new DataInputStream(new FileInputStream(propFilePath));
     	 ret.name=in.readUTF();ret.version=in.readUTF();
     	 ret.provider=in.readUTF();ret.updateUrl=in.readUTF();
     	 String logoPath=installFolder+File.separator+"logo.png";
@@ -109,7 +104,7 @@ public class CAppService implements IServerObject {
     	 }
     	 ret.describe=in.readUTF();
     	}catch(Exception e){
-    	 throw new RuntimeException(e);	
+    		Log.printError(propFilePath+" file not exist or format  error!");
     	}finally{
     		if(in!=null){
     			try{in.close();}catch(Exception e){};

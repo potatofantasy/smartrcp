@@ -25,5 +25,5 @@ public interface ISWTPartUnit {
     * @param params
     * @return
     */
-   public Object invoke(String methodName,Object[] params);
+   //public Object invoke(String methodName,Object[] params);
 }
