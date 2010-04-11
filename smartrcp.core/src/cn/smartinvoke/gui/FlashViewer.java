@@ -206,14 +206,15 @@ public class FlashViewer implements IServerObject {
 		// ¼ÓÔØflash
 		if (this.swfPath != null) {
 			this.flashContainer.loadMovie(0, swfPath);
-			//this.isLoaded=true;
+			
 		} else if (this.swfAndModulePath != null) {
 			if (swfAndModulePath.length >= 2) {
 				this.flashContainer.loadMovie(0, swfAndModulePath);
-				//this.isLoaded=true;
+				
 				this.swfPath = swfAndModulePath[1];
 			}
 		}
+		
 	}
     public boolean isBreak=false;
 	private void createFlashContainer(Composite parent) {
@@ -230,6 +231,8 @@ public class FlashViewer implements IServerObject {
         flashContainer.addListener(new ILoadCompleteListener(){
         	public void run(){
         	   FlashViewer.this.isLoaded=true;
+        	   System.out
+					.println("FlashViewer.createFlashContainer(...).new ILoadCompleteListener() {...}.run()");
         	   flexApp.asyncCall("onJavaCreate", new Object[]{FlashViewer.this,flashContainer});
         	}
         });

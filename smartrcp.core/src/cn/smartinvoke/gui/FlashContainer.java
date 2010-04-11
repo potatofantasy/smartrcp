@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 
 import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.RemoteObject;
+import cn.smartinvoke.util.Log;
 
 public class FlashContainer extends Flash implements IServerObject{
 	// flashCall事件
@@ -90,10 +91,7 @@ public class FlashContainer extends Flash implements IServerObject{
 						} else if (cmd.equals(CMD_DISPOSE)) {
 							executor.dispose(val);
 						} else if (cmd.equals(CMD_BOUNDS)) {
-							// String[] bounds=val.split(",");
-							// FlexAppWin.instance.setBounds(Float.valueOf(bounds[0]),Float.valueOf(bounds[1]),
-							// Float.valueOf(bounds[2]),
-							// Float.valueOf(bounds[3]));
+							
 						}else if(cmd.equals(CMD_ASYNC_CALL)){
 							try{
 								executor.call(val);
@@ -155,23 +153,11 @@ public class FlashContainer extends Flash implements IServerObject{
 	}
 
 	private synchronized String directCall(final String info) {
-		// 等待flash的加载完毕
-		if (!this.isFlashLoaded) {
-			boolean isInterrupt = false;
-			do {
-				isInterrupt = false;
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					isInterrupt = true;
-				}
-			} while (isInterrupt);
-		}
+		
 		final String[] retArr = new String[1];
 		Variant[] args = new Variant[1];
 		args[0] = new Variant(info);
-		// System.out.println("FlashContainer.callFunction()1");
-
+		
 		Variant ret = this.flashObject.invoke(0x000000c6, args);
 		if(ret==null){
 			throw new RuntimeException("flex返回null可能是flex无法加载对应服务类，请在flex项目中显示定义对应服务类");
@@ -224,17 +210,20 @@ public class FlashContainer extends Flash implements IServerObject{
     		return;
     	}
     	String runtimeSwfUrl=url[0];
-    	super.loadMovie(layer, runtimeSwfUrl);
     	//runtime加载完毕后加载模块
         ILoadCompleteListener listener=new ILoadCompleteListener(){
         	public void run(){
     	String moduleUrl=url[1];
+    	Log.printError("loadModule="+moduleUrl);
     	RemoteObject app=new RemoteObject(FlashContainer.this,false);
     	app.setRemoteId("app");
     	app.call("loadModule",new Object[]{moduleUrl});
         	}
         };
         this.addListener(listener);
+    	super.loadMovie(layer, runtimeSwfUrl);
+    	Log.printError("MainSWF="+url[0]+"\n ModuleSWF="+url[1]);
+    	
     }
 	public void dispose() {
 		//从全局容器集合中删除

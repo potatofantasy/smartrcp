@@ -12,19 +12,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.IServerObject;
+import cn.smartinvoke.gui.FlashContainer;
 import cn.smartinvoke.gui.FlashViewer;
+import cn.smartinvoke.gui.ILoadCompleteListener;
 import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
 import cn.smartinvoke.smartrcp.core.SmartRCPViewPart;
+import cn.smartinvoke.smartrcp.gui.control.ViewManager;
+import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
 import cn.smartinvoke.util.ImageManager;
-import cn.smartinvoke.util.Log;
 
 public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 		ISaveablePart2 {
@@ -37,10 +38,6 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 	 * viewPart的工具栏下拉菜单 管理器对象
 	 */
     private ViewPartActionBar partActionBar;
-    /**
-     * 该flash是否加载
-     */
-    private boolean isLoaded=false;
 	@Override
 	public void createPartControl(Composite parent) {
 		try {
@@ -71,6 +68,8 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 							CPerspective.getRuntimeSwfFolder() + "/" + modulePath);
 					}
 				}
+				//是否是debug连接器打开的ViewPart
+				flashViewer.debugModule=layoutInfo.isDebugLayout;
 				// 设置父亲控件
 				this.flashViewer.setParent(this);
 				// 设置布局信息
@@ -85,8 +84,18 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 						this.setTitleImage(imageDescriptor.createImage());
 					}
 				}
+				
+				//当前flex模块加载完毕后调用ViewManager方法，唤醒其上的flex监听器，使
+				//其他flex模块也可以监听到该模块的打开
+				FlashContainer flashContainer=flashViewer.getFlashContainer();
+				flashContainer.addListener(new ILoadCompleteListener() {
+					
+					public void run(){
+					  ViewManager.Instance.fireEvent(CPartEvent.Part_Opened, FlashViewPart.this);
+					}
+				});
 				// 加载swf
-				if (layoutInfo.autoLoad) {
+				if (layoutInfo.autoLoad){
 					flashViewer.loadFlash();
 				}
 			}

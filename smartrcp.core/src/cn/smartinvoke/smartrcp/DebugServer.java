@@ -9,11 +9,15 @@ import java.net.Socket;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.internal.WorkbenchPage;
 
 import cn.smartinvoke.gui.ObjectPool;
+import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 import cn.smartinvoke.smartrcp.gui.FlashShell;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
+import cn.smartinvoke.smartrcp.gui.control.ViewManager;
 import cn.smartinvoke.util.ConfigerLoader;
 
 /**
@@ -35,15 +39,15 @@ public class DebugServer {
 		        ObjectPool.INSTANCE.getObject(GlobalServiceId.Swt_Display);
 				// 获得端口
 				int port = 1738;
-				String portStr = ConfigerLoader
-						.getProperty(ConfigerLoader.key_debug_port);
-				if (portStr != null) {
-					try {
-						port = Integer.valueOf(portStr);
-					} catch (Throwable e) {
-					}
-					;
-				}
+//				String portStr = ConfigerLoader
+//						.getProperty(ConfigerLoader.key_debug_port);
+//				if (portStr != null) {
+//					try {
+//						port = Integer.valueOf(portStr);
+//					} catch (Throwable e) {
+//					}
+//					;
+//				}
 				try {
 					ServerSocket serverSocket = new ServerSocket(port);
 					while (true) {
@@ -58,7 +62,11 @@ public class DebugServer {
                         //打开debug窗口
                         display.asyncExec(new Runnable(){
     						public void run() {
-    							 openDebugShell(swfUrl);
+    							if(isDebugAsShell){
+    							  openDebugShell(swfUrl);
+    							}else{
+    							  openViewPart(swfUrl);
+    							}
     						}
     					});
                         //-----------
@@ -85,17 +93,28 @@ public class DebugServer {
 		thread.setDaemon(true);
 		thread.start();
 	}
+	/**
+	 * 为true表示打开debug窗口，false表示打开ViewPart
+	 */
+	public static boolean isDebugAsShell=true;
+	
     static void openDebugShell(String swfPath){
     	FlashShell flashShell=new FlashShell(true);
     	flashShell.setText(swfPath);
     	flashShell.setSize(550, 550);
-    	String modulePath=cur_application.getDebugPath();
-    	if(modulePath==null){
-    	   flashShell.createFlashContainer(swfPath);
-    	}else{
-    	   flashShell.createFlashContainer(swfPath,modulePath);
-    	}
+    	
+    	flashShell.createFlashContainer(swfPath);
+    	
     	flashShell.open();
+    }
+    static void openViewPart(String swfPath){
+    	CLayoutBasicInfo layoutInfo=new CLayoutBasicInfo();
+    	layoutInfo.autoLoad=true;
+    	layoutInfo.title=swfPath;
+    	//安装独立swf方式打开，因为loadModule方法由该swf自己调用
+    	layoutInfo.isModuleSwf=false;
+    	
+    	ViewManager.Instance.openViewPart(layoutInfo, true,IWorkbenchPage.VIEW_ACTIVATE);
     }
 	/**
 	 * @param args

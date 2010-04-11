@@ -17,7 +17,6 @@ import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.rcp.CPageLayout;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.Perspective;
-import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 import cn.smartinvoke.smartrcp.core.SmartRCPViewPart;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.module.CObservable;
@@ -93,26 +92,22 @@ public class ViewManager  extends CObservable implements IServerObject{
 					fireEvent(CPartEvent.Part_Deactivated, part);
 				}
 				public void partOpened(IWorkbenchPart part) {
-					if(part instanceof IViewPart){
-					 FlashViewer flashViewer=FlashViewer.getViewerByParent((IViewPart)part);
-					 if(flashViewer!=null){
-						 //将当前打开的viewPart的信息添加进模块对应表中
-						 CPageLayout.Instance.addViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
-					 }
-					 fireEvent(CPartEvent.Part_Opened, part);
-					}
-					/**
-					 *打开控制台存储的未显示的viewPart
-					 */
-					if(part instanceof FlashViewPart){
-						FlashViewPart viewPart=(FlashViewPart)part;
-						viewPart.getFlashViewer().loadFlash();
-					}
+				  //让Flex模块可以监听到继承SmartRCPViewPart类，但非FlashViewPart类型的ViewPart的打开
+				  if(part instanceof SmartRCPViewPart){
+				     if(!(part instanceof FlashViewPart)){
+				    	 fireEvent(CPartEvent.Part_Opened, part);
+				     }
+				  }	 
 				}
 			});
 		}
 	}
-	private void fireEvent(int type,IWorkbenchPart part){
+	/**
+	 * 
+	 * @param type 可选值:Part_Activated ，
+	 * @param part
+	 */
+	public void fireEvent(int type,IWorkbenchPart part){
 		//FlashViewer flashViewer=null;
 		if(part!=null){
 			List<FlashViewer> flashViewers=FlashViewer.getViewers();
@@ -138,7 +133,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 	/**
 	 * 根据配置信息打开一viewPart
 	 * 如果CLayoutBasicInfo 的viewId以.swf结尾，打开FlashViewPart视图，并加载对应的swf，
-	 * 否则打开viewId在plugin.xml中定义的视图。
+	 * 否则打开viewId在plugin.xml中定义的视图，并且allowMultiple一定为true
 	 * 
 	 * @param basicInfo
 	 * @return
@@ -146,40 +141,12 @@ public class ViewManager  extends CObservable implements IServerObject{
 	public FlashViewer openViewPart(CLayoutBasicInfo basicInfo,boolean isMultiple, int state) {
 		try {
 			FlashViewer ret=null;
-			IWorkbenchPage page=SmartRCPBuilder.Instance.window.getActivePage();
 			if (basicInfo != null) {
-				/*String viewId=basicInfo.modulePath;
-				if(viewId!=null){
-				   // IWorkbenchPage page=SmartRCPBuilder.window.getActivePage();
-				   //TODO 这里需要修改以适应swt控件单元部分的逻辑
-				   if(viewId.endsWith(".swf")){//如果是swf
-					  appId = FlashViewer.getViewNum();
-					  basicInfo.autoLoad=true;//设置为true，以便FlashViewPart自动加载swf
-					  Perspective.swfLayoutMap.put(Integer.valueOf(appId),basicInfo);
-					  
-					  FlashViewPart flashViewPart=(FlashViewPart)page.showView(FlashViewPart.ID, appId + "",state);
-					  ret=flashViewPart.getFlashViewer();
-				   }else{
-					  Integer num=FlashViewer.getViewNum();
-					  IViewPart showView=null;
-					  if(isMultiple){
-						 try{
-						 showView=page.showView(viewId, num+"", state);
-						 }catch(Exception e){e.printStackTrace();};
-					  }
-					  if(showView==null){
-					    showView=page.showView(viewId);
-					  }
-					  if(showView!=null && (showView instanceof SmartRCPViewPart)){
-						  SmartRCPViewPart smartRCPViewPart=(SmartRCPViewPart)showView;
-						  ret=smartRCPViewPart.getFlashViewer();
-					  }
-				   }
-				}*/
 				String viewId=basicInfo.viePartId;String modulePath=basicInfo.modulePath;
 				if(viewId!=null && modulePath!=null){
 					int moduleId= FlashViewer.getViewNum();//模块的唯一标识符
 					basicInfo.autoLoad=true;//设置为true，以便FlashViewPart自动加载swf
+					
 					//注册布局信息到全局变量，以便对应viewPart创建的时候可以得到
 					Perspective.swfLayoutMap.put(Integer.valueOf(moduleId),basicInfo);
 					
