@@ -29,7 +29,10 @@ public class ConfigerLoader {
 	private static Properties properties=null;
 	public static String configPath=null;
 	public static void init() throws FileNotFoundException, IOException{
-		appPath=getAppArg();//获得启动程序的路径
+		appPath=getStartInfo();//从start.ini文件中获取启动程序目录
+		if(appPath==null){
+			appPath=getAppArg();//从控制台获得启动程序的路径
+		}
 	    if(appPath==null || 
 	       (!new File(appPath).exists())){//如果没有则启动标准程序
 	    	appPath=CAppService.getInstallFolder()+"/smartrcp";
@@ -51,22 +54,20 @@ public class ConfigerLoader {
 	private static boolean isDebug=false;
 	//启动文件完整路径
 	public static String startFilePath="F:/myWork/cn.smartinvoke.smartrcp.core/start.ini";
-//	/**
-//	 * 获得启动信息
-//	 */
-//	private static void getStartInfo()throws FileNotFoundException, IOException{
-//		
-//		String path=HelpMethods.getPluginFolder()+File.separator+"start.ini";
-//		BufferedReader reader=new BufferedReader(new FileReader(path));
-//		appPath=reader.readLine();
-//		String debugStr=reader.readLine();
-//		if(debugStr!=null){
-//			try{
-//				isDebug=Boolean.valueOf(debugStr);
-//			}catch(Exception e){};
-//		}
-//		reader.close();
-//	}
+	/**
+	 * 从安装目录的start.ini文件中读取启动程序目录，如果该文件不存在，或数据错误，smartrcp则
+	 * 调用getAppArg方法尝试从控制台获得启动程序目录，如果控制台没有则启动标准程序
+	 */
+	private static String getStartInfo()throws FileNotFoundException, IOException{
+		String appPath=null;
+		String path=HelpMethods.getPluginFolder()+File.separator+"start.ini";
+	    if(new File(path).exists()){
+		 BufferedReader reader=new BufferedReader(new FileReader(path));
+		 appPath=reader.readLine();
+		 reader.close();
+	    }
+		return appPath;
+	}
 	/**
 	 * 获取控制台smartrcp目录参数值，如果没有则返回null
 	 * 应用参数如下：-app smartrcp应用程序的绝对路径

@@ -105,6 +105,7 @@ public class SmartRCPBuilder {
 	        //添加服务类
 	        TypeMapper.addServicePack("org.eclipse.swt.widgets");
 	        TypeMapper.addServicePack("org.eclipse.swt");
+	        TypeMapper.addServicePack("java.io");
 	        
 			startBundles(context);//启动标准库
 		}catch(Exception e){

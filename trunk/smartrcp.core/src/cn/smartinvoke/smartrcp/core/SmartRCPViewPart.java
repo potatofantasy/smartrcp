@@ -7,11 +7,11 @@ import org.eclipse.ui.part.ViewPart;
 
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.rcp.CLayoutBasicInfo;
-import cn.smartinvoke.smartrcp.gui.SplashWindow;
 /**
  * 在SmartRCP中，只有两种ViewPart，分别是FlashViewPart，
  * 和SmartRCPViewPart，前者用于加载flex应用，后者是java所有扩展ViewPart的超类，方便Java对SmartRCP
  * 的扩展，实现Flex与java的互操作
+ * 
  * @author pengzhen
  *
  */

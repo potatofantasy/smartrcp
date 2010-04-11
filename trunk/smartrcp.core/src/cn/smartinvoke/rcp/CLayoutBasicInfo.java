@@ -8,6 +8,8 @@ public class CLayoutBasicInfo {
 	public boolean isModuleSwf=true;
 	//是否在FlashViewer打开的时候自动加载swf
 	public boolean autoLoad=false;
+	//是否是debug方式
+	public boolean isDebugLayout=false;
 	//RCP的viewPart定义ID
 	public String viePartId=null;
 	//需要加载的模块的Id
