@@ -24,6 +24,37 @@ import org.eclipse.swt.widgets.Shell;
 
 public class HelpMethods {
 	private static String installFolder=null;
+    /**
+     * 删除指定文件夹
+     * 如果不能被删除则抛出RuntimeException异常
+     * @param delpath
+     */
+	public static void deleteFolder(String delpath) {
+		File file = new File(delpath);
+		if (!file.isDirectory()) {
+			if(!file.delete()){//文件不能被删除则抛出异常
+			  	throw new RuntimeException(file.getAbsolutePath()+" can not be delete!");
+			}
+		} else if (file.isDirectory()){
+			String[] filelist = file.list();
+			for (int i = 0; i < filelist.length; i++) {
+				File delfile = new File(delpath + File.separatorChar + filelist[i]);
+				if (!delfile.isDirectory()){
+					if(!delfile.delete()){//文件不能被删除则抛出异常
+					  	throw new RuntimeException(file.getAbsolutePath()+" can not be delete!");
+					}
+				}
+				else if (delfile.isDirectory()){
+					deleteFolder(delpath + File.separatorChar+ filelist[i]);
+				}
+			}
+			//删除空目录
+			if(!file.delete()){//文件不能被删除则抛出异常
+			  	throw new RuntimeException(file.getAbsolutePath()+" can not be delete!");
+			}
+		}
+	}
+ 
 	public static String getPluginFolder(){
 	   if(installFolder==null){
 		String ret=null;
@@ -325,6 +356,6 @@ public class HelpMethods {
 			 return val;
 		  }
 	public static void main(String[] args) {
-		
+		HelpMethods.deleteFolder("D:/flash");
 	}
 }
