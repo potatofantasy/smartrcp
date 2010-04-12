@@ -17,6 +17,7 @@ import cn.smartinvoke.smartrcp.app.pack.CAppInfo;
 import cn.smartinvoke.smartrcp.app.pack.PackageTool;
 import cn.smartinvoke.smartrcp.core.SmartRCPBuilder;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
+import cn.smartinvoke.smartrcp.util.JFaceHelpMethod;
 import cn.smartinvoke.util.HelpMethods;
 import cn.smartinvoke.util.Log;
 /**
@@ -154,25 +155,31 @@ public class CAppService implements IServerObject {
     public void runApp(String installFolder){
     	SmartRCPBuilder.Instance.reStart(installFolder);
     }
-    public void deleteApp(String installFolder){
-    	Log.println("拆卸程序"+installFolder);
+    public void deleteApp(String installPath){
+    	//File installFolder=new File(installPath);
+    	//if(installFolder.exists()){
+    	try{
+    	   HelpMethods.deleteFolder(installPath);
+    	}catch(Exception e){
+    	   JFaceHelpMethod.showError(installPath+"文件夹无法删除，\n可以是该目录下的程序正在运行，请退出程序重新删除");
+    	}
+    	//}
     }
+   
     public void updateApp(String installFolder){
     	Log.println("更新程序"+installFolder);
     }
-	public void dispose() {
+	public void dispose(){
 		
 	}
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args)throws Exception{
-		URL url = new URL("http://javaeye.com");
-		URLConnection connection=url.openConnection();
-		InputStream in=connection.getInputStream();
-		byte[] buf=new byte[1024*1024];
-		int red=in.read(buf,0,buf.length);
-		
-		System.out.println(new String(buf,0,red,"utf-8"));
+		File folder=new File("D:/Temporary Internet Files");
+		File[] subFiles=folder.listFiles();
+		for(File subFile : subFiles){
+			System.out.println(subFile.getAbsolutePath());
+		}
 	}
 }
