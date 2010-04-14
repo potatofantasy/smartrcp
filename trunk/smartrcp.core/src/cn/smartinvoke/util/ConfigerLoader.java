@@ -8,22 +8,35 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.eclipse.core.runtime.Platform;
+
 import cn.smartinvoke.smartrcp.app.CAppService;
 import cn.smartinvoke.smartrcp.app.pack.PackageTool;
 
 /**
  * 加载配置信息
  * @author pengzhen
- *
  */
 public class ConfigerLoader {
+	//程序名称
+	public static final String key_app_name="app_name";
+	//程序版本
+	public static final String key_app_version="app_version";
+	//更新地址
+	public static final String key_update_url="update_url";
+	//启动界面swf地址
     public static final String key_splash="splash";
+    //启动界面大小 width*height格式
     public static final String key_splash_size="splash-size";
+    //运行程序swf路径
     public static final String key_runtime="runtime";
+    
+    
+    
     public static final String key_debug_port="debug-port";
     public static final String key_debug="debug";
     public static final String key_export_package="Export-Package";
-	private ConfigerLoader() {
+	private ConfigerLoader(){
 	   
 	}
 	private static Properties properties=null;
@@ -43,7 +56,7 @@ public class ConfigerLoader {
 		if(!new File(configPath).exists()){//启动配置文件不存在
 		   Log.printError(configPath+" is not exist the program exit!");
 		}
-		Log.println("start.ini location="+configPath);
+		Log.println("config.ini location="+configPath);
 		properties.load(new FileInputStream(configPath));
 	  
 	}
@@ -53,7 +66,7 @@ public class ConfigerLoader {
 	public static String appPath;
 	private static boolean isDebug=false;
 	//启动文件完整路径
-	public static String startFilePath="F:/myWork/cn.smartinvoke.smartrcp.core/start.ini";
+	public static String startFilePath=null;
 	/**
 	 * 从安装目录的start.ini文件中读取启动程序目录，如果该文件不存在，或数据错误，smartrcp则
 	 * 调用getAppArg方法尝试从控制台获得启动程序目录，如果控制台没有则启动标准程序
@@ -77,10 +90,18 @@ public class ConfigerLoader {
 	 * @return
 	 */
 	private static String getAppArg(){
+		return getAppArg("-app ");
+	}
+	/**
+	 * 获取指定的命令行参数
+	 * @param key
+	 * @return
+	 */
+	public static String getAppArg(String key){
 		String ret=null;
-		String[] arr=org.eclipse.equinox.internal.app.CommandLineArgs.getAllArgs();
+		String[] arr=Platform.getApplicationArgs();
 		if(arr!=null){
-			String cmdName="-app ";
+			String cmdName=key;
     		for(int i=0;i<arr.length;i++){
     			String arg=arr[i].trim();
     			if(arg.equals(cmdName.trim())){
