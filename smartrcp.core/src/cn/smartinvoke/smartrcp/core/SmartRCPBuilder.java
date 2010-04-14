@@ -52,23 +52,12 @@ import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.rcp.CWindowConfigurer;
 import cn.smartinvoke.rcp.ErrorMessages;
 import cn.smartinvoke.smartrcp.CApplication;
-import cn.smartinvoke.smartrcp.DebugServer;
 import cn.smartinvoke.smartrcp.SmartRCPBundle;
 import cn.smartinvoke.smartrcp.app.CAppService;
 import cn.smartinvoke.smartrcp.app.pack.CAppInfo;
 import cn.smartinvoke.smartrcp.app.pack.PackageTool;
-import cn.smartinvoke.smartrcp.gui.CAppMenuBarManager;
-import cn.smartinvoke.smartrcp.gui.CAppToolBarManager;
-import cn.smartinvoke.smartrcp.gui.CStatusLineManager;
-import cn.smartinvoke.smartrcp.gui.FlashViewPart;
-import cn.smartinvoke.smartrcp.gui.SplashWindow;
-import cn.smartinvoke.smartrcp.gui.control.CAction;
-import cn.smartinvoke.smartrcp.gui.control.CActionManager;
-import cn.smartinvoke.smartrcp.gui.control.EventFilter;
-import cn.smartinvoke.smartrcp.gui.control.EventRegister;
-import cn.smartinvoke.smartrcp.gui.control.FlashViewInvoker;
-import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
-import cn.smartinvoke.smartrcp.gui.control.ViewManager;
+import cn.smartinvoke.smartrcp.gui.*;
+import cn.smartinvoke.smartrcp.gui.control.*;
 import cn.smartinvoke.smartrcp.util.BundleHelpMethod;
 import cn.smartinvoke.smartrcp.util.JFaceConstant;
 import cn.smartinvoke.util.ConfigerLoader;
@@ -269,6 +258,8 @@ public class SmartRCPBuilder {
      */
 	public  void initImageRegistry(ImageRegistry imageRegistry) {
 		// ---------加载图像注册信息
+        Display curDisp=Display.getCurrent();
+		ObjectPool.INSTANCE.putObject(curDisp, GlobalServiceId.Swt_Display);
 		ImageManager.init(imageRegistry);
 	}
 
@@ -420,7 +411,6 @@ public class SmartRCPBuilder {
 		this.winConfigurer=configurer;
 		
 		Display curDisp = Display.getCurrent();
-		ObjectPool.INSTANCE.putObject(curDisp, GlobalServiceId.Swt_Display);
 		EventFilter.exeFilter(curDisp);
 		
 		if (configurer != null) {
@@ -538,30 +528,8 @@ public class SmartRCPBuilder {
 			FlashViewer flashViewer=flashViewers.get(n);
 			flashViewer.loadFlash();
 		}
-		openDebugServer();
 		
-		//加载库
-		//startBundles(context);
 	}
-	
-	/**
-	 * 打开debug服务，接收flexBuilder的请求，如果已经打开就直接返回
-	 */
-	private  boolean isStart=false;
-    protected  void openDebugServer(){
-      if(!isStart){
-       String debugStr=ConfigerLoader.getProperty(ConfigerLoader.key_debug);
-       if(debugStr!=null){
-    	  debugStr=debugStr.trim();
-    	  if(debugStr.equals("true")){
-    			  DebugServer.start();
-    	  }
-       }
-       
-       isStart=true;
-      }
-    }
-    
     public  void dispose(){
     	//关闭所有视图
     	CPageLayout.Instance.close();

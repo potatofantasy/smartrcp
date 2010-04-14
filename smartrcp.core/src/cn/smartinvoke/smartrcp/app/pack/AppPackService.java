@@ -28,6 +28,7 @@ public class AppPackService implements IServerObject{
 	public AppPackService(){
 		
 	}
+	
 	/**
 	 * 从http服务器下载程序，存储于本地
 	 * @param url
@@ -60,8 +61,6 @@ public class AppPackService implements IServerObject{
     public void downloadAppFromLocal(String filePath){
     	if(filePath!=null){
     		File file=new File(filePath);
-    		
-    		
     		if(file.exists()){
     		   String savePath=getSaveFolder()+"/"+file.getName();
     		   File saveFile=new File(savePath);
@@ -82,10 +81,9 @@ public class AppPackService implements IServerObject{
     		    out.flush();
     		    out.close();
     		    
-    		    CAppInfo appInfo=PackageTool.readBasicInfo(savePath);
-    		    fireEvents(appInfo);//唤醒flex监听器
     		   }catch(Exception e){
-    			   throw new RuntimeException("无法将"+file.getAbsolutePath()+"拷贝到"+getSaveFolder()+"目录");
+    			   String str="无法将"+file.getAbsolutePath()+"拷贝到"+getSaveFolder()+"目录";
+    			   JFaceHelpMethod.showError(str);
     		   }finally{
     			   if(source!=null){
     				   try{source.close();}catch(Exception e){};
@@ -106,27 +104,7 @@ public class AppPackService implements IServerObject{
      * @return
      */
     public List<CAppInfo> getApps(){
-    	if(appPacks==null){
-    	 List<CAppInfo> ret=new LinkedList<CAppInfo>();
-    	 File folder=new File(getSaveFolder());
-    	 File[] filePacks=folder.listFiles();
-    	 if(filePacks!=null){
-    		for(int i=0;i<filePacks.length;i++){
-    		   String name=filePacks[i].getName();
-    		   if(name.endsWith(".rcp")){
-    			String packPath=filePacks[i].getAbsolutePath();
-    			if(!new File(packPath+File.separator+name+".info").exists()){
-    			  try{
-    				  ret.add(PackageTool.readBasicInfo(packPath));
-    			  }catch(Exception e){//跳过文件格式不正确的情况
-    				  
-    			  }
-    			}
-    		   }
-    		}
-    	 }
-    	 appPacks=ret;
-    	}
+    	
     	return appPacks;
     }
     
@@ -175,22 +153,6 @@ public class AppPackService implements IServerObject{
     		folder.mkdirs();
     	}
     	return path;
-    }
-    
-    /**
-     * java端的同步方法
-     * @param bean flex调用时传入的事件监听对象
-     */
-    public void syncMethod(final CEventBean bean){
-    	//启动新线程完成必要的工作
-    	new Thread(){
-    		public void run(){
-    			System.out.println("完成必要的工作");
-    			//唤醒flex监听器，告知任务的完成，这里可以传入任何对象
-    			bean.fireEvent("flex任务完成了");
-    		}
-    	}.start();
-    	
     }
 	/**
 	 * @param args

@@ -1,14 +1,8 @@
 package cn.smartinvoke.smartrcp.app;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -120,7 +114,7 @@ public class CAppService implements IServerObject {
     public void installApp(String path){
     	if(path!=null){
     	 if(new File(path).exists()){
-    	   CAppInfo appInfo=new PackageTool().uncompress(path, CAppService.getInstallFolder());
+    	   CAppInfo appInfo=new PackageTool().install(path, CAppService.getInstallFolder());
     	   this.fireEvents(appInfo);
     	 }
     	}

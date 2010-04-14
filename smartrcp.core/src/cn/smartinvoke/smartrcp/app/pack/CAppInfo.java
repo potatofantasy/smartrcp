@@ -58,7 +58,7 @@ public class CAppInfo {
     /**
      *扩展库jar路径
      */
-    private List<String> libs=new LinkedList<String>();
+    public List<String> libs=new LinkedList<String>();
     /**
      * 启动界面大小
      */

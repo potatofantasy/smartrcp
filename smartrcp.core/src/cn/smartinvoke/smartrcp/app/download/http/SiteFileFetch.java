@@ -124,11 +124,11 @@ public class SiteFileFetch extends Job {
 			if(!isErrorShutDown){//不是错误退出
 			  finishDownload("文件"+siteInfoBean.getSSiteURL()+"下载结束",false);
 			  //唤醒监听器
-			  if(completeListener!=null){ 
-			   String savePath=siteInfoBean.getSFilePath()+File.separator+siteInfoBean.getSFileName();
-			   CAppInfo appInfo=PackageTool.readBasicInfo(savePath);
-			   completeListener.complete(appInfo);
-			  }
+//			  if(completeListener!=null){ 
+//			   String savePath=siteInfoBean.getSFilePath()+File.separator+siteInfoBean.getSFileName();
+//			   CAppInfo appInfo=PackageTool.readBasicInfo(savePath);
+//			   completeListener.complete(appInfo);
+//			  }
 			  tmpFile.delete();//删除配置文件
 			}
 			
