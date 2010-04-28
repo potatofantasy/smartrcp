@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+ <update>true</update>
+ <version>2.0beta</version>
+ <describe>
+   adsfsadsad
+ </describe>
+ <baseUrl>http://smartinvoke.cn/</baseUrl>
+ <files>
+   <item>SplashDev.swf</item>
+   <item>SplashDev.swf</item>
+   <item>SplashDev.swf</item>
+   <item>SplashDev.swf</item>
+ </files>
+</root>
