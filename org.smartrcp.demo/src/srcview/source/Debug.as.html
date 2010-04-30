@@ -1,0 +1,293 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Debug.as</title>
+<link rel="stylesheet" type="text/css" href="../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptASDoc">/**
+* Debug
+* Designed for version 0.96.7 to 1.0 of the Arthropod Debugger.
+* 
+* USE AT YOUR OWN RISK!
+* Any trace that is made with arthropod may be viewed by others.
+* The main purpose of arthropod and this debug class is to debug
+* unpublished AIR applications or sites in their real 
+* environment (such as a web-browser). Future versions of
+* Arthropod may change the trace-engine pattern and may cause
+* traces for older versions not work properly.
+* 
+* A big thanks goes out to:
+* Stockholm Postproduction - www.stopp.se
+* Lee Brimelow - www.theflashblog.com 
+* 
+* @author Carl Calderon 2008
+* @version 0.74
+* @link http.//www.carlcalderon.com/
+* @since 0.72
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptBracket/Brace">{</span>
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">Bitmap</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">BitmapData</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">DisplayObject</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">IBitmapDrawable</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">Stage</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">StatusEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Matrix</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Rectangle</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">LocalConnection</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">system</span>.<span class="ActionScriptDefault_Text">System</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Debug</span> <span class="ActionScriptBracket/Brace">{</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Version control
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">NAME</span>        <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;Debug&apos;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">VERSION</span>        <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;0.74&apos;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Privacy
+         * By setting this password, you need to enter the
+         * same in &quot;Arthropod -&gt; Settings -&gt; Connection Password&quot;
+         * to be able to see the traces.
+         * 
+         * default: &apos;CDC309AF&apos;;
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">password</span>        <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;CDC309AF&apos;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Predefined colors
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">RED</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xCC0000</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">GREEN</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x00CC00</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">BLUE</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x6666CC</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">PINK</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xCC00CC</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">YELLOW</span>        <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xCCCC00</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">LIGHT_BLUE</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x00CCCC</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Status event
+         * If false, arthropod will trace error messages.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ignoreStatus</span>        <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Security (not tested)
+         * If secure is true, only the &lt;code&gt;secureDomain&lt;/code&gt; will be accepted.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">secure</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * A single domain to be used as the secure domain. (not tested)
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">secureDomain</span>        <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>     <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;*&apos;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Switches tracing on/off.
+         * TIP: Set this switch to false before release of AIR applications.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">allowLog</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * DO NOT CHANGE THESE VALUES! IF CHANGED, ARTHROPOD MIGHT NOT WORK PROPERLY!
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">DOMAIN</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;com.carlcalderon.Arthropod&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">CHECK</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;.161E714B6C1A76DE7B9865F88B32FCCE8FABA7B5.1&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TYPE</span>            <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;app&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">CONNECTION</span>        <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;arthropod&apos;</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">LOG_OPERATION</span>        <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;debug&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ERROR_OPERATION</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;debugError&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">WARNING_OPERATION</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;debugWarning&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ARRAY_OPERATION</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;debugArray&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">BITMAP_OPERATION</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;debugBitmapData&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">OBJECT_OPERATION</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;debugObject&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">MEMORY_OPERATION</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;debugMemory&apos;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">CLEAR_OPERATION</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;debugClear&apos;</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lc</span>                    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">LocalConnection</span>     <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">LocalConnection</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hasEventListeners</span>    <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>             <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Traces a message to Arthropod
+         * 
+         * @param    message        Message to be traced
+         * @param    color        opt. Color of the message
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">log</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:*</span>, <span class="ActionScriptDefault_Text">color</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xFEFEFE</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LOG_OPERATION</span>, <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptBracket/Brace">)</span> , <span class="ActionScriptDefault_Text">color</span> <span class="ActionScriptBracket/Brace">)</span> ;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Traces a warning to Arthropod.
+         * The message will be displayed in yellow.
+         * 
+         * @param    message        Message to be traced
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">error</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ERROR_OPERATION</span>, <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptBracket/Brace">)</span> , 0<span class="ActionScriptDefault_Text">xCC0000</span> <span class="ActionScriptBracket/Brace">)</span> ;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Traces an error to Arthropod.
+         * The message will be displayed in red.
+         * 
+         * @param    message        Message to be traced
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">warning</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">WARNING_OPERATION</span>, <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptBracket/Brace">)</span> , 0<span class="ActionScriptDefault_Text">xCCCC00</span> <span class="ActionScriptBracket/Brace">)</span> ;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Clears all the traces, including arrays and bitmaps
+         * from the Arthropod application window.
+         * 
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">clear</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">CLEAR_OPERATION</span>, 0, 0<span class="ActionScriptDefault_Text">x000000</span> <span class="ActionScriptBracket/Brace">)</span> ;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Traces an array to Arthropod.
+         * 
+         * If no earlier arrays have been traced,
+         * Arthropod will open up the array-window
+         * automatically. For each array that is traced,
+         * the array-window will clear and display the
+         * new one. This is useful for buffer-arrays, etc.
+         * 
+         * @param    arr            Array to be traced
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">array</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">arr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ARRAY_OPERATION</span>, <span class="ActionScriptDefault_Text">arr</span>,<span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> ;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Traces a thumbnail of the specified BitmapData
+         * to Arthropod.
+         * 
+         * The internal connection between Arthropod and
+         * the Debug class only accept calls less than
+         * 40Kb. The bitmap method converts the specified
+         * BitmapData to an acceptable size for the call.
+         * 
+         * @param    bmd            Any IBitmapDrawable
+         * @param    label        Label
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">bitmap</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">bmd</span><span class="ActionScriptOperator">:*</span>, <span class="ActionScriptDefault_Text">label</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BitmapData</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">BitmapData</span> <span class="ActionScriptBracket/Brace">(</span> 100, 100, <span class="ActionScriptReserved">true</span>, 0<span class="ActionScriptDefault_Text">x00FFFFFF</span> <span class="ActionScriptBracket/Brace">)</span> ;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">mtx</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Matrix</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Matrix</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">)</span> ;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 100 <span class="ActionScriptOperator">/</span> <span class="ActionScriptBracket/Brace">((</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">&gt;=</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptBracket/Brace">)</span> ;
+            <span class="ActionScriptDefault_Text">mtx</span>.<span class="ActionScriptDefault_Text">scale</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span>, <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">)</span> ;
+            <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">draw</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">bmd</span>, <span class="ActionScriptDefault_Text">mtx</span>,<span class="ActionScriptReserved">null</span>,<span class="ActionScriptReserved">null</span>,<span class="ActionScriptReserved">null</span>,<span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span> ;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bounds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptBracket/Brace">(</span> 0, 0, <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">floor</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">)</span> , <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">floor</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span> ;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">BITMAP_OPERATION</span>, <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">getPixels</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">bounds</span> <span class="ActionScriptBracket/Brace">)</span>, <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">bounds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">bounds</span>, <span class="ActionScriptDefault_Text">lbl</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptBracket/Brace">)</span> ;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Traces a snapshot of the current stage state.
+         * 
+         * @param    stage        Stage
+         * @param    label        Label
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">snapshot</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">stage</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Stage</span>, <span class="ActionScriptDefault_Text">label</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">stage</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">bitmap</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">stage</span>, <span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptBracket/Brace">)</span> ;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Traces an &lt;code&gt;object&lt;/code&gt; to Arthropod.
+         * The first level of arguments are traced as follows:
+         * 
+         * trace:
+         * Debug.object( { name: Carl, surname: Calderon } );
+         * 
+         * output:
+         * object
+         * name: Carl
+         * surname: Calderon
+         * 
+         * @param    obj            Object to be traced
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">object</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">OBJECT_OPERATION</span>, <span class="ActionScriptDefault_Text">obj</span>, <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> ;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Traces the current memory size used by Adobe Flash Player.
+         * Observe that this also includes AIR applications (such as
+         * Arthropod). Use with care.
+         * 
+         * @return                True if successful
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">memory</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">MEMORY_OPERATION</span>, <span class="ActionScriptDefault_Text">System</span>.<span class="ActionScriptDefault_Text">totalMemory</span>, <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> ;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * [internal-use]
+         * Sends the message
+         * 
+         * @param    operation    Operation name
+         * @param    value        Value to send
+         * @param    color        opt. Color of the message
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">send</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">operation</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span>, <span class="ActionScriptDefault_Text">prop</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">secure</span><span class="ActionScriptBracket/Brace">)</span>     <span class="ActionScriptDefault_Text">lc</span>.<span class="ActionScriptDefault_Text">allowInsecureDomain</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&apos;*&apos;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">else</span>             <span class="ActionScriptDefault_Text">lc</span>.<span class="ActionScriptDefault_Text">allowDomain</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">secureDomain</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">hasEventListeners</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ignoreStatus</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">lc</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">StatusEvent</span>.<span class="ActionScriptDefault_Text">STATUS</span>, <span class="ActionScriptDefault_Text">ignore</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">else</span>                 <span class="ActionScriptDefault_Text">lc</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">StatusEvent</span>.<span class="ActionScriptDefault_Text">STATUS</span>, <span class="ActionScriptDefault_Text">status</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">hasEventListeners</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">allowLog</span><span class="ActionScriptBracket/Brace">){</span>
+                <span class="ActionScriptReserved">try</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">lc</span>.<span class="ActionScriptDefault_Text">send</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">TYPE</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&apos;#&apos;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">DOMAIN</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">CHECK</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&apos;:&apos;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">CONNECTION</span> , <span class="ActionScriptDefault_Text">operation</span>, <span class="ActionScriptDefault_Text">password</span>, <span class="ActionScriptDefault_Text">value</span>, <span class="ActionScriptDefault_Text">prop</span> <span class="ActionScriptBracket/Brace">)</span> ;
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">catch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * [internal-use]
+         * Traces the status of the Debugger.
+         * 
+         * @see        ignoreStatus
+         * @param    e            StatusEvent
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">status</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">StatusEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScripttrace">trace</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&apos;Arthropod status:\n&apos;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * [internal-use]
+         * Method used to ignore StatusEvent&apos;s if an error occurs.
+         * 
+         * @see        ignoreStatus
+         * @param    e            StatusEvent
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ignore</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">StatusEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

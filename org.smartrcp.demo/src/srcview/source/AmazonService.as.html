@@ -1,0 +1,47 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>AmazonService.as</title>
+<link rel="stylesheet" type="text/css" href="../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">//  Copyright (C) 2006 Adobe Macromedia Software LLC and its licensors.
+</span><span class="ActionScriptComment">//  All Rights Reserved. The following is Source Code and is subject to all
+</span><span class="ActionScriptComment">//  restrictions on such code as contained in the End User License Agreement
+</span><span class="ActionScriptComment">//  accompanying this product.
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span>
+<span class="ActionScriptpackage">package</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">http</span>.<span class="ActionScriptDefault_Text">HTTPService</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">managers</span>.<span class="ActionScriptDefault_Text">CursorManager</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * Encapsulation of the Amazon Web Service. Contains static functions for performing specific calls on the service.
+     * 
+     * @author Mark Shepherd
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">AmazonService</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">urlBase</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&amp;AWSAccessKeyId=00WQKXFRETRXJMXW8682&amp;&quot;</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getItemInfo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">id</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">client</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">service</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">HTTPService</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">HTTPService</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">service</span>.<span class="ActionScriptDefault_Text">resultFormat</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;e4x&quot;</span>;
+            <span class="ActionScriptDefault_Text">service</span>.<span class="ActionScriptDefault_Text">url</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">urlBase</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;Operation=ItemLookup&amp;ResponseGroup=Reviews,Images,Large&amp;ItemId=&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">id</span>;
+            <span class="ActionScriptDefault_Text">service</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;result&quot;</span>, <span class="ActionScriptDefault_Text">client</span>.<span class="ActionScriptDefault_Text">getItemInfoResult</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">service</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;fault&quot;</span>, <span class="ActionScriptDefault_Text">client</span>.<span class="ActionScriptDefault_Text">getItemInfoFault</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">service</span>.<span class="ActionScriptDefault_Text">send</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getDetailPageUrl</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">id</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;http://www.amazon.com/gp/pdp/profile/&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">id</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of cn.smartinvoke.smartrcp-flex</title>
+	<nodes>
+		<node label="[source path] libs" icon="classpathIcon" expanded="true">
+			<node label="2.0.1.automation_swcs">
+				<node label="automation_agent.swc" url="source/[source path] libs/2.0.1.automation_swcs/automation_agent.swc"/>
+				<node label="automation_agent_rb.swc" url="source/[source path] libs/2.0.1.automation_swcs/automation_agent_rb.swc"/>
+				<node label="qtp.swc" url="source/[source path] libs/2.0.1.automation_swcs/qtp.swc"/>
+			</node>
+			<node label="air">
+				<node label="airframework.swc" url="source/[source path] libs/air/airframework.swc"/>
+				<node label="airglobal.swc" url="source/[source path] libs/air/airglobal.swc"/>
+				<node label="AIRIntrospector.js" url="source/[source path] libs/air/AIRIntrospector.js.txt"/>
+				<node label="AIRLocalizer.js" url="source/[source path] libs/air/AIRLocalizer.js.txt"/>
+				<node label="AIRMenuBuilder.js" url="source/[source path] libs/air/AIRMenuBuilder.js.txt"/>
+				<node label="AIRSourceViewer.js" url="source/[source path] libs/air/AIRSourceViewer.js.txt"/>
+				<node label="servicemonitor.swc" url="source/[source path] libs/air/servicemonitor.swc"/>
+			</node>
+			<node label="player">
+				<node label="9">
+					<node label="playerglobal.swc" url="source/[source path] libs/player/9/playerglobal.swc"/>
+				</node>
+			</node>
+			<node label="automation.swc" url="source/[source path] libs/automation.swc"/>
+			<node label="automation_agent.swc" url="source/[source path] libs/automation_agent.swc"/>
+			<node label="automation_dmv.swc" url="source/[source path] libs/automation_dmv.swc"/>
+			<node label="automation_flashflexkit.swc" url="source/[source path] libs/automation_flashflexkit.swc"/>
+			<node label="datavisualization.swc" url="source/[source path] libs/datavisualization.swc"/>
+			<node label="flex.swc" url="source/[source path] libs/flex.swc"/>
+			<node label="framework.swc" url="source/[source path] libs/framework.swc"/>
+			<node label="qtp.swc" url="source/[source path] libs/qtp.swc"/>
+			<node label="rpc.swc" url="source/[source path] libs/rpc.swc"/>
+			<node label="utilities.swc" url="source/[source path] libs/utilities.swc"/>
+		</node>
+		<node label="html-template">
+			<node label="history">
+				<node label="history.css" icon="cssIcon" url="source/html-template/history/history.css.html"/>
+				<node label="history.js" url="source/html-template/history/history.js.txt"/>
+				<node label="historyFrame.html" icon="htmlIcon" url="source/html-template/history/historyFrame.html"/>
+			</node>
+			<node label="AC_OETags.js" url="source/html-template/AC_OETags.js.txt"/>
+			<node label="index.template.html" icon="htmlIcon" url="source/html-template/index.template.html"/>
+			<node label="playerProductInstall.swf" icon="swfIcon" url="source/html-template/playerProductInstall.swf"/>
+		</node>
+		<node label="libs">
+			<node label="smartinvoke.swc" url="source/libs/smartinvoke.swc"/>
+			<node label="smartrcp.swc" url="source/libs/smartrcp.swc"/>
+		</node>
+		<node label="src" icon="classpathIcon" expanded="true">
+			<node label="border" icon="packageIcon" expanded="true">
+				<node label="SimpleGradientBorder.as" icon="actionScriptIcon" url="source/border/SimpleGradientBorder.as.html"/>
+			</node>
+			<node label="icons">
+				<node label="arraypartition_obj.gif" icon="imageIcon" url="source/icons/arraypartition_obj.gif.html"/>
+				<node label="att_class_obj.gif" icon="imageIcon" url="source/icons/att_class_obj.gif.html"/>
+				<node label="call_hierarchy.gif" icon="imageIcon" url="source/icons/call_hierarchy.gif.html"/>
+				<node label="clear.gif" icon="imageIcon" url="source/icons/clear.gif.html"/>
+				<node label="help.gif" icon="imageIcon" url="source/icons/help.gif.html"/>
+				<node label="nav.gif" icon="imageIcon" url="source/icons/nav.gif.html"/>
+				<node label="types.gif" icon="imageIcon" url="source/icons/types.gif.html"/>
+				<node label="waiting.gif" icon="imageIcon" url="source/icons/waiting.gif.html"/>
+			</node>
+			<node label="platform" icon="packageIcon" expanded="true">
+				<node label="AppManager.mxml" icon="mxmlIcon" url="source/platform/AppManager.mxml.html"/>
+				<node label="AppPackManager.mxml" icon="mxmlIcon" url="source/platform/AppPackManager.mxml.html"/>
+				<node label="AppSearch.mxml" icon="mxmlIcon" url="source/platform/AppSearch.mxml.html"/>
+				<node label="ConsoleTextArea.as" icon="actionScriptIcon" url="source/platform/ConsoleTextArea.as.html"/>
+				<node label="ConsoleView.mxml" icon="mxmlIcon" url="source/platform/ConsoleView.mxml.html"/>
+				<node label="LibObj.as" icon="actionScriptIcon" url="source/platform/LibObj.as.html"/>
+				<node label="WinUpdate.mxml" icon="mxmlIcon" url="source/platform/WinUpdate.mxml.html"/>
+			</node>
+			<node label="views" icon="packageIcon" expanded="true">
+				<node label="AppMenuBar_T.mxml" icon="mxmlIcon" url="source/views/AppMenuBar_T.mxml.html"/>
+				<node label="AppToolBar_T.mxml" icon="mxmlIcon" url="source/views/AppToolBar_T.mxml.html"/>
+				<node label="Content1.mxml" icon="mxmlIcon" url="source/views/Content1.mxml.html"/>
+				<node label="ContentViewDescribe.as" icon="actionScriptIcon" url="source/views/ContentViewDescribe.as.html"/>
+				<node label="ContentViewPart.mxml" icon="mxmlIcon" url="source/views/ContentViewPart.mxml.html"/>
+				<node label="ContextMenu_T.mxml" icon="mxmlIcon" url="source/views/ContextMenu_T.mxml.html"/>
+				<node label="CPerpertyViewDescribe.as" icon="actionScriptIcon" url="source/views/CPerpertyViewDescribe.as.html"/>
+				<node label="DbInvoke.mxml" icon="mxmlIcon" url="source/views/DbInvoke.mxml.html"/>
+				<node label="Dialog_T.mxml" icon="mxmlIcon" url="source/views/Dialog_T.mxml.html"/>
+				<node label="Drag_T.mxml" icon="mxmlIcon" url="source/views/Drag_T.mxml.html"/>
+				<node label="FlashShell_T.mxml" icon="mxmlIcon" url="source/views/FlashShell_T.mxml.html"/>
+				<node label="ModuleInvoke_T.mxml" icon="mxmlIcon" url="source/views/ModuleInvoke_T.mxml.html"/>
+				<node label="ModuleSourceCode.as" icon="actionScriptIcon" url="source/views/ModuleSourceCode.as.html"/>
+				<node label="MouseAndKeyBordEvt.mxml" icon="mxmlIcon" url="source/views/MouseAndKeyBordEvt.mxml.html"/>
+				<node label="PerpertyViewPart.mxml" icon="mxmlIcon" url="source/views/PerpertyViewPart.mxml.html"/>
+				<node label="StatusLine_T.mxml" icon="mxmlIcon" url="source/views/StatusLine_T.mxml.html"/>
+				<node label="TreeViewDescribe.as" icon="actionScriptIcon" url="source/views/TreeViewDescribe.as.html"/>
+				<node label="TreeViewPart.mxml" icon="mxmlIcon" url="source/views/TreeViewPart.mxml.html"/>
+				<node label="ViewManager_T.mxml" icon="mxmlIcon" url="source/views/ViewManager_T.mxml.html"/>
+				<node label="ViewPartActionBar_T.mxml" icon="mxmlIcon" url="source/views/ViewPartActionBar_T.mxml.html"/>
+			</node>
+			<node label="AmazonDemo.mxml" icon="mxmlIcon" url="source/AmazonDemo.mxml.html"/>
+			<node label="AmazonItem.as" icon="actionScriptIcon" url="source/AmazonItem.as.html"/>
+			<node label="AmazonItemView.mxml" icon="mxmlIcon" url="source/AmazonItemView.mxml.html"/>
+			<node label="AmazonService.as" icon="actionScriptIcon" url="source/AmazonService.as.html"/>
+			<node label="Debug.as" icon="actionScriptIcon" url="source/Debug.as.html"/>
+			<node label="helper.png" icon="imageIcon" url="source/helper.png.html"/>
+			<node label="info.png" icon="imageIcon" url="source/info.png.html"/>
+			<node label="KeyEvent_T.mxml" icon="mxmlIcon" url="source/KeyEvent_T.mxml.html"/>
+			<node label="logo.png" icon="imageIcon" url="source/logo.png.html"/>
+			<node selected="true" label="main.mxml" icon="mxmlAppIcon" url="source/main.mxml.html"/>
+			<node label="PlatformManager.mxml" icon="mxmlIcon" url="source/PlatformManager.mxml.html"/>
+			<node label="Splash.mxml" icon="mxmlIcon" url="source/Splash.mxml.html"/>
+			<node label="Splash.png" icon="imageIcon" url="source/Splash.png.html"/>
+			<node label="SplashDev.mxml" icon="mxmlIcon" url="source/SplashDev.mxml.html"/>
+			<node label="SpringGraphDemo.mxml" icon="mxmlIcon" url="source/SpringGraphDemo.mxml.html"/>
+			<node label="yflexskin.css" icon="cssIcon" url="source/yflexskin.css.html"/>
+			<node label="yflexskin.swf" icon="swfIcon" url="source/yflexskin.swf"/>
+		</node>
+	</nodes>
+</index>
