@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="smartrcp.platform.dev.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="Perspective"
+            class="smartrcp.platform.dev.Perspective"
+            id="smartrcp.platform.dev.perspective">
+      </perspective>
+      <perspective
+            class="cn.smartinvoke.smartrcp.core.Perspective"
+            id="cn.smartinvoke.smartrcp.core.perspective"
+            name="当前程序">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+     <view
+            name="SmartRCP视图"
+            class="cn.smartinvoke.smartrcp.gui.FlashViewPart"
+            id="cn.smartinvoke.smartrcp.gui.FlashViewPart" allowMultiple="true">
+      </view>
+      <view
+            name="swt视图单元"
+            class="cn.smartinvoke.smartrcp.core.SWTUnitViewPart"
+            id="cn.smartinvoke.smartrcp.core.SWTUnitViewPart" allowMultiple="true">
+      </view>
+      <view
+            name="smartrcp在线"
+            class="cn.smartinvoke.smartrcp.gui.browser.WebBrowser"
+            id="cn.smartinvoke.smartrcp.WebBrowser" allowMultiple="true">
+      </view>
+       <view
+             allowMultiple="true"
+             class="org.eclipse.ui.ExtensionFactory:progressView"
+             icon="icons/progress.gif"
+             id="org.eclipsercp.hyperbola.views.progress"
+             name="下载管理"/>
+      
+      <view name="tree" class="smartrcp.platform.dev.View" id="smartrcp.platform.dev.view"/>
+      
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="smartrcp.platform.dev.application"
+            name="smartrcp.dev">
+         <property
+               name="appName"
+               value="smartrcp.dev">
+         </property>
+      </product>
+   </extension>
+
+</plugin>
