@@ -13,17 +13,17 @@ public class ConsoleServer extends CObservable implements IServerObject,Runnable
 	
 	public static final ConsoleServer Instance=new ConsoleServer();
     public   void init(){
-		  standOut=new ByteArrayOutputStream(Buff_Size);
-		  errorOut=new ByteArrayOutputStream(Buff_Size);
-		  System.setOut(new PrintStream(standOut));
-		  System.setErr(new PrintStream(errorOut));
+//		  standOut=new ByteArrayOutputStream(Buff_Size);
+//		  errorOut=new ByteArrayOutputStream(Buff_Size);
+//		  System.setOut(new PrintStream(standOut));
+//		  System.setErr(new PrintStream(errorOut));
     }
 	private ConsoleServer() {
-	    this.init();
-	    
-	    Thread thread=new Thread(this);
-	    thread.setDaemon(true);
-	    thread.start();
+//	    this.init();
+//	    
+//	    Thread thread=new Thread(this);
+//	    thread.setDaemon(true);
+//	    thread.start();
 	}
 	public void run() {
 		while(true){

@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.BitSet;
 import java.util.Date;
 
 import org.eclipse.swt.program.Program;
@@ -30,8 +31,15 @@ public class AlarmT implements Runnable{
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		new AlarmT();
-		System.in.read();
+		BitSet set=new BitSet(100);
+		long a=Long.MIN_VALUE;
+		//有第三个权限值
+		long pt=Long.MAX_VALUE;
+		System.out.println(Long.toBinaryString(pt));
+		System.out.println(Long.toBinaryString(pt>>>3));
+		a=a^(pt>>3);
+		System.out.println(Long.toBinaryString(a));
+		//System.in.read();
 	}
 
 }

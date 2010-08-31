@@ -68,7 +68,6 @@ public class DebugManager implements IServerObject{
 	public static void main(String[] args) {
 		
 	}
-	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
