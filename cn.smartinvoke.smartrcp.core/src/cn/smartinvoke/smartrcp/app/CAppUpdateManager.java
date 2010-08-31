@@ -88,7 +88,6 @@ public class CAppUpdateManager extends Thread implements IServerObject{
     	}
     	return ret;
     }
-	@Override
 	public void dispose() {
 		
 	}

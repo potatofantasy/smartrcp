@@ -113,7 +113,7 @@ public class FlashShell implements IServerObject{
 				 //从PageLayout的appId模块对应表中删除该part的信息
 					//SplashWindow.getPerspective().
 					//page.removeViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
-				 flashViewer.dispose();
+				 flashViewer.disposeResource();
 			   }
 			}
 		});
@@ -149,7 +149,7 @@ public class FlashShell implements IServerObject{
 	//----------------------------
 	public void dispose() {
 		 if(this.flashViewer!=null){
-		  this.flashViewer.dispose();
+		   this.flashViewer.disposeResource();
 		 }
 		 this.shell.dispose();
 		//Log.println("in flashShell dispose");
@@ -177,7 +177,7 @@ public class FlashShell implements IServerObject{
 		if(flashViewer!=null){
 		 //调用对应flex程序回收资源
 		 flashViewer.flexAppExist();
-		 flashViewer.dispose();
+		 flashViewer.disposeResource();
 		}
 		this.shell.setMinimized(true);//将窗口设到最小化回收内存
 		this.shell.close();

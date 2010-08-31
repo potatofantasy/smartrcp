@@ -22,6 +22,7 @@ import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.module.CObservable;
 import cn.smartinvoke.smartrcp.gui.module.CPartEvent;
 import cn.smartinvoke.smartrcp.util.UIHelpMethod;
+import cn.smartinvoke.util.Log;
 
 /**
  * 视图管理器，主要是flex调用此类的方法，实现java与flex的同步 这里的视图包括：ViewPart ,Shell窗口
@@ -65,16 +66,20 @@ public class ViewManager  extends CObservable implements IServerObject{
 			page.addPartListener(new IPartListener(){
 
 				public void partActivated(IWorkbenchPart part) {
-					fireEvent(CPartEvent.Part_Activated, part);
+				   if(part instanceof SmartRCPViewPart){
+					fireEvent(CPartEvent.Part_Activated, (SmartRCPViewPart)part);
+				   }
 				}
 
 				public void partBroughtToTop(IWorkbenchPart part) {
-					fireEvent(CPartEvent.Part_BroughtToTop, part);
+					if(part instanceof SmartRCPViewPart){
+					  fireEvent(CPartEvent.Part_BroughtToTop,(SmartRCPViewPart)part);
+					}
 				}
 
 				public void partClosed(IWorkbenchPart part) {
 					//从FlashViewer集合中删除掉当前关闭的ViewPart
-					List<FlashViewer> curViews=FlashViewer.getViewers();//当前的所有FlashViewer
+					/**List<FlashViewer> curViews=FlashViewer.getViewers();//当前的所有FlashViewer
 					for(int n=0;n<curViews.size();n++){
 						FlashViewer viewer=curViews.get(n);
 						if(viewer.getParent().equals(part)){//
@@ -82,22 +87,42 @@ public class ViewManager  extends CObservable implements IServerObject{
 							CPageLayout.Instance.removeViewPartInfo(viewer.getModulePath(), viewer.getAppId());
 							//触发flex监听器
 							fireFlashViewer(CPartEvent.Part_Closed,viewer);
-							curViews.remove(n);
+							//curViews.remove(n);
+							//curViews.remove(viewer);
+							
+							viewer.dispose();//释放对象
+							Log.println("curSize="+curViews.size());
+							
 							break;
 						}
+					}*/
+					if(part instanceof SmartRCPViewPart){
+					   FlashViewer flashViewer=FlashViewer.getViewerByParent((SmartRCPViewPart)part);
+					   if(flashViewer!=null){
+						 //触发flex监听器
+						   try{
+							   
+						     fireFlashViewer(CPartEvent.Part_Closed,flashViewer);
+						     flashViewer.disposeResource();//释放对象资源
+						     Log.println("curSize="+FlashViewer.getViewers().size());
+						     
+						   }catch(Throwable e){
+							   e.printStackTrace();
+						   }
+					   }
 					}
-					
 				}
 
 				public void partDeactivated(IWorkbenchPart part) {
-					fireEvent(CPartEvent.Part_Deactivated, part);
+					if(part instanceof SmartRCPViewPart){
+					  fireEvent(CPartEvent.Part_Deactivated, (SmartRCPViewPart)part);
+					}
 				}
 				public void partOpened(IWorkbenchPart part) {
 				  //让Flex模块可以监听到继承SmartRCPViewPart类，但非FlashViewPart类型的ViewPart的打开
 				  if(part instanceof SmartRCPViewPart){
-				     if(!(part instanceof FlashViewPart)){
-				    	 fireEvent(CPartEvent.Part_Opened, part);
-				     }else{
+					 fireEvent(CPartEvent.Part_Opened, (SmartRCPViewPart)part);
+				     if(part instanceof FlashViewPart){
 				    	 ((FlashViewPart)part).getFlashViewer().loadFlash();
 				     }
 				  }	 
@@ -110,7 +135,7 @@ public class ViewManager  extends CObservable implements IServerObject{
 	 * @param type 可选值:Part_Activated ，
 	 * @param part
 	 */
-	public void fireEvent(int type,IWorkbenchPart part){
+	public void fireEvent(int type,SmartRCPViewPart part){
 		//FlashViewer flashViewer=null;
 		if(part!=null){
 			List<FlashViewer> flashViewers=FlashViewer.getViewers();

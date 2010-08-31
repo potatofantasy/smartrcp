@@ -200,7 +200,12 @@ public class FlashContainer extends Flash implements IServerObject{
     	super.loadMovie(layer, runtimeSwfUrl);
     	
     }
-	public void dispose() {
+    private boolean isDispose=false;//确保dispose方法只调用一次
+	public void disposeResource() {
+		if(isDispose){
+			return;
+		}
+		isDispose=true;
 		//从全局容器集合中删除
 		//FlashContainer.remove_Container(this);
 		//删除对象池中的对应服务类

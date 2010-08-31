@@ -29,6 +29,7 @@ import cn.smartinvoke.rcp.CPageLayout;
 import cn.smartinvoke.rcp.CPerspective;
 import cn.smartinvoke.smartrcp.core.ISWTPartUnit;
 import cn.smartinvoke.smartrcp.core.SWTUnitViewPart;
+import cn.smartinvoke.smartrcp.core.SmartRCPViewPart;
 import cn.smartinvoke.smartrcp.gui.FlashShell;
 import cn.smartinvoke.smartrcp.gui.FlashViewPart;
 import cn.smartinvoke.smartrcp.gui.SplashWindow;
@@ -99,7 +100,7 @@ public class FlashViewer implements IServerObject {
 				String appId=container.getAppId();
 				page.removeViewPartInfo(modulePath,appId);
 				
-				Log.println("removeModule:"+modulePath+" addId:"+appId);
+				//Log.println("removeModule:"+modulePath+" addId:"+appId);
 		}
 		
 	}
@@ -124,7 +125,7 @@ public class FlashViewer implements IServerObject {
 		}
 		return ret;
 	}
-    public static FlashViewer getViewerByParent(IViewPart part){
+    public static FlashViewer getViewerByParent(SmartRCPViewPart part){
     	FlashViewer ret = null;
 		if (part != null) {
 			for (int i = 0; i < containers.size(); i++) {
@@ -204,6 +205,7 @@ public class FlashViewer implements IServerObject {
 		swfAndModulePath = swfPath;
 	}
     public boolean isLoaded=false;
+    private boolean isLoading=false;
 	/**
 	 * 加载flash
 	 */
@@ -211,6 +213,11 @@ public class FlashViewer implements IServerObject {
 		if(isLoaded){
 			return;
 		}
+		if(isLoading){
+			return;
+		}
+		isLoading=true;
+		
 		if(this.flashContainer==null){
 			return;
 		}
@@ -379,17 +386,22 @@ public class FlashViewer implements IServerObject {
  		try{this.flexApp.call("onExist",null);}catch(Exception e){};
  	}
  	private boolean isDispose=false;//确保dispose方法只调用一次
-	public void dispose() {
+	public void disposeResource() {
 		if(isDispose){
 			return;
 		}
 		if(!isDispose){
+			isDispose=true;
+			System.err.println("FlashViewer.disposeResource()");
 		//在flashViewer退出之前调用flex app的onExist函数
 		//try{this.flexApp.call("onExist",null);}catch(Exception e){};
 		
 		//清空数据区
         this.dataMap.clear();
-		// 从全局容器集合中删除
+        //释放appId占用的号码资源
+        usedAppIds.remove(Integer.valueOf(this.getAppId()));
+		
+        // 从全局容器集合中删除
 		//if (containers.contains(this)) {
 		//	Log.println("in FlashViewer dispose");
 			FlashViewer.remove_Viewer(this);
@@ -402,6 +414,7 @@ public class FlashViewer implements IServerObject {
 			EventRegister eventRegister = (EventRegister) pool
 					.getObject(GlobalServiceId.Event_Register);
 			String appId = this.flashContainer.getAppId();
+			
 			eventRegister.removeListeners(appId);
 			
 			//删除Observable中的所有监听器
@@ -409,10 +422,10 @@ public class FlashViewer implements IServerObject {
 			
 			// 删除对象池中的对应服务类
 			if (this.flashContainer != null) {
-				this.flashContainer.dispose();
+				this.flashContainer.disposeResource();
 			}
 		}
-		isDispose=true;
+		
 		}
 	}
 
@@ -585,6 +598,9 @@ public class FlashViewer implements IServerObject {
 			throw invokException;
         }
         return retObj;
+	}
+	public void dispose() {
+		
 	}
 	
 }

@@ -51,7 +51,7 @@ public class UIHelpMethod implements IServerObject {
 				ret = subPath;
 			} else
 			// 绝对路径
-			if (new File(subPath).exists()){
+			if (subPath.indexOf(':')!=-1) {
 				ret = subPath;
 			} else {
 				// 相对路径
@@ -84,7 +84,6 @@ public class UIHelpMethod implements IServerObject {
 			e.printStackTrace();
 		}
 	}
-	@Override
 	public void dispose() {
 		
 	}

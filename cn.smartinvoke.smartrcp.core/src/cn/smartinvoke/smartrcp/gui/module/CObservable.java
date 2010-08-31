@@ -12,6 +12,7 @@ import cn.smartinvoke.util.Log;
  *
  */
 public abstract class CObservable implements IServerObject{
+	//该CObservable对象下的所有注册监听器对象
 	protected List<CEventBean> listeners = new LinkedList<CEventBean>();
 	//记录所有的CObservable实例，当有FlashViwer关闭时，轮询此集合回收对应的监听器对象
 	private static List<CObservable> observers=new LinkedList<CObservable>();
@@ -48,6 +49,7 @@ public abstract class CObservable implements IServerObject{
     	}
     }
     public void dispose() {
+    	
     	observers.remove(this);
 	}
     
@@ -58,6 +60,15 @@ public abstract class CObservable implements IServerObject{
     		   observers.get(n).delListeners(appId);
     	   }
        }
+    }
+    /**
+     * 删除CObservable资源
+     * @param appId
+     * @param observable
+     */
+    public static void remove(String appId,CObservable observable){
+    	//String objId=ObjectPool.INSTANCE.getObjectkey(observable);
+    	//ObjectPool.INSTANCE.removeObject(appId, objId);
     }
 	/**
 	 * @param args

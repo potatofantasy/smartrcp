@@ -132,9 +132,10 @@ public class SmartRCPBuilder {
 	}
 	protected  void startBundles(BundleContext context){
 		 //加载标准库
-		 String libPath=HelpMethods.getPluginFolder()+"/lib";
+		 String basePath=CApplication.Instance.getInstallLocation();
+		 String libPath=basePath+"/lib";
 		 startBundles(libPath);
-		 libPath=HelpMethods.getPluginFolder()+"/ext";
+		 libPath=basePath+"/ext";
 		 //加载扩展库
 		 startBundles(libPath);
 	}
@@ -150,6 +151,7 @@ public class SmartRCPBuilder {
 		 try{
 		   CApplication.setStandardBundles(BundleHelpMethod.installBundles(folder));
 		 }catch(BundleException e){
+			 e.printStackTrace();
 			 throw new RuntimeException(e);
 		 }
 	}
@@ -473,21 +475,16 @@ public class SmartRCPBuilder {
 
 					public void partOpened(IWorkbenchPartReference partRef) {
 						IWorkbenchPart workbenchPart=partRef.getPart(true);
-						//只对IViewPart进行管理
-						if(!(workbenchPart instanceof IViewPart)){
-						  return;
-						}
 						//非FlashViewPart视图，需要手动创建FlashViewer对象
-					    if(!(workbenchPart instanceof FlashViewPart)){
-							
-						}else{
-							 IViewPart viewPart=(IViewPart)workbenchPart;
+					    if(workbenchPart instanceof FlashViewPart){
+					    	
+							FlashViewPart viewPart=(FlashViewPart)workbenchPart;
 							 //将当前打开的viewPart的信息添加进模块对应表中	
 							 FlashViewer flashViewer=FlashViewer.getViewerByParent(viewPart);//视图对应的FlashViewer对象
 							 if(flashViewer!=null){
 								 flashViewer.loadFlash();
-								 CPageLayout page= CPageLayout.Instance;
-								 page.addViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
+								 //CPageLayout page= CPageLayout.Instance;
+								// page.addViewPartInfo(flashViewer.getModulePath(), flashViewer.getAppId());
 							 }
 					    }
 					}

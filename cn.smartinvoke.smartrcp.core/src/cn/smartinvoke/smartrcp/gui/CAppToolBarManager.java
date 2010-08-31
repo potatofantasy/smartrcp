@@ -36,7 +36,7 @@ public class CAppToolBarManager implements IServerObject {
 			curToolBar=toolBar;
 			this.createToolBar(toolBar.type);
 			
-			List<String> actionIds = toolBar.actionIds;
+			List<String> actionIds = toolBar.getActionIds();
 			if (actionIds != null) {
 				for (int n = 0; n < actionIds.size(); n++) {
 					Object idObj = actionIds.get(n);
@@ -100,7 +100,7 @@ public class CAppToolBarManager implements IServerObject {
 		if (actionId != null) {
 				this.toolBarManager.remove(actionId);
 				this.coolBar.update(true);
-				this.curToolBar.actionIds.remove(actionId);
+				this.curToolBar.getActionIds().remove(actionId);
 		}
 	}
 
@@ -115,7 +115,7 @@ public class CAppToolBarManager implements IServerObject {
 	 */
 	public void insertItem(String actionId) {
 		if (actionId != null) {
-			if(this.curToolBar.actionIds.contains(actionId)){//如果已经添加则返回
+			if(this.curToolBar.getActionIds().contains(actionId)){//如果已经添加则返回
 				return;
 			}
 			IAction action = SmartRCPBuilder.Instance.actionManager.getAction(actionId);
@@ -128,14 +128,14 @@ public class CAppToolBarManager implements IServerObject {
 				}
 				this.toolBarManager.add(contributionItem);
 				this.coolBar.update(true);
-				this.curToolBar.actionIds.add(actionId);
+				this.curToolBar.getActionIds().add(actionId);
 			}
 		}
 	}
 
 	public void insertBefore(String beforeId, String actionId) {
 		if (beforeId != null && actionId != null) {
-			if(this.curToolBar.actionIds.contains(actionId)){
+			if(this.curToolBar.getActionIds().contains(actionId)){
 				return;
 			}
 			IAction action = SmartRCPBuilder.Instance.actionManager.getAction(actionId);
@@ -148,7 +148,7 @@ public class CAppToolBarManager implements IServerObject {
 					this.toolBarManager.add(contributionItem);
 					this.coolBar.update(true);
 							
-					List<String> actionIds=this.curToolBar.actionIds;
+					List<String> actionIds=this.curToolBar.getActionIds();
 					int idIndex=actionIds.indexOf(beforeId);
 					actionIds.add(idIndex-1, actionId);		
 			}
@@ -156,7 +156,7 @@ public class CAppToolBarManager implements IServerObject {
 	}
 	public void insertAfter(String afterId, String actionId) {
 		if (afterId != null && actionId != null) {
-			if(this.curToolBar.actionIds.contains(actionId)){
+			if(this.curToolBar.getActionIds().contains(actionId)){
 				return;
 			}
 			IAction action = SmartRCPBuilder.Instance.actionManager.getAction(actionId);
@@ -168,7 +168,7 @@ public class CAppToolBarManager implements IServerObject {
 					this.toolBarManager.add(contributionItem);
 					this.coolBar.update(true);
 				    
-					List<String> actionIds=this.curToolBar.actionIds;
+					List<String> actionIds=this.curToolBar.getActionIds();
 					int idIndex=actionIds.indexOf(afterId);
 					actionIds.add(idIndex, actionId);	
 			}

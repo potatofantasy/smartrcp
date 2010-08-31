@@ -11,7 +11,7 @@ public class CToolBar {
 	public static final int Image=2;
     public int type=Image_Text_Horizontal;
     //public String toolBarId=null;
-    public List<String> actionIds=null;
+    private List<String> actionIds=null;
 	public CToolBar() {
 		this.actionIds=new LinkedList<String>();
 		this.actionIds.add(JFaceConstant.Menu_Separator_Str);
@@ -31,11 +31,26 @@ public class CToolBar {
 	public int hashCode(){
 		return toolBarId.hashCode();
 	}*/
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
 	}
-
+	public List<String> getActionIds() {
+		return actionIds;
+	}
+	public void setActionIds(List<String> actionIds) {
+		List<String> temp=actionIds;
+		if(temp!=null){
+		  this.actionIds = new LinkedList<String>();
+		  for (int i = 0; i < temp.size(); i++) {
+			  String item=temp.get(i);
+			  if(!this.actionIds.contains(item)){
+				  this.actionIds.add(item);
+			  }
+		  }
+		}
+	}
 }

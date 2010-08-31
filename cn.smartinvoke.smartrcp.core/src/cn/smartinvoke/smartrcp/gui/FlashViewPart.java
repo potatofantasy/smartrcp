@@ -152,18 +152,17 @@ public class FlashViewPart extends SmartRCPViewPart implements IServerObject,
 
 	public void dispose() {
 		// 删除透视图对象中的layout信息对象
+		super.dispose();
 		try {
 			if (this.flashViewer != null){
 				//从布局map中注销掉自己
 				Perspective.swfLayoutMap.remove(Integer.valueOf(this.flashViewer
 						.getAppId()));
-				
-				this.flashViewer.dispose();
+				//this.flashViewer.dispose();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//super.dispose();
 	}
 	public String getType(){
     	return "FlashViewPart";

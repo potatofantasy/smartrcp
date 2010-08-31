@@ -69,7 +69,7 @@ public class ConfigerLoader {
 		}else{//如果没有则启动标准程序
 	    	if(!checkSwfExist()){
 	    		//标准启动程序
-		    	startupSwf=CApplication.Instance.getInstallLocation()+"default.swf";
+		    	startupSwf=CApplication.Instance.getInstallLocation()+"Splash.swf";
 		    	//JFaceHelpMethod.showInfo("splash:"+startupSwf);
 		    	if(!new File(startupSwf).exists()){
 		    	  JFaceHelpMethod.showError("启动SWF文件"+startupSwf+"不存在，程序将退出");

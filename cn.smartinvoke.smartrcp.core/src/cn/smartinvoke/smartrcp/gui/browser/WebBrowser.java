@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.ProgressEvent;
@@ -20,6 +21,7 @@ import cn.smartinvoke.IServerObject;
 import cn.smartinvoke.rcp.CLayoutBasicInfo;
 import cn.smartinvoke.smartrcp.core.SmartRCPViewPart;
 import cn.smartinvoke.smartrcp.gui.module.CEventBean;
+import cn.smartinvoke.util.ImageManager;
 import cn.smartinvoke.util.Log;
 
 public class WebBrowser extends SmartRCPViewPart implements IServerObject {
@@ -44,18 +46,27 @@ public class WebBrowser extends SmartRCPViewPart implements IServerObject {
 					}
 				}
 				this.setViewTitle(basicInfo.title);
+				// 设置图标
+				if (basicInfo.image != null) {
+					ImageDescriptor imageDescriptor = ImageManager
+							.getImageDescriptor(basicInfo.image);
+					if (imageDescriptor != null) {
+						this.setTitleImage(imageDescriptor.createImage());
+					}
+				}
+				
 			}
 			
 			//添加事件
 			browser.addTitleListener(new TitleListener() {
-				@Override
+				//@Override
 				public void changed(TitleEvent event){
 					 WebBrowser.this.setViewTitle(event.title);
 				}
 			});
             browser.addProgressListener(new ProgressListener() {
 				
-				@Override
+				//@Override
 				public void completed(ProgressEvent event){
 					boolean ret=browser.execute("document.getElementsByTagName('body')[0].style.overflow='auto'");
 					for(int i=0;i<listeners.size();i++){
@@ -68,7 +79,7 @@ public class WebBrowser extends SmartRCPViewPart implements IServerObject {
 					}
 				}
 				
-				@Override
+				//@Override
 				public void changed(ProgressEvent event) {
 				       
 				}
@@ -101,9 +112,6 @@ public class WebBrowser extends SmartRCPViewPart implements IServerObject {
 		public void setHtml(String html){
 			this.browser.setText(html);
 		}
-		
-		
-		
 		public void dispose(){
 			super.dispose();
 		}

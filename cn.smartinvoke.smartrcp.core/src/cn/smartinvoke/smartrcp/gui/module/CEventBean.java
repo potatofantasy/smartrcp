@@ -1,13 +1,10 @@
 package cn.smartinvoke.smartrcp.gui.module;
 
-import java.util.List;
-
 import org.eclipse.swt.widgets.Event;
 
 import cn.smartinvoke.RemoteObject;
 import cn.smartinvoke.gui.FlashViewer;
 import cn.smartinvoke.smartrcp.gui.control.GlobalServiceId;
-import cn.smartinvoke.util.Log;
 
 /**
  * flex监听器传递的bean数据。 当flex有监听器添加到java时，会传递此实例， 作为监听器信息，当java对应事件触发时，会跟据该信息类
@@ -28,7 +25,7 @@ public class CEventBean {
 	// private RemoteObject tagetRemoteObj=null;
 
 	private RemoteObject flexEventNotifer = null;
-
+    
 	public CEventBean() {
 
 	}
@@ -93,7 +90,7 @@ public class CEventBean {
 						this.tagetId, this.funId, param });
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	/**

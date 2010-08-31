@@ -24,5 +24,6 @@ Export-Package: cn.smartinvoke,
  cn.smartinvoke.util
 Bundle-ClassPath: protocol.jar,
  .
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 
 

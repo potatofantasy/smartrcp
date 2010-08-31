@@ -76,7 +76,7 @@ public class ViewPartActionBar extends ActionBarBase implements IServerObject {
 		if (toolBar != null) {
 			//Ê×ÏÈÇå¿Õ
 			this.toolBarManager.removeAll();
-			List<String> actionIds = toolBar.actionIds;
+			List<String> actionIds = toolBar.getActionIds();
 			if (actionIds != null) {
 				//IToolBarManager curDisplayToolBar =toolBarManager;
 				for (int n = 0; n < actionIds.size(); n++) {

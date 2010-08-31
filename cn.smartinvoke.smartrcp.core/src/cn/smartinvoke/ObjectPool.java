@@ -3,11 +3,17 @@ package cn.smartinvoke;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
+import org.eclipse.swt.widgets.Control;
 
 import cn.smartinvoke.exception.InvokeException;
 import cn.smartinvoke.exception.Messages;
+import cn.smartinvoke.smartrcp.gui.FlashShell;
+import cn.smartinvoke.smartrcp.gui.module.CObservable;
 import cn.smartinvoke.util.HelpMethods;
+import cn.smartinvoke.util.Log;
 
 /**
  * 对象池，管理着平台中的所有远程调用的响应对象
@@ -199,7 +205,7 @@ public class ObjectPool implements IObjectPool{
 		if (appId != null) {
 				PoolEntity temp = this.poolMaps.get(appId);
 				if(temp!=null){
-					temp.objMap.clear();
+					temp.clearObjects();
 				}
 		}
 	}
@@ -243,4 +249,26 @@ class PoolEntity {
 	 * 对象池
 	 */
 	Map objMap = new HashMap();
+	/**
+	 * 释放objMap中的所有内存对象
+	 */
+	public void clearObjects(){
+		//Iterator<Object> keys= objMap.keySet().iterator();
+		System.err.println("ObjectPool.clearObjects>>");
+		for(Object key: objMap.keySet()){
+			//Object key =  keys.next();
+			Object value=objMap.get(key);
+			
+			if(value instanceof IServerObject){
+				if(!(value instanceof Control)){//如果是swt控件就不用调用dispose方法了
+				  if(!(value instanceof FlashShell)){//如果是flashShell对象也不需要调用
+				   //强制调用serviceObject的dispose方法以释放对象
+				   ((IServerObject)value).dispose();
+				  }
+				}
+			}
+		}
+		this.objMap.clear();
+		System.out.println("PoolEntity.clearObjects() map size="+objMap.size());
+	}
 }
